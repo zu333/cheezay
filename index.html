@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cheezay Dikhao - Online Shop</title>
+<style>
+*{box-sizing:border-box}
+:root{
+  --orange:#e87500; --orange2:#f58a12; --green:#0b7d45; --green2:#0e9b59;
+  --dark:#171717; --cream:#fffaf4; --line:#e8e8e8; --text:#172033;
+}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#fff;color:var(--text)}
+button,input{font:inherit}
+button{cursor:pointer}
+.topbar{height:38px;background:#191919;color:#fff;display:flex;justify-content:center}
+.topinner{width:min(1400px,94%);display:flex;align-items:center;justify-content:space-between;font-size:13px}
+.topitem{display:flex;gap:8px;align-items:center}
+.header{background:#fff;border-bottom:1px solid #eee;position:sticky;top:0;z-index:30}
+.header-main{width:min(1400px,94%);margin:auto;min-height:90px;display:flex;align-items:center;gap:28px}
+.logo{width:205px;display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--orange);font-weight:800;font-size:22px}
+.logo img{width:68px;height:68px;object-fit:contain}
+.search-wrap{flex:1;display:flex;max-width:720px;height:48px;border:1px solid #ddd;border-radius:28px;overflow:hidden;background:#fff}
+.search-wrap input{flex:1;border:0;outline:0;padding:0 20px;font-size:15px}
+.search-wrap button{width:120px;border:0;background:var(--orange);color:#fff;font-weight:700}
+.actions{margin-left:auto;display:flex;gap:22px}
+.action{border:0;background:none;color:#111;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:12px;min-width:52px}
+.action .ico{font-size:22px}
+.badge{background:var(--orange);color:white;border-radius:99px;padding:2px 6px;font-size:10px;position:absolute;margin-left:25px;margin-top:-4px}
+.nav{border-bottom:1px solid #eee;background:#fff}
+.navinner{width:min(1400px,94%);margin:auto;display:flex;gap:30px;overflow:auto}
+.nav button{white-space:nowrap;border:0;background:none;padding:15px 4px;color:#202020;font-weight:600;border-bottom:3px solid transparent}
+.nav button:hover,.nav button.active{color:var(--orange);border-bottom-color:var(--orange)}
+main{width:min(1400px,94%);margin:20px auto 60px}
+.hero{display:grid;grid-template-columns:2fr 1fr;gap:18px}
+.hero-main{min-height:390px;border-radius:24px;background:#f8ecdf url("hero-banner.png") center/cover no-repeat;position:relative;overflow:hidden}
+.hero-copy{position:absolute;left:52px;top:58px;width:48%;z-index:2}
+.pill{display:inline-flex;align-items:center;gap:7px;background:#fff8;border:1px solid #e7d9c7;padding:8px 13px;border-radius:99px;font-size:12px;font-weight:700}
+.hero-copy h1{font-size:42px;line-height:1.12;margin:22px 0 12px;color:#20232b}
+.hero-copy h1 span{color:var(--orange)}
+.hero-copy p{font-size:16px;line-height:1.6;color:#4d5058}
+.hero-dots{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);display:flex;gap:8px}
+.hero-dots i{width:12px;height:6px;border-radius:10px;background:#fff}
+.side-banners{display:grid;gap:18px}
+.side{border-radius:22px;min-height:186px;padding:28px;position:relative;overflow:hidden;display:flex;align-items:center}
+.side h2{font-size:24px;line-height:1.2;max-width:170px;z-index:2;margin:0}
+.side.pk{background:linear-gradient(120deg,#f3f9ed,#d9edcf)}
+.side.pk h2{color:#12623b}
+.side.pk:after{content:"☾";position:absolute;right:18px;bottom:-30px;font-size:150px;color:#16814d;opacity:.18}
+.side.cn{background:linear-gradient(120deg,#fff2e8,#ffe0d2)}
+.side.cn h2{color:#a92c20}
+.side.cn:after{content:"★";position:absolute;right:35px;bottom:-35px;font-size:150px;color:#df2b1b;opacity:.17}
+.section{background:#fff;border:1px solid #eee;border-radius:24px;margin-top:26px;padding:30px}
+.section-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
+.section h2{margin:0;font-size:26px}
+.seeall{color:var(--orange);font-weight:700;border:0;background:none}
+.categories{display:grid;grid-template-columns:repeat(9,1fr);gap:16px}
+.cat{border:0;background:none;text-align:center;color:#222}
+.cat-img{height:105px;width:105px;margin:auto;border-radius:50%;background:#fafafa;border:1px solid #eee;display:flex;align-items:center;justify-content:center;font-size:42px;transition:.2s}
+.cat:hover .cat-img{transform:translateY(-5px);box-shadow:0 8px 20px #0001}
+.cat b{display:block;margin-top:12px;font-size:13px}
+.products{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.card{border:1px solid #e8e8e8;border-radius:18px;overflow:hidden;background:#fff;position:relative;transition:.2s}
+.card:hover{transform:translateY(-3px);box-shadow:0 10px 30px #00000010}
+.card-img{height:210px;background:#f7f7f7;display:flex;align-items:center;justify-content:center;font-size:80px}
+.card-body{padding:16px}
+.card h3{font-size:15px;line-height:1.35;margin:0 0 10px}
+.price{font-size:20px;font-weight:800;color:#111}
+.old{font-size:12px;color:#999;text-decoration:line-through;margin-left:6px}
+.card-actions{display:flex;gap:8px;margin-top:14px}
+.add{flex:1;border:0;background:var(--orange);color:#fff;padding:10px;border-radius:9px;font-weight:700}
+.heart{width:42px;border:1px solid #ddd;background:#fff;border-radius:9px;font-size:19px}
+.heart.active{color:#e22;background:#fff1f1}
+.empty{padding:35px;text-align:center;color:#777}
+.overlay{display:none;position:fixed;inset:0;background:#0008;z-index:100}
+.overlay.show{display:flex;align-items:center;justify-content:center}
+.modal{width:min(720px,92%);max-height:90vh;overflow:auto;background:#fff;border-radius:20px;padding:25px;position:relative}
+.close{position:absolute;right:15px;top:12px;border:0;background:none;font-size:28px}
+.cart-row{display:flex;align-items:center;gap:15px;padding:14px 0;border-bottom:1px solid #eee}
+.cart-icon{width:60px;height:60px;background:#f7f7f7;border-radius:10px;display:grid;place-items:center;font-size:30px}
+.qty{display:flex;border:1px solid #ddd;border-radius:8px;overflow:hidden;margin-left:auto}
+.qty button{border:0;background:#fafafa;width:32px}
+.qty span{width:35px;text-align:center;padding:7px}
+.total{display:flex;justify-content:space-between;font-size:20px;font-weight:800;padding-top:18px}
+.checkout{width:100%;margin-top:18px;border:0;background:var(--green2);color:#fff;padding:14px;border-radius:10px;font-weight:800}
+.toast{position:fixed;right:25px;bottom:25px;background:#151515;color:#fff;padding:13px 18px;border-radius:10px;opacity:0;transform:translateY(15px);pointer-events:none;transition:.25s;z-index:200}
+.toast.show{opacity:1;transform:none}
+.login-form{display:grid;gap:12px}
+.login-form input{padding:12px;border:1px solid #ddd;border-radius:8px}
+.login-form button{border:0;background:var(--orange);color:#fff;padding:12px;border-radius:8px;font-weight:700}
+footer{background:#171717;color:#ddd;padding:35px 4%;text-align:center}
+@media(max-width:1050px){
+  .header-main{flex-wrap:wrap;padding:10px 0}.logo{width:auto}.search-wrap{order:3;max-width:none;flex-basis:100%}
+  .actions{gap:8px}.categories{grid-template-columns:repeat(5,1fr)}.products{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:760px){
+  .topinner{font-size:10px}.topitem:nth-child(3),.topitem:nth-child(4){display:none}
+  .hero{grid-template-columns:1fr}.hero-main{min-height:420px}.hero-copy{left:25px;top:30px;width:65%}.hero-copy h1{font-size:30px}
+  .side-banners{grid-template-columns:1fr 1fr}.side{min-height:150px;padding:18px}.side h2{font-size:18px}
+  .categories{grid-template-columns:repeat(3,1fr)}.products{grid-template-columns:repeat(2,1fr)}
+  .section{padding:18px}.actions .action span:last-child{display:none}.actions{margin-left:0}
+}
+@media(max-width:480px){
+  .header-main{gap:10px}.logo{font-size:17px}.logo img{width:52px;height:52px}
+  .products{grid-template-columns:1fr}.categories{grid-template-columns:repeat(2,1fr)}
+  .hero-copy{width:70%}.hero-copy p{font-size:13px}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topinner">
+    <div class="topitem">🚚 <span>Lowest delivery price in Pakistan</span></div>
+    <div class="topitem">💳 <span>Cash on Delivery available</span></div>
+    <div class="topitem">↩️ <span>7-day easy returns</span></div>
+    <div class="topitem">🛡️ <span>Verified Suppliers</span></div>
+  </div>
+</div>
+
+<header class="header">
+  <div class="header-main">
+    <a class="logo" href="#" onclick="goHome();return false;">
+      <img src="cropped-logo.jpg" alt="Cheezay Dikhao">
+      <span>Cheezay Dikhao</span>
+    </a>
+
+    <form class="search-wrap" onsubmit="searchProducts(event)">
+      <input id="searchInput" placeholder="Search products, brands & stores">
+      <button>Search</button>
+    </form>
+
+    <div class="actions">
+      <button class="action" onclick="openLogin()"><span class="ico">◯</span><span>Log in</span></button>
+      <button class="action" onclick="showOrders()"><span class="ico">📦</span><span>Orders</span></button>
+      <button class="action" onclick="showWishlist()"><span class="ico">♡</span><span>Wishlist</span></button>
+      <button class="action" onclick="openCart()" style="position:relative"><span class="ico">🛒<b id="cartBadge" class="badge">0</b></span><span>Cart</span></button>
+    </div>
+  </div>
+</header>
+
+<nav class="nav">
+  <div class="navinner">
+    <button class="active" data-category="All" onclick="filterCategory('All',this)">⌂ All</button>
+    <button data-category="Kids & Mother" onclick="filterCategory('Kids & Mother',this)">👶 Kids & Mother</button>
+    <button data-category="Women Corner" onclick="filterCategory('Women Corner',this)">👩 Women Corner</button>
+    <button data-category="China" onclick="filterCategory('China',this)">🇨🇳 China</button>
+    <button data-category="Urdu Bazaar" onclick="filterCategory('Urdu Bazaar',this)">📚 Urdu Bazaar</button>
+    <button data-category="Beauty & Care" onclick="filterCategory('Beauty & Care',this)">💄 Beauty & Care</button>
+    <button data-category="Men's Fashion" onclick="filterCategory(\"Men's Fashion\",this)">👨 Men's Fashion</button>
+    <button data-category="Home & Living" onclick="filterCategory('Home & Living',this)">🏠 Home & Living</button>
+    <button data-category="Tech & Tools" onclick="filterCategory('Tech & Tools',this)">🔧 Tech & Tools</button>
+  </div>
+</nav>
+
+<main id="home">
+  <section class="hero">
+    <div class="hero-main">
+      <div class="hero-copy">
+        <div class="pill">🛍️ Shopping in Pakistan</div>
+        <h1>Buy for yourself, love or <span>resell and earn.</span></h1>
+        <p>Millions shop on Cheezay Dikhao for quality products, best prices & trusted sellers.</p>
+      </div>
+      <div class="hero-dots"><i></i><i></i><i></i></div>
+    </div>
+    <div class="side-banners">
+      <div class="side pk" onclick="filterCategory('Pakistan',null)"><h2>Shop<br>from Pakistan</h2></div>
+      <div class="side cn" onclick="filterCategory('China',null)"><h2>Shop<br>from China →</h2></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <h2>Shop by category</h2>
+      <button class="seeall" onclick="renderProducts(products)">See all →</button>
+    </div>
+    <div class="categories">
+      <button class="cat" onclick="filterCategory('Beauty & Care')"><div class="cat-img">💄</div><b>Cosmetics</b></button>
+      <button class="cat" onclick="filterCategory('Women Corner')"><div class="cat-img">👗</div><b>Womens<br>Stitched</b></button>
+      <button class="cat" onclick="filterCategory('Kids & Mother')"><div class="cat-img">👕</div><b>Kids<br>Clothing</b></button>
+      <button class="cat" onclick="filterCategory(\"Men's Fashion\")"><div class="cat-img">👔</div><b>Mens<br>Stitched</b></button>
+      <button class="cat" onclick="filterCategory('Women Corner')"><div class="cat-img">💍</div><b>Jewellery</b></button>
+      <button class="cat" onclick="filterCategory('Beauty & Care')"><div class="cat-img">🕶️</div><b>Fashion<br>Accessories</b></button>
+      <button class="cat" onclick="filterCategory('Home & Living')"><div class="cat-img">🛏️</div><b>Bedding</b></button>
+      <button class="cat" onclick="filterCategory('Women Corner')"><div class="cat-img">🧣</div><b>Festive<br>Collection</b></button>
+      <button class="cat" onclick="filterCategory('Urdu Bazaar')"><div class="cat-img">📖</div><b>Islamic<br>Accessories</b></button>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <h2 id="productTitle">Featured Products</h2>
+      <button class="seeall" onclick="renderProducts(products)">Reset</button>
+    </div>
+    <div id="products" class="products"></div>
+  </section>
+</main>
+
+<footer>© 2026 Cheezay Dikhao — Online Shopping in Pakistan</footer>
+
+<div id="cartModal" class="overlay" onclick="closeOnBackdrop(event,'cartModal')">
+  <div class="modal">
+    <button class="close" onclick="closeModal('cartModal')">×</button>
+    <h2>Your Cart</h2>
+    <div id="cartItems"></div>
+    <div class="total"><span>Total</span><span id="cartTotal">PKR 0</span></div>
+    <button class="checkout" onclick="checkout()">Place Cash on Delivery Order</button>
+  </div>
+</div>
+
+<div id="loginModal" class="overlay" onclick="closeOnBackdrop(event,'loginModal')">
+  <div class="modal">
+    <button class="close" onclick="closeModal('loginModal')">×</button>
+    <h2>Login</h2>
+    <form class="login-form" onsubmit="login(event)">
+      <input id="loginEmail" type="email" placeholder="Email address" required>
+      <input id="loginPassword" type="password" placeholder="Password" required>
+      <button>Login</button>
+    </form>
+  </div>
+</div>
+
+<div id="ordersModal" class="overlay" onclick="closeOnBackdrop(event,'ordersModal')">
+  <div class="modal">
+    <button class="close" onclick="closeModal('ordersModal')">×</button>
+    <h2>Orders</h2>
+    <div id="ordersContent" class="empty">No orders yet.</div>
+  </div>
+</div>
+
+<div id="wishlistModal" class="overlay" onclick="closeOnBackdrop(event,'wishlistModal')">
+  <div class="modal">
+    <button class="close" onclick="closeModal('wishlistModal')">×</button>
+    <h2>Wishlist</h2>
+    <div id="wishlistContent" class="empty">Your wishlist is empty.</div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+const products = [
+ {id:1,name:"Premium Ladies Handbag",price:2499,old:2999,cat:"Women Corner",icon:"👜"},
+ {id:2,name:"Wireless Bluetooth Earbuds",price:1599,old:2199,cat:"Tech & Tools",icon:"🎧"},
+ {id:3,name:"Kids Summer Dress Set",price:1899,old:2399,cat:"Kids & Mother",icon:"👗"},
+ {id:4,name:"Classic Men's Polo Shirt",price:1299,old:1699,cat:"Men's Fashion",icon:"👕"},
+ {id:5,name:"Makeup Beauty Kit",price:2199,old:2799,cat:"Beauty & Care",icon:"💄"},
+ {id:6,name:"Elegant Jewellery Set",price:999,old:1399,cat:"Women Corner",icon:"💍"},
+ {id:7,name:"Soft Comfort Bedding Set",price:3299,old:3999,cat:"Home & Living",icon:"🛏️"},
+ {id:8,name:"Islamic Gift & Tasbeeh Set",price:899,old:1199,cat:"Urdu Bazaar",icon:"📿"},
+ {id:9,name:"Smart LED Desk Lamp",price:1799,old:2299,cat:"Tech & Tools",icon:"💡"},
+ {id:10,name:"Fashion Sunglasses",price:799,old:1099,cat:"Beauty & Care",icon:"🕶️"},
+ {id:11,name:"Festive Women's Suit",price:2899,old:3499,cat:"Women Corner",icon:"🥻"},
+ {id:12,name:"Remote Control Flying Toy",price:4029,old:4699,cat:"Kids & Mother",icon:"✈️"}
+];
+
+let cart = JSON.parse(localStorage.getItem("cd_cart") || "[]");
+let wishlist = JSON.parse(localStorage.getItem("cd_wishlist") || "[]");
+let orders = JSON.parse(localStorage.getItem("cd_orders") || "[]");
+
+function money(n){return "PKR " + Number(n).toLocaleString("en-PK")}
+function save(){
+ localStorage.setItem("cd_cart",JSON.stringify(cart));
+ localStorage.setItem("cd_wishlist",JSON.stringify(wishlist));
+ localStorage.setItem("cd_orders",JSON.stringify(orders));
+ updateBadge();
+}
+function updateBadge(){
+ document.getElementById("cartBadge").textContent=cart.reduce((s,x)=>s+x.qty,0);
+}
+function renderProducts(list){
+ const box=document.getElementById("products");
+ document.getElementById("productTitle").textContent = list.length ? "Products" : "No Products Found";
+ box.innerHTML=list.length ? list.map(p=>`
+  <article class="card">
+    <div class="card-img">${p.icon}</div>
+    <div class="card-body">
+      <h3>${p.name}</h3>
+      <div><span class="price">${money(p.price)}</span><span class="old">${money(p.old)}</span></div>
+      <div class="card-actions">
+        <button class="add" onclick="addToCart(${p.id})">Add to Cart</button>
+        <button class="heart ${wishlist.includes(p.id)?'active':''}" onclick="toggleWish(${p.id})">${wishlist.includes(p.id)?'♥':'♡'}</button>
+      </div>
+    </div>
+  </article>`).join("") : '<div class="empty" style="grid-column:1/-1">Try another search or category.</div>';
+}
+function filterCategory(cat,btn){
+ if(btn){document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("active"));btn.classList.add("active")}
+ const list=cat==="All" ? products : products.filter(p=>p.cat===cat || (cat==="Pakistan" && p.cat!=="Tech & Tools"));
+ document.getElementById("searchInput").value="";
+ renderProducts(list);
+ document.getElementById("productTitle").textContent = cat==="All" ? "Featured Products" : cat;
+ window.scrollTo({top:document.getElementById("products").offsetTop-150,behavior:"smooth"});
+}
+function searchProducts(e){
+ e.preventDefault();
+ const q=document.getElementById("searchInput").value.trim().toLowerCase();
+ if(!q){renderProducts(products);return}
+ const list=products.filter(p=>(p.name+" "+p.cat).toLowerCase().includes(q));
+ renderProducts(list);
+ document.getElementById("productTitle").textContent="Search results";
+}
+function addToCart(id){
+ const p=products.find(x=>x.id===id);
+ const item=cart.find(x=>x.id===id);
+ if(item)item.qty++;
+ else cart.push({id,qty:1});
+ save(); toast(p.name+" cart mein add ho gaya");
+}
+function changeQty(id,delta){
+ const item=cart.find(x=>x.id===id); if(!item)return;
+ item.qty+=delta;
+ if(item.qty<=0)cart=cart.filter(x=>x.id!==id);
+ save(); renderCart();
+}
+function renderCart(){
+ const box=document.getElementById("cartItems");
+ if(!cart.length){box.innerHTML='<div class="empty">Your cart is empty.</div>';document.getElementById("cartTotal").textContent="PKR 0";return}
+ let total=0;
+ box.innerHTML=cart.map(item=>{
+   const p=products.find(x=>x.id===item.id); total+=p.price*item.qty;
+   return `<div class="cart-row">
+    <div class="cart-icon">${p.icon}</div><div><b>${p.name}</b><div>${money(p.price)}</div></div>
+    <div class="qty"><button onclick="changeQty(${p.id},-1)">−</button><span>${item.qty}</span><button onclick="changeQty(${p.id},1)">+</button></div>
+   </div>`
+ }).join("");
+ document.getElementById("cartTotal").textContent=money(total);
+}
+function openCart(){renderCart();openModal("cartModal")}
+function toggleWish(id){
+ if(wishlist.includes(id))wishlist=wishlist.filter(x=>x!==id); else wishlist.push(id);
+ save();renderProducts([...document.querySelectorAll(".card")].length ? products : products);
+ toast(wishlist.includes(id)?"Wishlist mein add ho gaya":"Wishlist se remove ho gaya");
+}
+function showWishlist(){
+ const box=document.getElementById("wishlistContent");
+ const list=products.filter(p=>wishlist.includes(p.id));
+ box.innerHTML=list.length ? list.map(p=>`<div class="cart-row"><div class="cart-icon">${p.icon}</div><div><b>${p.name}</b><div>${money(p.price)}</div></div><button class="add" style="max-width:130px" onclick="addToCart(${p.id})">Add to Cart</button></div>`).join("") : '<div class="empty">Your wishlist is empty.</div>';
+ openModal("wishlistModal");
+}
+function showOrders(){
+ const box=document.getElementById("ordersContent");
+ box.innerHTML=orders.length ? orders.map((o,i)=>`<div class="cart-row"><div><b>Order #${i+1}</b><div>${o.items} items • ${money(o.total)}</div><small>${o.date}</small></div><b style="margin-left:auto">COD</b></div>`).join("") : '<div class="empty">No orders yet.</div>';
+ openModal("ordersModal");
+}
+function checkout(){
+ if(!cart.length){toast("Cart khali hai");return}
+ const total=cart.reduce((s,i)=>{const p=products.find(x=>x.id===i.id);return s+p.price*i.qty},0);
+ const count=cart.reduce((s,i)=>s+i.qty,0);
+ orders.unshift({items:count,total,date:new Date().toLocaleString()});
+ cart=[];save();closeModal("cartModal");showOrders();toast("Order successfully place ho gaya");
+}
+function openLogin(){openModal("loginModal")}
+function login(e){e.preventDefault();closeModal("loginModal");toast("Login demo successful")}
+function openModal(id){document.getElementById(id).classList.add("show")}
+function closeModal(id){document.getElementById(id).classList.remove("show")}
+function closeOnBackdrop(e,id){if(e.target.id===id)closeModal(id)}
+function goHome(){window.scrollTo({top:0,behavior:"smooth"});renderProducts(products)}
+let toastTimer;
+function toast(msg){
+ const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");
+ clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove("show"),2200);
+}
+updateBadge();
+renderProducts(products);
+</script>
+</body>
+</html>
