@@ -105,6 +105,31 @@ footer{background:#171717;color:#ddd;padding:35px 4%;text-align:center}
   .products{grid-template-columns:1fr}.categories{grid-template-columns:repeat(2,1fr)}
   .hero-copy{width:70%}.hero-copy p{font-size:13px}
 }
+
+/* Admin + checkout UI */
+.admin-overlay{z-index:100}
+.admin-shell{width:min(1200px,96vw);max-height:92vh;overflow:auto;background:#fff;border-radius:22px;padding:24px}
+.admin-head{display:flex;align-items:center;justify-content:space-between;gap:15px;border-bottom:1px solid #eee;padding-bottom:15px;margin-bottom:18px}
+.admin-head h2{margin:0}
+.admin-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.admin-tabs button{border:1px solid #ddd;background:#fff;border-radius:10px;padding:10px 14px;font-weight:700}
+.admin-tabs button.active{background:var(--orange);color:#fff;border-color:var(--orange)}
+.admin-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.admin-card{border:1px solid #eee;border-radius:16px;padding:16px}
+.admin-card h3{margin:0 0 12px}
+.admin-form{display:grid;gap:10px}
+.admin-form input,.admin-form textarea,.admin-form select{width:100%;padding:11px;border:1px solid #ddd;border-radius:9px}
+.admin-form textarea{min-height:90px;resize:vertical}
+.admin-row{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.admin-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.btn{border:0;border-radius:9px;padding:10px 14px;font-weight:700}
+.btn.primary{background:var(--orange);color:#fff}.btn.green{background:var(--green);color:#fff}.btn.danger{background:#b42318;color:#fff}.btn.light{background:#f3f3f3}
+.admin-table{width:100%;border-collapse:collapse;font-size:13px}
+.admin-table th,.admin-table td{padding:10px;border-bottom:1px solid #eee;text-align:left;vertical-align:top}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+.stat{background:#faf7f2;border:1px solid #eee;border-radius:14px;padding:15px}.stat b{font-size:22px;display:block}
+.checkout-form{display:grid;gap:10px}.checkout-form input,.checkout-form textarea{width:100%;padding:12px;border:1px solid #ddd;border-radius:9px}.checkout-form textarea{min-height:80px}
+@media(max-width:760px){.admin-grid{grid-template-columns:1fr}.stat-grid{grid-template-columns:repeat(2,1fr)}.admin-row{grid-template-columns:1fr}.admin-shell{padding:15px}}
 </style>
 </head>
 <body>
@@ -236,10 +261,57 @@ footer{background:#171717;color:#ddd;padding:35px 4%;text-align:center}
   </div>
 </div>
 
+
+<div id="checkoutModal" class="overlay" onclick="closeOnBackdrop(event,'checkoutModal')">
+  <div class="modal">
+    <button class="close" onclick="closeModal('checkoutModal')">×</button>
+    <h2>Cash on Delivery</h2>
+    <form class="checkout-form" onsubmit="placeOrder(event)">
+      <input id="custName" placeholder="Full name" required>
+      <input id="custPhone" placeholder="Mobile number" required>
+      <input id="custCity" placeholder="City" required>
+      <textarea id="custAddress" placeholder="Complete delivery address" required></textarea>
+      <button class="checkout">Confirm COD Order</button>
+    </form>
+  </div>
+</div>
+
+<div id="adminLoginModal" class="overlay admin-overlay" onclick="closeOnBackdrop(event,'adminLoginModal')">
+  <div class="modal">
+    <button class="close" onclick="closeModal('adminLoginModal')">×</button>
+    <h2>Admin Login</h2>
+    <p style="color:#666;font-size:13px">Admin area is hidden. Enter admin credentials.</p>
+    <form class="login-form" onsubmit="adminLogin(event)">
+      <input id="adminEmail" type="text" placeholder="Admin email" required>
+      <input id="adminPassword" type="password" placeholder="Admin password" required>
+      <button>Open Admin</button>
+    </form>
+  </div>
+</div>
+
+<div id="adminModal" class="overlay admin-overlay" onclick="closeOnBackdrop(event,'adminModal')">
+  <div class="admin-shell">
+    <div class="admin-head">
+      <div><h2>⚙️ Cheezay Dikhao Admin</h2><small>Complete store control panel</small></div>
+      <button class="btn light" onclick="adminLogout()">Logout</button>
+    </div>
+    <div class="admin-tabs">
+      <button id="tab-dashboard" onclick="showAdminTab('dashboard')">Dashboard</button>
+      <button id="tab-products" onclick="showAdminTab('products')">Products</button>
+      <button id="tab-orders" onclick="showAdminTab('orders')">Orders</button>
+      <button id="tab-categories" onclick="showAdminTab('categories')">Categories</button>
+      <button id="tab-store" onclick="showAdminTab('store')">Store Settings</button>
+      <button id="tab-security" onclick="showAdminTab('security')">Admin Security</button>
+      <button id="tab-data" onclick="showAdminTab('data')">Backup / Data</button>
+    </div>
+    <div id="adminContent"></div>
+  </div>
+</div>
 <div id="toast" class="toast"></div>
 
+
 <script>
-const products = [
+const defaultProducts = [
  {id:1,name:"Premium Ladies Handbag",price:2499,old:2999,cat:"Women Corner",icon:"👜"},
  {id:2,name:"Wireless Bluetooth Earbuds",price:1599,old:2199,cat:"Tech & Tools",icon:"🎧"},
  {id:3,name:"Kids Summer Dress Set",price:1899,old:2399,cat:"Kids & Mother",icon:"👗"},
@@ -253,116 +325,159 @@ const products = [
  {id:11,name:"Festive Women's Suit",price:2899,old:3499,cat:"Women Corner",icon:"🥻"},
  {id:12,name:"Remote Control Flying Toy",price:4029,old:4699,cat:"Kids & Mother",icon:"✈️"}
 ];
+const defaultCategories=["Kids & Mother","Women Corner","China","Urdu Bazaar","Beauty & Care","Men's Fashion","Home & Living","Tech & Tools"];
+const defaultSettings={
+ storeName:"Cheezay Dikhao",deliveryText:"Lowest delivery price in Pakistan",cod:true,returns:"7-day easy returns",
+ heroTitle:"Buy for yourself, love or resell and earn.",heroText:"Millions shop on Cheezay Dikhao for quality products, best prices & trusted sellers.",
+ currency:"PKR",adminEmail:"admin@cheezaydikhao.local",adminPassword:"Admin@1234"
+};
+let products=JSON.parse(localStorage.getItem("cd_products")||"null")||defaultProducts;
+let categories=JSON.parse(localStorage.getItem("cd_categories")||"null")||defaultCategories;
+let settings=Object.assign({},defaultSettings,JSON.parse(localStorage.getItem("cd_settings")||"{}"));
+let cart=JSON.parse(localStorage.getItem("cd_cart")||"[]");
+let wishlist=JSON.parse(localStorage.getItem("cd_wishlist")||"[]");
+let orders=JSON.parse(localStorage.getItem("cd_orders")||"[]");
+let adminAuthed=false, adminTab="dashboard", logoTaps=0, logoTapTimer=null, editingProductId=null;
 
-let cart = JSON.parse(localStorage.getItem("cd_cart") || "[]");
-let wishlist = JSON.parse(localStorage.getItem("cd_wishlist") || "[]");
-let orders = JSON.parse(localStorage.getItem("cd_orders") || "[]");
-
-function money(n){return "PKR " + Number(n).toLocaleString("en-PK")}
-function save(){
+function money(n){return settings.currency+" "+Number(n||0).toLocaleString("en-PK")}
+function persist(){
+ localStorage.setItem("cd_products",JSON.stringify(products));
+ localStorage.setItem("cd_categories",JSON.stringify(categories));
+ localStorage.setItem("cd_settings",JSON.stringify(settings));
  localStorage.setItem("cd_cart",JSON.stringify(cart));
  localStorage.setItem("cd_wishlist",JSON.stringify(wishlist));
  localStorage.setItem("cd_orders",JSON.stringify(orders));
  updateBadge();
 }
-function updateBadge(){
- document.getElementById("cartBadge").textContent=cart.reduce((s,x)=>s+x.qty,0);
-}
+function updateBadge(){document.getElementById("cartBadge").textContent=cart.reduce((s,x)=>s+x.qty,0)}
 function renderProducts(list){
  const box=document.getElementById("products");
- document.getElementById("productTitle").textContent = list.length ? "Products" : "No Products Found";
- box.innerHTML=list.length ? list.map(p=>`
-  <article class="card">
-    <div class="card-img">${p.icon}</div>
-    <div class="card-body">
-      <h3>${p.name}</h3>
-      <div><span class="price">${money(p.price)}</span><span class="old">${money(p.old)}</span></div>
-      <div class="card-actions">
-        <button class="add" onclick="addToCart(${p.id})">Add to Cart</button>
-        <button class="heart ${wishlist.includes(p.id)?'active':''}" onclick="toggleWish(${p.id})">${wishlist.includes(p.id)?'♥':'♡'}</button>
-      </div>
-    </div>
-  </article>`).join("") : '<div class="empty" style="grid-column:1/-1">Try another search or category.</div>';
+ document.getElementById("productTitle").textContent=list.length?"Products":"No Products Found";
+ box.innerHTML=list.length?list.map(p=>`<article class="card"><div class="card-img">${p.icon||"🛍️"}</div><div class="card-body"><h3>${escapeHtml(p.name)}</h3><div><span class="price">${money(p.price)}</span><span class="old">${money(p.old||p.price)}</span></div><div class="card-actions"><button class="add" onclick="addToCart(${p.id})">Add to Cart</button><button class="heart ${wishlist.includes(p.id)?"active":""}" onclick="toggleWish(${p.id})">${wishlist.includes(p.id)?"♥":"♡"}</button></div></div></article>`).join(""):'<div class="empty" style="grid-column:1/-1">Try another search or category.</div>';
 }
 function filterCategory(cat,btn){
  if(btn){document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("active"));btn.classList.add("active")}
- const list=cat==="All" ? products : products.filter(p=>p.cat===cat || (cat==="Pakistan" && p.cat!=="Tech & Tools"));
- document.getElementById("searchInput").value="";
- renderProducts(list);
- document.getElementById("productTitle").textContent = cat==="All" ? "Featured Products" : cat;
+ const list=cat==="All"?products:products.filter(p=>p.cat===cat||(cat==="Pakistan"&&p.cat!=="China"));
+ document.getElementById("searchInput").value="";renderProducts(list);
+ document.getElementById("productTitle").textContent=cat==="All"?"Featured Products":cat;
  window.scrollTo({top:document.getElementById("products").offsetTop-150,behavior:"smooth"});
 }
-function searchProducts(e){
- e.preventDefault();
- const q=document.getElementById("searchInput").value.trim().toLowerCase();
- if(!q){renderProducts(products);return}
- const list=products.filter(p=>(p.name+" "+p.cat).toLowerCase().includes(q));
- renderProducts(list);
- document.getElementById("productTitle").textContent="Search results";
-}
-function addToCart(id){
- const p=products.find(x=>x.id===id);
- const item=cart.find(x=>x.id===id);
- if(item)item.qty++;
- else cart.push({id,qty:1});
- save(); toast(p.name+" cart mein add ho gaya");
-}
-function changeQty(id,delta){
- const item=cart.find(x=>x.id===id); if(!item)return;
- item.qty+=delta;
- if(item.qty<=0)cart=cart.filter(x=>x.id!==id);
- save(); renderCart();
-}
+function searchProducts(e){e.preventDefault();const q=document.getElementById("searchInput").value.trim().toLowerCase();const list=q?products.filter(p=>(p.name+" "+p.cat).toLowerCase().includes(q)):products;renderProducts(list);document.getElementById("productTitle").textContent=q?"Search results":"Featured Products"}
+function addToCart(id){const p=products.find(x=>x.id===id);if(!p)return;const item=cart.find(x=>x.id===id);if(item)item.qty++;else cart.push({id,qty:1});persist();toast(p.name+" cart mein add ho gaya")}
+function changeQty(id,delta){const item=cart.find(x=>x.id===id);if(!item)return;item.qty+=delta;if(item.qty<=0)cart=cart.filter(x=>x.id!==id);persist();renderCart()}
 function renderCart(){
- const box=document.getElementById("cartItems");
- if(!cart.length){box.innerHTML='<div class="empty">Your cart is empty.</div>';document.getElementById("cartTotal").textContent="PKR 0";return}
- let total=0;
- box.innerHTML=cart.map(item=>{
-   const p=products.find(x=>x.id===item.id); total+=p.price*item.qty;
-   return `<div class="cart-row">
-    <div class="cart-icon">${p.icon}</div><div><b>${p.name}</b><div>${money(p.price)}</div></div>
-    <div class="qty"><button onclick="changeQty(${p.id},-1)">−</button><span>${item.qty}</span><button onclick="changeQty(${p.id},1)">+</button></div>
-   </div>`
- }).join("");
- document.getElementById("cartTotal").textContent=money(total);
+ const box=document.getElementById("cartItems");if(!cart.length){box.innerHTML='<div class="empty">Your cart is empty.</div>';document.getElementById("cartTotal").textContent=money(0);return}
+ let total=0;box.innerHTML=cart.map(item=>{const p=products.find(x=>x.id===item.id);if(!p)return "";total+=p.price*item.qty;return `<div class="cart-row"><div class="cart-icon">${p.icon||"🛍️"}</div><div><b>${escapeHtml(p.name)}</b><div>${money(p.price)}</div></div><div class="qty"><button onclick="changeQty(${p.id},-1)">−</button><span>${item.qty}</span><button onclick="changeQty(${p.id},1)">+</button></div></div>`}).join("");document.getElementById("cartTotal").textContent=money(total)
 }
 function openCart(){renderCart();openModal("cartModal")}
-function toggleWish(id){
- if(wishlist.includes(id))wishlist=wishlist.filter(x=>x!==id); else wishlist.push(id);
- save();renderProducts([...document.querySelectorAll(".card")].length ? products : products);
- toast(wishlist.includes(id)?"Wishlist mein add ho gaya":"Wishlist se remove ho gaya");
-}
-function showWishlist(){
- const box=document.getElementById("wishlistContent");
- const list=products.filter(p=>wishlist.includes(p.id));
- box.innerHTML=list.length ? list.map(p=>`<div class="cart-row"><div class="cart-icon">${p.icon}</div><div><b>${p.name}</b><div>${money(p.price)}</div></div><button class="add" style="max-width:130px" onclick="addToCart(${p.id})">Add to Cart</button></div>`).join("") : '<div class="empty">Your wishlist is empty.</div>';
- openModal("wishlistModal");
-}
-function showOrders(){
- const box=document.getElementById("ordersContent");
- box.innerHTML=orders.length ? orders.map((o,i)=>`<div class="cart-row"><div><b>Order #${i+1}</b><div>${o.items} items • ${money(o.total)}</div><small>${o.date}</small></div><b style="margin-left:auto">COD</b></div>`).join("") : '<div class="empty">No orders yet.</div>';
- openModal("ordersModal");
-}
-function checkout(){
- if(!cart.length){toast("Cart khali hai");return}
- const total=cart.reduce((s,i)=>{const p=products.find(x=>x.id===i.id);return s+p.price*i.qty},0);
+function toggleWish(id){wishlist=wishlist.includes(id)?wishlist.filter(x=>x!==id):[...wishlist,id];persist();renderProducts(products);toast(wishlist.includes(id)?"Wishlist mein add ho gaya":"Wishlist se remove ho gaya")}
+function showWishlist(){const list=products.filter(p=>wishlist.includes(p.id));document.getElementById("wishlistContent").innerHTML=list.length?list.map(p=>`<div class="cart-row"><div class="cart-icon">${p.icon||"🛍️"}</div><div><b>${escapeHtml(p.name)}</b><div>${money(p.price)}</div></div><button class="add" style="max-width:130px" onclick="addToCart(${p.id})">Add to Cart</button></div>`).join(""):'<div class="empty">Your wishlist is empty.</div>';openModal("wishlistModal")}
+function showOrders(){document.getElementById("ordersContent").innerHTML=orders.length?orders.map((o,i)=>`<div class="cart-row"><div><b>Order #${escapeHtml(o.id||String(i+1))}</b><div>${o.items} items • ${money(o.total)}</div><small>${escapeHtml(o.date||"")}</small></div><b style="margin-left:auto">${escapeHtml(o.status||"Pending")}</b></div>`).join(""):'<div class="empty">No orders yet.</div>';openModal("ordersModal")}
+function checkout(){if(!cart.length){toast("Cart khali hai");return}if(!settings.cod){toast("Cash on Delivery filhal disabled hai");return}openModal("checkoutModal")}
+function placeOrder(e){
+ e.preventDefault();if(!cart.length)return;
+ const total=cart.reduce((s,i)=>{const p=products.find(x=>x.id===i.id);return s+(p?p.price*i.qty:0)},0);
  const count=cart.reduce((s,i)=>s+i.qty,0);
- orders.unshift({items:count,total,date:new Date().toLocaleString()});
- cart=[];save();closeModal("cartModal");showOrders();toast("Order successfully place ho gaya");
+ const order={id:"CD-"+Date.now().toString().slice(-8),items:count,total,date:new Date().toLocaleString(),status:"Pending",customer:{name:document.getElementById("custName").value,phone:document.getElementById("custPhone").value,city:document.getElementById("custCity").value,address:document.getElementById("custAddress").value},cart:[...cart]};
+ orders.unshift(order);cart=[];persist();closeModal("checkoutModal");showOrders();toast("Order successfully place ho gaya")
 }
 function openLogin(){openModal("loginModal")}
-function login(e){e.preventDefault();closeModal("loginModal");toast("Login demo successful")}
+function login(e){e.preventDefault();closeModal("loginModal");toast("Customer login demo successful")}
 function openModal(id){document.getElementById(id).classList.add("show")}
 function closeModal(id){document.getElementById(id).classList.remove("show")}
 function closeOnBackdrop(e,id){if(e.target.id===id)closeModal(id)}
 function goHome(){window.scrollTo({top:0,behavior:"smooth"});renderProducts(products)}
-let toastTimer;
-function toast(msg){
- const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");
- clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove("show"),2200);
+function escapeHtml(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m]))}
+let toastTimer;function toast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove("show"),2200)}
+
+/* Hidden admin: tap the logo 5 times quickly */
+document.querySelector(".logo").addEventListener("click",function(e){
+ logoTaps++;clearTimeout(logoTapTimer);logoTapTimer=setTimeout(()=>logoTaps=0,1800);
+ if(logoTaps>=5){e.preventDefault();logoTaps=0;openModal("adminLoginModal")}
+});
+function adminLogin(e){
+ e.preventDefault();
+ const em=document.getElementById("adminEmail").value.trim(),pw=document.getElementById("adminPassword").value;
+ if(em===settings.adminEmail&&pw===settings.adminPassword){adminAuthed=true;closeModal("adminLoginModal");openModal("adminModal");showAdminTab("dashboard");document.getElementById("adminPassword").value=""}
+ else toast("Admin email ya password ghalat hai");
 }
-updateBadge();
-renderProducts(products);
+function adminLogout(){adminAuthed=false;closeModal("adminModal")}
+function showAdminTab(tab){
+ if(!adminAuthed)return;adminTab=tab;
+ document.querySelectorAll(".admin-tabs button").forEach(b=>b.classList.remove("active"));
+ const el=document.getElementById("tab-"+tab);if(el)el.classList.add("active");
+ const box=document.getElementById("adminContent");
+ if(tab==="dashboard")box.innerHTML=adminDashboard();
+ if(tab==="products")box.innerHTML=adminProducts();
+ if(tab==="orders")box.innerHTML=adminOrders();
+ if(tab==="categories")box.innerHTML=adminCategories();
+ if(tab==="store")box.innerHTML=adminStore();
+ if(tab==="security")box.innerHTML=adminSecurity();
+ if(tab==="data")box.innerHTML=adminData();
+}
+function adminDashboard(){
+ const revenue=orders.reduce((s,o)=>s+Number(o.total||0),0);
+ return `<div class="stat-grid"><div class="stat">Products<b>${products.length}</b></div><div class="stat">Orders<b>${orders.length}</b></div><div class="stat">Revenue<b>${money(revenue)}</b></div><div class="stat">Wishlist<b>${wishlist.length}</b></div></div>
+ <div class="admin-grid"><div class="admin-card"><h3>Store status</h3><p>🟢 Site active • COD ${settings.cod?"enabled":"disabled"}</p><p>${escapeHtml(settings.deliveryText)}</p><p>${escapeHtml(settings.returns)}</p></div>
+ <div class="admin-card"><h3>Quick actions</h3><div class="admin-actions"><button class="btn primary" onclick="showAdminTab('products')">Add Product</button><button class="btn green" onclick="showAdminTab('orders')">Manage Orders</button><button class="btn light" onclick="showAdminTab('store')">Store Settings</button></div></div></div>`;
+}
+function adminProducts(){
+ const edit=editingProductId?products.find(p=>p.id===editingProductId):null;
+ return `<div class="admin-card"><h3>${edit?"Edit Product":"Add Product"}</h3><form class="admin-form" onsubmit="saveProduct(event)">
+ <div class="admin-row"><input id="pName" placeholder="Product name" value="${escapeHtml(edit?.name||"")}" required><select id="pCat">${categories.map(c=>`<option ${edit?.cat===c?"selected":""}>${escapeHtml(c)}</option>`).join("")}</select></div>
+ <div class="admin-row"><input id="pPrice" type="number" min="0" placeholder="Sale price" value="${edit?.price??""}" required><input id="pOld" type="number" min="0" placeholder="Old price" value="${edit?.old??""}"></div>
+ <input id="pIcon" placeholder="Emoji / icon" value="${escapeHtml(edit?.icon||"🛍️")}">
+ <div class="admin-actions"><button class="btn primary">${edit?"Update":"Add Product"}</button>${edit?'<button type="button" class="btn light" onclick="cancelEdit()">Cancel</button>':""}</div></form></div>
+ <div class="admin-card" style="margin-top:16px"><h3>All Products</h3><table class="admin-table"><tr><th>Product</th><th>Category</th><th>Price</th><th>Actions</th></tr>${products.map(p=>`<tr><td>${p.icon||""} ${escapeHtml(p.name)}</td><td>${escapeHtml(p.cat)}</td><td>${money(p.price)}</td><td><button class="btn light" onclick="editProduct(${p.id})">Edit</button> <button class="btn danger" onclick="deleteProduct(${p.id})">Delete</button></td></tr>`).join("")}</table></div>`;
+}
+function saveProduct(e){
+ e.preventDefault();const data={name:pName.value.trim(),cat:pCat.value,price:Number(pPrice.value),old:Number(pOld.value||pPrice.value),icon:pIcon.value.trim()||"🛍️"};
+ if(editingProductId){const p=products.find(x=>x.id===editingProductId);Object.assign(p,data);toast("Product updated")}
+ else{data.id=products.length?Math.max(...products.map(x=>x.id))+1:1;products.push(data);toast("Product added")}
+ editingProductId=null;persist();renderProducts(products);showAdminTab("products")
+}
+function editProduct(id){editingProductId=id;showAdminTab("products")} function cancelEdit(){editingProductId=null;showAdminTab("products")}
+function deleteProduct(id){const p=products.find(x=>x.id===id);if(!p||!confirm("Delete "+p.name+"?"))return;products=products.filter(x=>x.id!==id);cart=cart.filter(x=>x.id!==id);wishlist=wishlist.filter(x=>x!==id);persist();renderProducts(products);showAdminTab("products");toast("Product deleted")}
+function adminOrders(){
+ return `<div class="admin-card"><h3>Customer Orders</h3>${orders.length?`<table class="admin-table"><tr><th>Order</th><th>Customer</th><th>Total</th><th>Status</th><th>Action</th></tr>${orders.map((o,i)=>`<tr><td><b>${escapeHtml(o.id)}</b><br><small>${escapeHtml(o.date)}</small></td><td>${escapeHtml(o.customer?.name||"") }<br>${escapeHtml(o.customer?.phone||"")}<br>${escapeHtml(o.customer?.city||"")}<br>${escapeHtml(o.customer?.address||"")}</td><td>${money(o.total)}</td><td><select onchange="setOrderStatus(${i},this.value)">${["Pending","Confirmed","Packed","Shipped","Delivered","Cancelled"].map(s=>`<option ${o.status===s?"selected":""}>${s}</option>`).join("")}</select></td><td><button class="btn danger" onclick="deleteOrder(${i})">Delete</button></td></tr>`).join("")}</table>`:'<div class="empty">No orders yet.</div>'}</div>`;
+}
+function setOrderStatus(i,status){if(orders[i]){orders[i].status=status;persist();showAdminTab("orders");toast("Order status updated")}}
+function deleteOrder(i){if(confirm("Delete this order?")){orders.splice(i,1);persist();showAdminTab("orders")}}
+function adminCategories(){
+ return `<div class="admin-grid"><div class="admin-card"><h3>Add Category</h3><form class="admin-form" onsubmit="addCategory(event)"><input id="newCat" placeholder="Category name" required><button class="btn primary">Add Category</button></form></div><div class="admin-card"><h3>Categories</h3>${categories.map((c,i)=>`<div class="cart-row"><b>${escapeHtml(c)}</b><button class="btn danger" onclick="deleteCategory(${i})">Delete</button></div>`).join("")}</div></div>`;
+}
+function addCategory(e){e.preventDefault();const n=newCat.value.trim();if(n&&!categories.includes(n)){categories.push(n);persist();showAdminTab("categories");toast("Category added")}}
+function deleteCategory(i){if(categories.length<=1){toast("At least one category required");return}if(confirm("Delete category? Existing products keep their category.")){categories.splice(i,1);persist();showAdminTab("categories")}}
+function adminStore(){
+ return `<div class="admin-card"><h3>Store Settings</h3><form class="admin-form" onsubmit="saveStore(event)">
+ <label>Store name<input id="sName" value="${escapeHtml(settings.storeName)}" required></label>
+ <label>Delivery message<input id="sDelivery" value="${escapeHtml(settings.deliveryText)}"></label>
+ <label>Return policy<input id="sReturns" value="${escapeHtml(settings.returns)}"></label>
+ <label>Currency<input id="sCurrency" value="${escapeHtml(settings.currency)}"></label>
+ <label>Hero title<input id="sHeroTitle" value="${escapeHtml(settings.heroTitle)}"></label>
+ <label>Hero text<textarea id="sHeroText">${escapeHtml(settings.heroText)}</textarea></label>
+ <label><input id="sCod" type="checkbox" ${settings.cod?"checked":""}> Enable Cash on Delivery</label>
+ <button class="btn primary">Save Store Settings</button></form></div>`;
+}
+function saveStore(e){e.preventDefault();settings.storeName=sName.value.trim();settings.deliveryText=sDelivery.value.trim();settings.returns=sReturns.value.trim();settings.currency=sCurrency.value.trim()||"PKR";settings.heroTitle=sHeroTitle.value.trim();settings.heroText=sHeroText.value.trim();settings.cod=sCod.checked;persist();applyStoreSettings();showAdminTab("store");toast("Store settings saved")}
+function applyStoreSettings(){
+ document.title=settings.storeName+" - Online Shop";
+ const hero=document.querySelector(".hero-copy h1");if(hero){const parts=settings.heroTitle.split("resell and earn.");hero.innerHTML=parts.length>1?escapeHtml(parts[0])+'<span>resell and earn.</span>':escapeHtml(settings.heroTitle)}
+ const hp=document.querySelector(".hero-copy p");if(hp)hp.textContent=settings.heroText;
+ const logoText=document.querySelector(".logo span");if(logoText)logoText.textContent=settings.storeName;
+ const footer=document.querySelector("footer");if(footer)footer.textContent="© 2026 "+settings.storeName+" — Online Shopping in Pakistan";
+}
+function adminSecurity(){
+ return `<div class="admin-card"><h3>Admin Security</h3><p>Change the hidden admin login credentials.</p><form class="admin-form" onsubmit="saveSecurity(event)"><input id="newAdminEmail" type="text" value="${escapeHtml(settings.adminEmail)}" required><input id="newAdminPass" type="password" placeholder="New password (min 6 chars)" required minlength="6"><button class="btn primary">Save Credentials</button></form><p style="font-size:12px;color:#777">Note: this is a browser-only admin. For a real public shop, server-side authentication/database is required.</p></div>`;
+}
+function saveSecurity(e){e.preventDefault();settings.adminEmail=newAdminEmail.value.trim();settings.adminPassword=newAdminPass.value;persist();toast("Admin credentials updated");showAdminTab("security")}
+function adminData(){
+ return `<div class="admin-grid"><div class="admin-card"><h3>Export Backup</h3><p>Download all store data as JSON.</p><button class="btn green" onclick="exportData()">Export JSON</button></div><div class="admin-card"><h3>Reset Demo Store</h3><p>Restore original products/categories/settings.</p><button class="btn danger" onclick="resetStore()">Reset Everything</button></div></div>`;
+}
+function exportData(){const data={products,categories,settings,orders,wishlist};const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="cheezay-dikhao-backup.json";a.click();URL.revokeObjectURL(a.href)}
+function resetStore(){if(!confirm("Reset all store data?"))return;products=JSON.parse(JSON.stringify(defaultProducts));categories=[...defaultCategories];settings=Object.assign({},defaultSettings);orders=[];wishlist=[];cart=[];persist();applyStoreSettings();renderProducts(products);showAdminTab("dashboard");toast("Store reset complete")}
+
+updateBadge();applyStoreSettings();renderProducts(products);
 </script>
 </body>
 </html>
