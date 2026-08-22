@@ -252,27 +252,14 @@ function openLogin(){openModal("loginModal")}function login(e){
 function loginWithGoogle(){
  if(!firebaseReady){toast("Firebase initialize nahi hua");return}
  const provider=new firebase.auth.GoogleAuthProvider();
- provider.setCustomParameters({prompt:"select_account"});
  document.getElementById("loginStatus").textContent="Google login ho raha hai...";
- auth.signInWithRedirect(provider).catch(err=>{
+ auth.signInWithPopup(provider).then(result=>{
+   const name=result.user.displayName||result.user.email||"Google user";
+   document.getElementById("loginStatus").textContent="Welcome "+name;
+   closeModal("loginModal");toast("Google login successful");
+ }).catch(err=>{
    document.getElementById("loginStatus").textContent=err.message;
    toast("Google login failed");
- });
-}
-
-// Google redirect ke baad result handle karein.
-if(firebaseReady){
- auth.getRedirectResult().then(result=>{
-   if(result && result.user){
-     const name=result.user.displayName||result.user.email||"Google user";
-     const st=document.getElementById("loginStatus");
-     if(st) st.textContent="Welcome "+name;
-     toast("Google login successful");
-   }
- }).catch(err=>{
-   const st=document.getElementById("loginStatus");
-   if(st) st.textContent=err.message;
-   console.error("Google redirect error:",err);
  });
 }
 function openModal(id){document.getElementById(id).classList.add("show")}function closeModal(id){document.getElementById(id).classList.remove("show")}function closeOnBackdrop(e,id){if(e.target.id===id)closeModal(id)}
@@ -306,11 +293,14 @@ function adminLogin(e){
  const showPanel=()=>{
    document.getElementById("adminLoginBox").style.display="none";
    document.getElementById("adminPanel").style.display="block";
-   document.getElementById("firebaseStatus").textContent="Admin password accepted. Firebase connected.";
+   document.getElementById("firebaseStatus").textContent="Admin login successful.";
    loadHeroFromFirebase();
  };
- // Admin panel ke liye Anonymous Authentication ki zaroorat nahi.
- showPanel();
+ if(auth.currentUser){showPanel();return}
+ auth.signInAnonymously().then(showPanel).catch(err=>{
+   document.getElementById("firebaseStatus").textContent="Firebase Anonymous Auth enable karein: "+err.message;
+   toast("Anonymous Authentication enable karein");
+ });
 }
 function adminLogout(){
  if(auth.currentUser && auth.currentUser.isAnonymous) auth.signOut();
@@ -335,10 +325,11 @@ function resizeHero(){
  };im.src=originalHeroData;
 }
 function saveHeroToFirebase(){
+ if(!auth.currentUser){toast("Admin login zaroori hai");return}
  if(!originalHeroData){toast("Image upload/resize karein");return}
  const size=Math.round(originalHeroData.length/1024);
  if(size>5000){toast("Image bohat bari hai. Quality ya size kam karein.");return}
- db.ref("siteSettings/heroImage").set({data:originalHeroData,updatedAt:Date.now(),updatedBy:"admin-password"}).then(()=>{applyHero(originalHeroData);toast("Hero Firebase mein save ho gaya")}).catch(err=>{document.getElementById("adminInfo").textContent=err.message})
+ db.ref("siteSettings/heroImage").set({data:originalHeroData,updatedAt:Date.now(),updatedBy:auth.currentUser.email||""}).then(()=>{applyHero(originalHeroData);toast("Hero Firebase mein save ho gaya")}).catch(err=>{document.getElementById("adminInfo").textContent=err.message})
 }
 function loadHeroFromFirebase(){
  if(!firebaseReady)return;

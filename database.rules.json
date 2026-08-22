@@ -1,10 +1,12 @@
 {
   "rules": {
     ".read": true,
-    ".write": "auth != null",
+    ".write": false,
     "siteSettings": {
       "heroImage": {
-        ".validate": "newData.hasChildren(['data','updatedAt'])"
+        ".read": true,
+        ".write": true,
+        ".validate": "newData.hasChildren(['data','updatedAt']) && newData.child('data').isString()"
       }
     }
   }

@@ -1,25 +1,26 @@
 CHEEZAY DIKHAO - FIREBASE SETUP
 
-1. Firebase Console > Authentication > Sign-in method:
-   - Enable Google.
-   - Enable Anonymous (required for the hidden admin password flow).
+1) Authentication > Sign-in method:
+   - Google: ENABLED
+   - Email/Password: optional
+   - Anonymous: NOT REQUIRED for this version. You can disable it.
 
-2. Realtime Database:
-   - Import/apply database.rules.json.
-   - The current rule allows authenticated users to write. Because the admin password is stored in frontend code, this is a convenience/demo admin gate, NOT strong security.
+2) Authentication > Settings > Authorized domains:
+   Add:
+   - localhost
+   - your Vercel domain, e.g. your-project.vercel.app
+   Do NOT include https:// in the domain entry.
 
-3. Hidden Admin:
-   - Footer Admin Settings link has been removed.
-   - Cheezay Dikhao logo ko 5 dafa jaldi click karne par Admin Settings open hoti hain.
-   - Sirf password: nabel3457
-   - Admin mein device se hero image upload, resize/crop, preview, Firebase save/reload available hai.
+3) Google login:
+   The website now uses Firebase signInWithRedirect instead of popup. This is more reliable on browsers that block popups.
 
-4. Normal Login:
-   - Login button mein Google login active code added hai.
-   - Google provider Firebase Console mein enable karna zaroori hai.
-   - Email/password login bhi Firebase Auth se connected hai.
+4) Admin:
+   Click the Cheezay Dikhao logo 5 times quickly.
+   Admin password: nabel3457
+   Anonymous Authentication is NOT used by the admin code.
 
-5. Vercel/GitHub:
-   - index.html, cropped-logo.jpg, default-hero.jpg aur database.rules.json ko same project root mein rakhein.
-   - Build command: empty
-   - Output directory: .
+5) Realtime Database:
+   Apply database.rules.json in Realtime Database > Rules.
+
+SECURITY NOTE:
+The requested admin password is stored in frontend JavaScript, so it is not a secure production admin authentication system. The heroImage path is intentionally writable without Firebase authentication so the requested password-only admin can save without Anonymous Auth. For a real production admin, use Firebase Authentication + security rules/Cloud Functions.
