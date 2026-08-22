@@ -85,6 +85,10 @@ footer button{border:0;background:none;color:#aaa;text-decoration:underline}
 .admin-form-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.admin-field label{display:block;font-size:13px;font-weight:700;margin-bottom:6px;color:#39433f}.admin-field input,.admin-field select{width:100%;padding:11px 12px;border:1px solid #d9e0dd;border-radius:9px;outline:0}.admin-field input:focus,.admin-field select:focus{border-color:#0da45e;box-shadow:0 0 0 3px #0da45e18}
 .admin-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}.admin-actions button{border:0;padding:12px 16px;border-radius:9px;font-weight:800}.btn-orange{background:var(--orange);color:#fff}.btn-green{background:#087b4b;color:#fff}.btn-gray{background:#eef1ef;color:#33403a}.admin-status{margin-top:16px;padding:12px 14px;border-radius:10px;background:#f1f8f4;color:#276449;font-size:13px;line-height:1.5}
 .admin-login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}.admin-login-card{width:min(430px,94%);background:#fff;border:1px solid #e4ebe7;border-radius:22px;padding:32px;box-shadow:0 18px 60px #00000012;text-align:center}.admin-login-card img{width:90px;height:90px;object-fit:contain}.admin-login-card h2{margin:12px 0 6px}.admin-login-card p{color:#68736f}.admin-login-card input{width:100%;padding:13px;border:1px solid #d9e0dd;border-radius:10px;margin:10px 0;outline:0}.admin-login-card button{width:100%;border:0;background:var(--orange);color:#fff;padding:13px;border-radius:10px;font-weight:800}
+
+.admin-content{min-width:0}.admin-tab{display:none}.admin-tab.active{display:block}.admin-side-item{width:100%;border:0;text-align:left;cursor:pointer}.admin-image-editor{display:grid;grid-template-columns:220px 1fr;gap:22px;align-items:center}.admin-preview-square{width:200px;height:200px;object-fit:contain;border:1px solid #e2e8e5;border-radius:14px;background:#f7f8f7}.firebase-check-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.firebase-check-grid>div{padding:16px;background:#f5f8f6;border-radius:12px;display:flex;flex-direction:column;gap:6px}.firebase-check-grid span{color:#68736f}.admin-product-row{display:grid;grid-template-columns:70px 1.5fr .7fr .7fr 1fr 120px;gap:8px;align-items:center;padding:12px 0;border-bottom:1px solid #edf0ee}.admin-product-row input,.admin-product-row select{padding:9px;border:1px solid #d9e0dd;border-radius:8px;width:100%}.admin-product-img{width:60px;height:60px;border-radius:10px;object-fit:cover;background:#f3f5f4}.admin-category-row{display:grid;grid-template-columns:55px 1fr 1fr 180px 90px;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid #edf0ee}.admin-category-row input{padding:10px;border:1px solid #d9e0dd;border-radius:8px;width:100%}
+@media(max-width:760px){.admin-layout{grid-template-columns:1fr}.admin-side{display:flex;gap:7px;overflow:auto}.admin-side-item{min-width:170px}.admin-form-grid{grid-template-columns:1fr}.admin-image-editor{grid-template-columns:1fr}.firebase-check-grid{grid-template-columns:1fr}.admin-product-row{grid-template-columns:55px 1fr 1fr}.admin-product-row>*:nth-child(n+4){grid-column:span 1}.admin-category-row{grid-template-columns:45px 1fr 1fr}.admin-preview-square{width:160px;height:160px}}
+
 @media(max-width:1050px){.header-main{flex-wrap:wrap;padding:10px 0}.logo{width:auto}.search-wrap{order:3;max-width:none;flex-basis:100%}.actions{gap:8px}.categories{grid-template-columns:repeat(5,1fr)}.products{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:760px){.topinner{font-size:10px}.topitem:nth-child(3),.topitem:nth-child(4){display:none}.hero{height:300px}.section{padding:18px}.categories{grid-template-columns:repeat(3,1fr)}.products{grid-template-columns:repeat(2,1fr)}.actions .action span:last-child{display:none}.actions{margin-left:0}}
 @media(max-width:480px){.logo{font-size:17px}.logo img{width:52px;height:52px}.products{grid-template-columns:1fr}.categories{grid-template-columns:repeat(2,1fr)}.hero{height:250px}.section h2{font-size:21px}}
@@ -105,7 +109,7 @@ footer button{border:0;background:none;color:#aaa;text-decoration:underline}
 <a class="logo" href="#" onclick="handleLogoAdminClick(event);return false;" title="Cheezay Dikhao"><img src="cropped-logo.jpg" alt="Cheezay Dikhao"><span>Cheezay Dikhao</span></a>
 <form class="search-wrap" onsubmit="searchProducts(event)"><input id="searchInput" placeholder="Search products, brands & stores"><button>Search</button></form>
 <div class="actions">
-<button class="action" onclick="openLogin()"><span class="ico">◯</span><span>Log in</span></button>
+<button id="accountAction" class="action" onclick="handleAccountAction()"><span class="ico" id="accountIcon">◯</span><span id="accountLabel">Log in</span></button>
 <button class="action" onclick="showOrders()"><span class="ico">📦</span><span>Orders</span></button>
 <button class="action" onclick="showWishlist()"><span class="ico">♡</span><span>Wishlist</span></button>
 <button class="action" onclick="openCart()" style="position:relative"><span class="ico">🛒<b id="cartBadge" class="badge">0</b></span><span>Cart</span></button>
@@ -148,7 +152,7 @@ footer button{border:0;background:none;color:#aaa;text-decoration:underline}
 <section class="section"><div class="section-head"><h2 id="productTitle">Featured Products</h2><button class="seeall" onclick="renderProducts(products)">Reset</button></div><div id="products" class="products"></div></section>
 </main>
 
-<footer>© 2026 Cheezay Dikhao — Online Shopping in Pakistan</footer>
+<footer><span id="footerText">© 2026 Cheezay Dikhao — Online Shopping in Pakistan</span></footer>
 
 <div id="adminScreen" class="admin-screen">
   <div id="adminLoginScreen" class="admin-login-screen">
@@ -163,37 +167,63 @@ footer button{border:0;background:none;color:#aaa;text-decoration:underline}
   </div>
   <div id="adminDashboard" style="display:none">
     <div class="admin-top">
-      <div class="admin-brand"><img src="cropped-logo.jpg" alt="Logo"><span>Cheezay Dikhao Admin</span></div>
+      <div class="admin-brand"><img id="adminBrandLogo" src="cropped-logo.jpg" alt="Logo"><span>Cheezay Dikhao Admin</span></div>
       <button class="admin-back" onclick="closeAdminFull()">← Back to Website</button>
     </div>
     <div class="admin-wrap">
-      <div class="admin-title"><h1>Website Settings</h1><p>Hero banner ko upload, resize aur Firebase Realtime Database mein save karein.</p></div>
+      <div class="admin-title"><h1>Website Admin Panel</h1><p>Yahan se website ki tamam basic settings, images, categories aur products manage karein.</p></div>
       <div class="admin-layout">
         <aside class="admin-side">
-          <div class="admin-side-item active">🖼️ Hero Banner</div>
-          <div class="admin-side-item">☁️ Firebase Storage</div>
-          <div class="admin-side-item">⚙️ Site Settings</div>
+          <button class="admin-side-item active" onclick="showAdminTab('general',this)">⚙️ General Settings</button>
+          <button class="admin-side-item" onclick="showAdminTab('images',this)">🖼️ Images & Banners</button>
+          <button class="admin-side-item" onclick="showAdminTab('categories',this)">🗂️ Categories</button>
+          <button class="admin-side-item" onclick="showAdminTab('products',this)">🛍️ Products</button>
+          <button class="admin-side-item" onclick="showAdminTab('firebase',this)">🔥 Firebase</button>
           <div class="admin-status">Firebase: <b id="adminFirebaseState">Checking...</b></div>
         </aside>
-        <section class="admin-card">
-          <h2>Hero Banner</h2><p class="help">Recommended size: 1600 × 390 px. Upload ke baad resize karke save karein.</p>
-          <div class="admin-field"><label>Image from device</label><input id="heroFileFull" type="file" accept="image/*" onchange="previewHeroFileFull(event)"></div>
-          <img id="adminPreviewFull" class="admin-preview-large" src="default-hero.jpg" alt="Hero preview">
-          <div class="admin-form-grid">
-            <div class="admin-field"><label>Width (px)</label><input id="resizeWFull" type="number" value="1600" min="320" max="3000"></div>
-            <div class="admin-field"><label>Height (px)</label><input id="resizeHFull" type="number" value="390" min="120" max="1500"></div>
-            <div class="admin-field"><label>Quality</label><input id="resizeQFull" type="number" value="0.85" min="0.3" max="1" step="0.05"></div>
+        <section class="admin-content">
+          <div id="adminTab-general" class="admin-tab active">
+            <div class="admin-card"><h2>General Website Settings</h2><p class="help">Website ka naam, top bar aur footer text yahan se change karein.</p>
+              <div class="admin-form-grid">
+                <div class="admin-field"><label>Website Name</label><input id="siteNameAdmin" value="Cheezay Dikhao"></div>
+                <div class="admin-field"><label>Top Bar 1</label><input id="top1Admin" value="Lowest delivery price in Pakistan"></div>
+                <div class="admin-field"><label>Top Bar 2</label><input id="top2Admin" value="Cash on Delivery available"></div>
+                <div class="admin-field"><label>Top Bar 3</label><input id="top3Admin" value="7-day easy returns"></div>
+                <div class="admin-field"><label>Top Bar 4</label><input id="top4Admin" value="Verified Suppliers"></div>
+                <div class="admin-field"><label>Footer Text</label><input id="footerAdmin" value="© 2026 Cheezay Dikhao — Online Shopping in Pakistan"></div>
+              </div>
+              <div class="admin-actions"><button class="btn-green" onclick="saveGeneralSettings()">Save General Settings</button><button class="btn-gray" onclick="loadAllAdminSettings()">Reload</button></div>
+              <div id="generalStatus" class="admin-status">Ready.</div>
+            </div>
+            <div class="admin-card" style="margin-top:18px"><h2>Logo</h2><p class="help">Device se logo upload karein. Resize karke Firebase mein save ho jayega.</p>
+              <div class="admin-image-editor"><div><input id="logoFileAdmin" type="file" accept="image/*" onchange="previewAdminImage(event,'logo')"><img id="logoPreviewAdmin" class="admin-preview-square" src="cropped-logo.jpg"></div><div>
+                <div class="admin-form-grid"><div class="admin-field"><label>Width</label><input id="logoWAdmin" type="number" value="500" min="80" max="2000"></div><div class="admin-field"><label>Height</label><input id="logoHAdmin" type="number" value="500" min="80" max="2000"></div><div class="admin-field"><label>Quality</label><input id="logoQAdmin" type="number" value="0.9" min="0.3" max="1" step="0.05"></div></div>
+                <div class="admin-actions"><button class="btn-orange" onclick="resizeAdminImage('logo')">Resize Image</button><button class="btn-green" onclick="saveAdminImage('logo')">Save Logo</button></div></div></div><div id="logoStatus" class="admin-status">Logo ready.</div>
+            </div>
           </div>
-          <div class="admin-form-grid" style="margin-top:14px">
-            <div class="admin-field"><label>Resize mode</label><select id="fitModeFull"><option value="cover">Cover / Crop</option><option value="contain">Fit / No Crop</option></select></div>
+
+          <div id="adminTab-images" class="admin-tab">
+            <div class="admin-card"><h2>Main Hero Banner</h2><p class="help">Recommended: 1600 × 390 px. Device se image upload, resize aur Firebase save karein.</p>
+              <input id="heroFileFull" type="file" accept="image/*" onchange="previewHeroFileFull(event)">
+              <img id="adminPreviewFull" class="admin-preview-large" src="default-hero.jpg" alt="Hero preview">
+              <div class="admin-form-grid"><div class="admin-field"><label>Width</label><input id="resizeWFull" type="number" value="1600" min="320" max="3000"></div><div class="admin-field"><label>Height</label><input id="resizeHFull" type="number" value="390" min="120" max="1500"></div><div class="admin-field"><label>Quality</label><input id="resizeQFull" type="number" value="0.85" min="0.3" max="1" step="0.05"></div></div>
+              <div class="admin-form-grid" style="margin-top:14px"><div class="admin-field"><label>Resize mode</label><select id="fitModeFull"><option value="cover">Cover / Crop</option><option value="contain">Fit / No Crop</option></select></div></div>
+              <div class="admin-actions"><button class="btn-orange" onclick="resizeHeroFull()">Resize Image</button><button class="btn-green" onclick="saveHeroToFirebaseFull()">Save Hero</button><button class="btn-gray" onclick="loadHeroFromFirebaseFull()">Reload</button></div><div id="adminInfoFull" class="admin-status">Ready.</div>
+            </div>
+            <div class="admin-card" style="margin-top:18px"><h2>Image Rules</h2><p class="help">Images Firebase Realtime Database mein compressed data ke tor par save hoti hain. Behtar result ke liye resize aur quality kam karke save karein.</p></div>
           </div>
-          <div class="admin-actions">
-            <button class="btn-orange" onclick="resizeHeroFull()">Resize Image</button>
-            <button class="btn-green" onclick="saveHeroToFirebaseFull()">Save to Firebase</button>
-            <button class="btn-gray" onclick="loadHeroFromFirebaseFull()">Reload from Firebase</button>
-            <button class="btn-gray" onclick="closeAdminFull()">Exit Admin</button>
+
+          <div id="adminTab-categories" class="admin-tab">
+            <div class="admin-card"><h2>Categories</h2><p class="help">Category ka naam, icon/emoji aur optional image set karein.</p><div id="categoryAdminList"></div><div class="admin-actions"><button class="btn-green" onclick="saveCategoriesAdmin()">Save Categories</button></div><div id="categoryStatus" class="admin-status">Categories loaded.</div></div>
           </div>
-          <div id="adminInfoFull" class="admin-status">Ready. Pehle image upload karein.</div>
+
+          <div id="adminTab-products" class="admin-tab">
+            <div class="admin-card"><h2>Products</h2><p class="help">Product name, price, old price, category aur product image manage karein.</p><div id="productAdminList"></div><div class="admin-actions"><button class="btn-green" onclick="saveProductsAdmin()">Save Products</button><button class="btn-orange" onclick="addAdminProduct()">+ Add Product</button></div><div id="productStatus" class="admin-status">Products loaded.</div></div>
+          </div>
+
+          <div id="adminTab-firebase" class="admin-tab">
+            <div class="admin-card"><h2>Firebase Status</h2><div class="firebase-check-grid"><div><b>Project</b><span>school-c9633</span></div><div><b>Realtime Database</b><span id="firebaseDbStatus">Connected check...</span></div><div><b>Authentication</b><span>Email/Password + Google</span></div></div><div class="admin-actions"><button class="btn-green" onclick="testFirebaseConnection()">Test Firebase</button><button class="btn-gray" onclick="logoutUser()">Logout User</button></div><div id="firebaseAdminStatus" class="admin-status">Firebase configuration active.</div></div>
+          </div>
         </section>
       </div>
     </div>
@@ -261,7 +291,7 @@ function money(n){return "PKR "+Number(n).toLocaleString("en-PK")}
 function save(){localStorage.setItem("cd_cart",JSON.stringify(cart));localStorage.setItem("cd_wishlist",JSON.stringify(wishlist));localStorage.setItem("cd_orders",JSON.stringify(orders));updateBadge()}
 function updateBadge(){document.getElementById("cartBadge").textContent=cart.reduce((s,x)=>s+x.qty,0)}
 function renderProducts(list){
- document.getElementById("products").innerHTML=list.length?list.map(p=>`<article class="card"><div class="card-img">${p.icon}</div><div class="card-body"><h3>${p.name}</h3><div><span class="price">${money(p.price)}</span><span class="old">${money(p.old)}</span></div><div class="card-actions"><button class="add" onclick="addToCart(${p.id})">Add to Cart</button><button class="heart ${wishlist.includes(p.id)?"active":""}" onclick="toggleWish(${p.id})">${wishlist.includes(p.id)?"♥":"♡"}</button></div></div></article>`).join(""):'<div class="empty" style="grid-column:1/-1">No products found.</div>';
+ document.getElementById("products").innerHTML=list.length?list.map(p=>`<article class="card"><div class="card-img">${p.image?`<img src="${p.image}" alt="${escapeHtml(p.name)}" style="width:100%;height:100%;object-fit:cover">`:p.icon}</div><div class="card-body"><h3>${p.name}</h3><div><span class="price">${money(p.price)}</span><span class="old">${money(p.old)}</span></div><div class="card-actions"><button class="add" onclick="addToCart(${p.id})">Add to Cart</button><button class="heart ${wishlist.includes(p.id)?"active":""}" onclick="toggleWish(${p.id})">${wishlist.includes(p.id)?"♥":"♡"}</button></div></div></article>`).join(""):'<div class="empty" style="grid-column:1/-1">No products found.</div>';
 }
 function filterCategory(cat,btn){if(btn){document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("active"));btn.classList.add("active")}const list=cat==="All"?products:products.filter(p=>p.cat===cat);renderProducts(list);document.getElementById("productTitle").textContent=cat==="All"?"Featured Products":cat}
 function searchProducts(e){e.preventDefault();const q=document.getElementById("searchInput").value.trim().toLowerCase();renderProducts(q?products.filter(p=>(p.name+" "+p.cat).toLowerCase().includes(q)):products);document.getElementById("productTitle").textContent=q?"Search results":"Featured Products"}
@@ -298,27 +328,26 @@ function loginWithGoogle(){
  if(!firebaseReady){toast("Firebase initialize nahi hua");return}
  const provider=new firebase.auth.GoogleAuthProvider();
  provider.setCustomParameters({prompt:"select_account"});
- document.getElementById("loginStatus").textContent="Google login ho raha hai...";
- auth.signInWithRedirect(provider).catch(err=>{
-   document.getElementById("loginStatus").textContent=err.message;
-   toast("Google login failed");
- });
+ const st=document.getElementById("loginStatus"); if(st)st.textContent="Google login ho raha hai...";
+ auth.signInWithRedirect(provider).catch(err=>{if(st)st.textContent=err.message;toast("Google login failed")});
 }
-
-// Google redirect ke baad result handle karein.
 if(firebaseReady){
  auth.getRedirectResult().then(result=>{
-   if(result && result.user){
-     const name=result.user.displayName||result.user.email||"Google user";
-     const st=document.getElementById("loginStatus");
-     if(st) st.textContent="Welcome "+name;
-     toast("Google login successful");
-   }
+   if(result && result.user){ closeModal("loginModal"); toast("Google login successful"); updateAccountUI(result.user); }
  }).catch(err=>{
-   const st=document.getElementById("loginStatus");
-   if(st) st.textContent=err.message;
+   const st=document.getElementById("loginStatus"); if(st)st.textContent=err.message;
    console.error("Google redirect error:",err);
  });
+}
+function handleAccountAction(){ if(auth && auth.currentUser){ logoutUser(); } else openLogin(); }
+function updateAccountUI(user){
+ const label=document.getElementById("accountLabel"),icon=document.getElementById("accountIcon");
+ if(user){ label.textContent="Logout"; icon.textContent="↪"; }
+ else { label.textContent="Log in"; icon.textContent="◯"; }
+}
+function logoutUser(){
+ if(!auth){openLogin();return}
+ auth.signOut().then(()=>{updateAccountUI(null);toast("Logout ho gaya")}).catch(e=>toast(e.message));
 }
 function openModal(id){document.getElementById(id).classList.add("show")}function closeModal(id){document.getElementById(id).classList.remove("show")}function closeOnBackdrop(e,id){if(e.target.id===id)closeModal(id)}
 function goHome(){window.scrollTo({top:0,behavior:"smooth"});renderProducts(products)}
@@ -351,7 +380,7 @@ function adminLoginFull(e){
  document.getElementById("adminLoginScreen").style.display="none";
  document.getElementById("adminDashboard").style.display="block";
  document.getElementById("adminFirebaseState").textContent=firebaseReady?"Connected":"Not connected";
- loadHeroFromFirebaseFull();
+ loadHeroFromFirebaseFull(); loadAllAdminSettings(); if(firebaseReady){db.ref('siteSettings/logo').once('value').then(s=>{const v=s.val();if(v&&v.data){adminImages.logo=v.data;document.getElementById('logoPreviewAdmin').src=v.data}});}
 }
 function closeAdminFull(){document.getElementById("adminScreen").classList.remove("show");document.getElementById("adminLoginScreen").style.display="flex";document.getElementById("adminDashboard").style.display="none"}
 
@@ -401,13 +430,40 @@ function loadHeroFromFirebase(){
 function applyHero(data){const img=document.getElementById("heroImage");img.src=data;img.style.display="block";document.getElementById("heroPlaceholder").style.display="none"}
 if(firebaseReady){
  db.ref("siteSettings/heroImage").once("value").then(s=>{const v=s.val();if(v&&v.data)applyHero(v.data)}).catch(console.warn);
- auth.onAuthStateChanged(user=>{
-   if(user && !user.isAnonymous){
-     const st=document.getElementById("loginStatus");
-     if(st)st.textContent="Logged in: "+(user.displayName||user.email||"Google user");
-   }
- });
+ db.ref("siteSettings/general").once("value").then(s=>{const v=s.val();if(v)applyGeneralSettings(v)}).catch(console.warn);
+ db.ref("siteSettings/logo").once("value").then(s=>{const v=s.val();if(v&&v.data)applyLogo(v.data)}).catch(console.warn);
+ db.ref("siteSettings/categories").once("value").then(s=>{const v=s.val();if(v&&Array.isArray(v.items))applyCategories(v.items)}).catch(console.warn);
+ db.ref("siteSettings/products").once("value").then(s=>{const v=s.val();if(v&&Array.isArray(v.items)){products.splice(0,products.length,...v.items);renderProducts(products)}}).catch(console.warn);
+ auth.onAuthStateChanged(user=>{updateAccountUI(user);if(user){const st=document.getElementById("loginStatus");if(st)st.textContent="Logged in: "+(user.displayName||user.email||"Google user")}});
 }
+
+let adminImages={logo:null};
+const defaultCategories=[
+ {name:"Cosmetics",cat:"Beauty & Care",icon:"💄"},{name:"Womens Stitched",cat:"Women Corner",icon:"👗"},{name:"Kids Clothing",cat:"Kids & Mother",icon:"👕"},{name:"Mens Stitched",cat:"Men's Fashion",icon:"👔"},{name:"Jewellery",cat:"Women Corner",icon:"💍"},{name:"Fashion Accessories",cat:"Beauty & Care",icon:"🕶️"},{name:"Bedding",cat:"Home & Living",icon:"🛏️"},{name:"Festive Collection",cat:"Women Corner",icon:"🧣"},{name:"Islamic Accessories",cat:"Urdu Bazaar",icon:"📖"}
+];
+let categoriesAdmin=JSON.parse(localStorage.getItem("cd_categories")||"null")||defaultCategories;
+function showAdminTab(name,btn){document.querySelectorAll('.admin-tab').forEach(x=>x.classList.remove('active'));document.getElementById('adminTab-'+name).classList.add('active');document.querySelectorAll('.admin-side-item').forEach(x=>x.classList.remove('active'));if(btn)btn.classList.add('active');if(name==='categories')renderCategoryAdmin();if(name==='products')renderProductAdmin();if(name==='firebase')testFirebaseConnection();}
+function previewAdminImage(e,type){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{adminImages[type]=r.result;document.getElementById(type==='logo'?'logoPreviewAdmin':'adminPreviewFull').src=r.result};r.readAsDataURL(f)}
+function resizeDataUrl(data,W,H,Q,mode,cb){const im=new Image();im.onload=()=>{const c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,W,H);const scale=mode==='cover'?Math.max(W/im.width,H/im.height):Math.min(W/im.width,H/im.height);const nw=im.width*scale,nh=im.height*scale;x.drawImage(im,(W-nw)/2,(H-nh)/2,nw,nh);cb(c.toDataURL('image/jpeg',Q))};im.src=data}
+function resizeAdminImage(type){const data=adminImages[type];if(!data){toast('Pehle image upload karein');return}const W=Number(document.getElementById('logoWAdmin').value)||500,H=Number(document.getElementById('logoHAdmin').value)||500,Q=Number(document.getElementById('logoQAdmin').value)||.9;resizeDataUrl(data,W,H,Q,'contain',out=>{adminImages[type]=out;document.getElementById('logoPreviewAdmin').src=out;document.getElementById('logoStatus').textContent=`Logo resized: ${W} × ${H}px`})}
+function saveAdminImage(type){if(!firebaseReady){toast('Firebase connected nahi hai');return}const data=adminImages[type];if(!data){toast('Pehle logo upload/resize karein');return}db.ref('siteSettings/logo').set({data,updatedAt:Date.now()}).then(()=>{applyLogo(data);document.getElementById('logoStatus').textContent='Logo Firebase mein save ho gaya.'}).catch(e=>document.getElementById('logoStatus').textContent=e.message)}
+function applyLogo(data){document.querySelectorAll('.logo img').forEach(x=>x.src=data);const a=document.getElementById('adminBrandLogo');if(a)a.src=data;const l=document.querySelector('#adminLoginScreen img');if(l)l.src=data;}
+function saveGeneralSettings(){if(!firebaseReady){toast('Firebase connected nahi hai');return}const v={siteName:document.getElementById('siteNameAdmin').value,top1:document.getElementById('top1Admin').value,top2:document.getElementById('top2Admin').value,top3:document.getElementById('top3Admin').value,top4:document.getElementById('top4Admin').value,footer:document.getElementById('footerAdmin').value};db.ref('siteSettings/general').set(v).then(()=>{applyGeneralSettings(v);document.getElementById('generalStatus').textContent='General settings save ho gayi.'}).catch(e=>document.getElementById('generalStatus').textContent=e.message)}
+function applyGeneralSettings(v){const tops=document.querySelectorAll('.topitem span');[v.top1,v.top2,v.top3,v.top4].forEach((x,i)=>{if(tops[i]&&x)tops[i].textContent=x});if(v.footer)document.getElementById('footerText').textContent=v.footer;if(v.siteName){document.title=v.siteName+' - Shop';document.querySelectorAll('.logo span').forEach(x=>x.textContent=v.siteName)}}
+function loadAllAdminSettings(){if(!firebaseReady)return;db.ref('siteSettings/general').once('value').then(s=>{const v=s.val();if(!v)return;document.getElementById('siteNameAdmin').value=v.siteName||'Cheezay Dikhao';document.getElementById('top1Admin').value=v.top1||'';document.getElementById('top2Admin').value=v.top2||'';document.getElementById('top3Admin').value=v.top3||'';document.getElementById('top4Admin').value=v.top4||'';document.getElementById('footerAdmin').value=v.footer||'';applyGeneralSettings(v)})}
+function renderCategoryAdmin(){const box=document.getElementById('categoryAdminList');box.innerHTML=categoriesAdmin.map((c,i)=>`<div class="admin-category-row"><div class="admin-category-preview">${c.image?`<img src="${c.image}" alt="" style="width:45px;height:45px;object-fit:cover;border-radius:50%">`:`<span>${escapeHtml(c.icon||'📦')}</span>`}</div><input value="${escapeHtml(c.name||'')}" data-ci="${i}" data-k="name"><input value="${escapeHtml(c.cat||'')}" data-ci="${i}" data-k="cat"><input type="file" accept="image/*" onchange="previewCategoryImage(event,${i})"><button class="btn-gray" onclick="removeCategoryAdmin(${i})">Remove</button></div>`).join('')}
+function previewCategoryImage(e,i){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{resizeDataUrl(r.result,300,300,.82,'cover',out=>{categoriesAdmin[i].image=out;categoriesAdmin[i].icon='';renderCategoryAdmin()})};r.readAsDataURL(f)}
+function saveCategoriesAdmin(){if(!firebaseReady){toast('Firebase connected nahi hai');return}document.querySelectorAll('#categoryAdminList [data-ci]').forEach(el=>{categoriesAdmin[Number(el.dataset.ci)][el.dataset.k]=el.value});db.ref('siteSettings/categories').set({items:categoriesAdmin,updatedAt:Date.now()}).then(()=>{localStorage.setItem('cd_categories',JSON.stringify(categoriesAdmin));applyCategories(categoriesAdmin);document.getElementById('categoryStatus').textContent='Categories save ho gayi.'}).catch(e=>document.getElementById('categoryStatus').textContent=e.message)}
+function removeCategoryAdmin(i){categoriesAdmin.splice(i,1);renderCategoryAdmin()}
+function applyCategories(list){categoriesAdmin=list;localStorage.setItem('cd_categories',JSON.stringify(list));const box=document.querySelector('.categories');if(!box)return;box.innerHTML=list.map(c=>`<button class="cat" onclick="filterCategory('${String(c.cat||'').replace(/'/g,"\\'")}')"><div class="cat-img">${c.image?`<img src="${c.image}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:escapeHtml(c.icon||'📦')}</div><b>${escapeHtml(c.name||'Category')}</b></button>`).join('')}
+function renderProductAdmin(){const box=document.getElementById('productAdminList');box.innerHTML=products.map((p,i)=>`<div class="admin-product-row"><div class="admin-product-img">${p.image?`<img src="${p.image}" style="width:100%;height:100%;object-fit:cover;border-radius:10px">`:p.icon||'📦'}</div><input data-pi="${i}" data-k="name" value="${escapeHtml(p.name)}"><input data-pi="${i}" data-k="price" type="number" value="${p.price}"><input data-pi="${i}" data-k="old" type="number" value="${p.old||''}"><select data-pi="${i}" data-k="cat">${categoriesAdmin.map(c=>`<option ${c.cat===p.cat?'selected':''}>${escapeHtml(c.cat)}</option>`).join('')}</select><input type="file" accept="image/*" onchange="previewProductImage(event,${i})"><button class="btn-gray" onclick="removeAdminProduct(${i})">Remove</button></div>`).join('')}
+function previewProductImage(e,i){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{resizeDataUrl(r.result,600,600,.82,'contain',out=>{products[i].image=out;products[i].icon='';renderProductAdmin()})};r.readAsDataURL(f)}
+function addAdminProduct(){products.push({id:Date.now(),name:'New Product',price:0,old:0,cat:categoriesAdmin[0]?.cat||'Beauty & Care',icon:'📦'});renderProductAdmin()}
+function removeAdminProduct(i){products.splice(i,1);renderProductAdmin()}
+function saveProductsAdmin(){if(!firebaseReady){toast('Firebase connected nahi hai');return}document.querySelectorAll('#productAdminList [data-pi]').forEach(el=>{const i=Number(el.dataset.pi),k=el.dataset.k;products[i][k]=k==='price'||k==='old'?Number(el.value):el.value});db.ref('siteSettings/products').set({items:products,updatedAt:Date.now()}).then(()=>{renderProducts(products);document.getElementById('productStatus').textContent='Products Firebase mein save ho gaye.'}).catch(e=>document.getElementById('productStatus').textContent=e.message)}
+function testFirebaseConnection(){if(!firebaseReady){document.getElementById('firebaseAdminStatus').textContent='Firebase initialize nahi hua.';return}db.ref('siteSettings/connectionTest').set({time:Date.now()}).then(()=>{document.getElementById('firebaseDbStatus').textContent='Connected & writable';document.getElementById('firebaseAdminStatus').textContent='Firebase Realtime Database successfully test ho gaya.'}).catch(e=>{document.getElementById('firebaseDbStatus').textContent='Error';document.getElementById('firebaseAdminStatus').textContent=e.message})}
+function escapeHtml(v){return String(v??'').replace(/[&<>'"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[m]))}
+
 updateBadge();renderProducts(products);
 </script>
 </body>

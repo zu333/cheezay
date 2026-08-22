@@ -3,11 +3,8 @@
     ".read": true,
     ".write": false,
     "siteSettings": {
-      "heroImage": {
-        ".read": true,
-        ".write": true,
-        ".validate": "newData.hasChildren(['data','updatedAt']) && newData.child('data').isString()"
-      }
+      ".read": true,
+      ".write": true
     }
   }
 }
