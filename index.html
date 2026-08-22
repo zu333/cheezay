@@ -105,7 +105,7 @@ footer button{border:0;background:none;color:#aaa;text-decoration:underline}
 .admin-layout{display:grid;grid-template-columns:260px 1fr;gap:22px}
 .admin-side,.admin-card{background:#fff;border:1px solid #e4ebe7;border-radius:18px;box-shadow:0 8px 28px #123d2a0a}
 .admin-side{padding:18px;height:max-content}.admin-side-item{padding:12px 14px;border-radius:10px;font-weight:700;color:#43504a;background:#f5f8f6;margin-bottom:8px}.admin-side-item.active{background:#eaf8f0;color:#087b4b}
-.admin-card{padding:24px}.admin-card h2{margin:0 0 6px}.admin-card p.help{color:#68736f;margin-top:0}.admin-preview-large{width:100%;height:320px;object-fit:cover;border-radius:14px;background:#f5f7f6;border:1px solid #e2e8e5;margin:14px 0}
+.admin-card{padding:24px}.admin-card h2{margin:0 0 6px}.admin-card p.help{color:#68736f;margin-top:0}.admin-preview-large{width:100%;height:320px;object-fit:contain;border-radius:14px;background:#f5f7f6;border:1px solid #e2e8e5;margin:14px 0}
 .admin-form-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.admin-field label{display:block;font-size:13px;font-weight:700;margin-bottom:6px;color:#39433f}.admin-field input,.admin-field select{width:100%;padding:11px 12px;border:1px solid #d9e0dd;border-radius:9px;outline:0}.admin-field input:focus,.admin-field select:focus{border-color:#0da45e;box-shadow:0 0 0 3px #0da45e18}
 .admin-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}.admin-actions button{border:0;padding:12px 16px;border-radius:9px;font-weight:800}.btn-orange{background:var(--orange);color:#fff}.btn-green{background:#087b4b;color:#fff}.btn-gray{background:#eef1ef;color:#33403a}.admin-status{margin-top:16px;padding:12px 14px;border-radius:10px;background:#f1f8f4;color:#276449;font-size:13px;line-height:1.5}
 .admin-login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}.admin-login-card{width:min(430px,94%);background:#fff;border:1px solid #e4ebe7;border-radius:22px;padding:32px;box-shadow:0 18px 60px #00000012;text-align:center}.admin-login-card img{width:90px;height:90px;object-fit:contain}.admin-login-card h2{margin:12px 0 6px}.admin-login-card p{color:#68736f}.admin-login-card input{width:100%;padding:13px;border:1px solid #d9e0dd;border-radius:10px;margin:10px 0;outline:0}.admin-login-card button{width:100%;border:0;background:var(--orange);color:#fff;padding:13px;border-radius:10px;font-weight:800}
@@ -290,7 +290,7 @@ footer button{border:0;background:none;color:#aaa;text-decoration:underline}
           </div>
 
           <div id="adminTab-images" class="admin-tab">
-            <div class="admin-card"><h2>Main Hero Banner</h2><p class="help">Recommended: 1600 × 390 px. Device se image upload, resize aur Firebase save karein.</p>
+            <div class="admin-card"><h2>Main Hero Banner (GIF Supported)</h2><p class="help">Recommended: 1600 × 390 px. Agar Animated GIF upload karni hai, to usay resize mat karein, direct save karein.</p>
               <input id="heroFileFull" type="file" accept="image/*" onchange="previewHeroFileFull(event)">
               <img id="adminPreviewFull" class="admin-preview-large" src="default-hero.jpg" alt="Hero preview">
               <div class="admin-form-grid"><div class="admin-field"><label>Width</label><input id="resizeWFull" type="number" value="1600" min="320" max="3000"></div><div class="admin-field"><label>Height</label><input id="resizeHFull" type="number" value="390" min="120" max="1500"></div><div class="admin-field"><label>Quality</label><input id="resizeQFull" type="number" value="0.85" min="0.3" max="1" step="0.05"></div></div>
@@ -579,21 +579,86 @@ function adminLoginFull(e){
 }
 function closeAdminFull(){document.getElementById("adminScreen").classList.remove("show");document.getElementById("adminLoginScreen").style.display="flex";document.getElementById("adminDashboard").style.display="none"}
 
-let originalHeroData=null;
-function previewHeroFileFull(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{originalHeroData=r.result;document.getElementById("adminPreviewFull").src=r.result;document.getElementById("adminInfoFull").textContent="Image loaded. Ab Resize Image par click karein."};r.readAsDataURL(f)}
-function resizeHeroFull(){
- if(!originalHeroData){document.getElementById("adminInfoFull").textContent="Pehle image upload karein.";return}
- const W=Math.max(320,Math.min(3000,Number(document.getElementById("resizeWFull").value)||1600));
- const H=Math.max(120,Math.min(1500,Number(document.getElementById("resizeHFull").value)||390));
- const Q=Math.max(.3,Math.min(1,Number(document.getElementById("resizeQFull").value)||.85));
- const mode=document.getElementById("fitModeFull").value;
- const im=new Image();im.onload=()=>{const c=document.createElement("canvas");c.width=W;c.height=H;const x=c.getContext("2d");x.fillStyle="#064f3e";x.fillRect(0,0,W,H);const scale=mode==="cover"?Math.max(W/im.width,H/im.height):Math.min(W/im.width,H/im.height);const nw=im.width*scale,nh=im.height*scale;x.drawImage(im,(W-nw)/2,(H-nh)/2,nw,nh);originalHeroData=c.toDataURL("image/jpeg",Q);document.getElementById("adminPreviewFull").src=originalHeroData;document.getElementById("adminInfoFull").textContent=`Resized: ${W} × ${H}px. Ready to save.`};im.src=originalHeroData}
-function saveHeroToFirebaseFull(){
- if(!firebaseReady){document.getElementById("adminInfoFull").textContent="Firebase initialize nahi hua. API key check karein.";return}
- if(!originalHeroData){document.getElementById("adminInfoFull").textContent="Pehle image upload/resize karein.";return}
- const size=Math.round(originalHeroData.length/1024);if(size>5000){document.getElementById("adminInfoFull").textContent="Image bohat bari hai. Quality ya dimensions kam karein.";return}
- db.ref("siteSettings/heroImage").set({data:originalHeroData,updatedAt:Date.now(),updatedBy:"admin-password"}).then(()=>{applyHero(originalHeroData);document.getElementById("adminInfoFull").textContent="Hero image Firebase mein successfully save ho gayi."}).catch(err=>{document.getElementById("adminInfoFull").textContent="Firebase error: "+err.message})
+let originalHeroData = null;
+let isHeroGif = false;
+
+function previewHeroFileFull(e){
+  const f = e.target.files[0];
+  if(!f) return;
+  
+  isHeroGif = f.type === 'image/gif';
+  
+  const r = new FileReader();
+  r.onload = () => {
+    originalHeroData = r.result;
+    document.getElementById("adminPreviewFull").src = r.result;
+    
+    if(isHeroGif){
+      document.getElementById("adminInfoFull").textContent = "GIF loaded. GIF ko resize na karein warna animation ruk jayegi, direct 'Save Hero' par click karein.";
+      document.getElementById("adminInfoFull").style.color = "#d97706"; 
+    } else {
+      document.getElementById("adminInfoFull").textContent = "Image loaded. Ab Resize Image par click karein.";
+      document.getElementById("adminInfoFull").style.color = "#276449";
+    }
+  };
+  r.readAsDataURL(f);
 }
+
+function resizeHeroFull(){
+  if(!originalHeroData){
+    document.getElementById("adminInfoFull").textContent = "Pehle image upload karein.";
+    return;
+  }
+  
+  if(isHeroGif){
+    document.getElementById("adminInfoFull").textContent = "Error: Animated GIF ko resize nahi kiya ja sakta! Direct 'Save Hero' par click karein.";
+    document.getElementById("adminInfoFull").style.color = "red";
+    return;
+  }
+  
+  const W = Math.max(320, Math.min(3000, Number(document.getElementById("resizeWFull").value) || 1600));
+  const H = Math.max(120, Math.min(1500, Number(document.getElementById("resizeHFull").value) || 390));
+  const Q = Math.max(.3, Math.min(1, Number(document.getElementById("resizeQFull").value) || .85));
+  const mode = document.getElementById("fitModeFull").value;
+  
+  const im = new Image();
+  im.onload = () => {
+    const c = document.createElement("canvas");
+    c.width = W;
+    c.height = H;
+    const x = c.getContext("2d");
+    x.fillStyle = "#064f3e";
+    x.fillRect(0, 0, W, H);
+    const scale = mode === "cover" ? Math.max(W/im.width, H/im.height) : Math.min(W/im.width, H/im.height);
+    const nw = im.width * scale, nh = im.height * scale;
+    x.drawImage(im, (W-nw)/2, (H-nh)/2, nw, nh);
+    originalHeroData = c.toDataURL("image/jpeg", Q);
+    document.getElementById("adminPreviewFull").src = originalHeroData;
+    document.getElementById("adminInfoFull").textContent = `Resized: ${W} × ${H}px. Ready to save.`;
+    document.getElementById("adminInfoFull").style.color = "#276449";
+  };
+  im.src = originalHeroData;
+}
+
+function saveHeroToFirebaseFull(){
+  if(!firebaseReady){document.getElementById("adminInfoFull").textContent="Firebase initialize nahi hua. API key check karein.";return}
+  if(!originalHeroData){document.getElementById("adminInfoFull").textContent="Pehle image upload/resize karein.";return}
+  
+  const size = Math.round(originalHeroData.length/1024);
+  if(size > 5000){
+    document.getElementById("adminInfoFull").textContent="Image bohat bari hai (" + size + " KB). Limit 5000 KB hai.";
+    return;
+  }
+  
+  db.ref("siteSettings/heroImage").set({data:originalHeroData, updatedAt:Date.now(), updatedBy:"admin-password"}).then(()=>{
+    applyHero(originalHeroData);
+    document.getElementById("adminInfoFull").textContent="Hero image Firebase mein successfully save ho gayi.";
+    document.getElementById("adminInfoFull").style.color = "#276449";
+  }).catch(err=>{
+    document.getElementById("adminInfoFull").textContent="Firebase error: "+err.message;
+  })
+}
+
 function loadHeroFromFirebaseFull(){
  if(!firebaseReady){document.getElementById("adminInfoFull").textContent="Firebase initialize nahi hua.";return}
  db.ref("siteSettings/heroImage").once("value").then(s=>{const v=s.val();if(v&&v.data){applyHero(v.data);originalHeroData=v.data;document.getElementById("adminPreviewFull").src=v.data;document.getElementById("adminInfoFull").textContent="Firebase se latest hero image load ho gayi."}else document.getElementById("adminInfoFull").textContent="Firebase mein hero image abhi save nahi hai."}).catch(e=>document.getElementById("adminInfoFull").textContent="Firebase error: "+e.message)
