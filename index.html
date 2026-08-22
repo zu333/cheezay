@@ -62,6 +62,11 @@ main{width:min(1400px,94%);margin:20px auto 60px}
 .total{display:flex;justify-content:space-between;font-size:20px;font-weight:800;padding-top:18px}
 .checkout{width:100%;margin-top:18px;border:0;background:var(--green2);color:#fff;padding:14px;border-radius:10px;font-weight:800}
 
+/* WhatsApp Floating Button */
+.whatsapp-float{position:fixed;width:55px;height:55px;bottom:25px;left:25px;background-color:#25d366;color:#FFF;border-radius:50px;text-align:center;box-shadow:0px 4px 10px rgba(0,0,0,0.15);z-index:100;display:flex;align-items:center;justify-content:center;transition:.3s}
+.whatsapp-float:hover{background-color:#20b858;transform:translateY(-3px)}
+.whatsapp-float svg{width:32px;height:32px;fill:currentColor}
+
 /* Product Detail Modal (Markaz Style) */
 .pd-modal{width:min(1050px,96%);background:#fdfaf6;padding:30px;border-radius:24px;position:relative;margin:auto;max-height:95vh;overflow-y:auto;box-shadow:0 20px 60px #0004}
 .pd-layout{display:grid;grid-template-columns:1fr 1fr 300px;gap:28px}
@@ -179,6 +184,11 @@ footer button{border:0;background:none;color:#aaa;text-decoration:underline}
 
 <footer><span id="footerText">© 2026 Cheezay Dikhao — Online Shopping in Pakistan</span></footer>
 
+<!-- WhatsApp Floating Button -->
+<a href="https://wa.me/923000000000" id="whatsappBtn" class="whatsapp-float" target="_blank" title="Contact on WhatsApp">
+  <svg viewBox="0 0 32 32"><path d="M16.05 1.77c-7.92 0-14.34 6.42-14.34 14.34 0 2.53.66 5 1.91 7.18L1.6 30.23l7.1-1.86a14.2 14.2 0 0 0 7.35 2.05h.01c7.92 0 14.34-6.42 14.34-14.34S23.97 1.77 16.05 1.77zM16.05 28.06c-2.14 0-4.24-.58-6.08-1.67l-.44-.26-4.52 1.18 1.2-4.4-.28-.45a11.9 11.9 0 0 1-1.8-6.38c0-6.6 5.37-11.96 11.97-11.96 3.2 0 6.2 1.25 8.46 3.51s3.51 5.27 3.51 8.47c0 6.6-5.37 11.96-11.97 11.96zm6.57-8.98c-.36-.18-2.14-1.06-2.47-1.18-.33-.12-.57-.18-.8.18s-.93 1.18-1.14 1.42c-.21.24-.42.27-.78.09-.36-.18-1.53-.56-2.91-1.8-1.07-1.02-1.79-2.28-2-2.64-.21-.36-.02-.56.16-.74.16-.16.36-.42.54-.63.18-.21.24-.36.36-.6.12-.24.06-.45-.03-.63-.09-.18-.8-1.93-1.1-2.64-.29-.7-.58-.6-.8-.61h-.68c-.24 0-.63.09-.96.45-.33.36-1.26 1.23-1.26 3 0 1.77 1.29 3.48 1.47 3.72.18.24 2.54 3.88 6.15 5.43.86.37 1.53.59 2.05.76.86.27 1.64.23 2.26.14.7-.1 2.14-.87 2.44-1.71.3-.84.3-1.56.21-1.71-.09-.15-.33-.24-.69-.42z"/></svg>
+</a>
+
 <!-- Product Detail Modal (Markaz Style) -->
 <div id="productDetailModal" class="overlay" onclick="closeOnBackdrop(event,'productDetailModal')">
   <div class="pd-modal">
@@ -259,9 +269,10 @@ footer button{border:0;background:none;color:#aaa;text-decoration:underline}
         </aside>
         <section class="admin-content">
           <div id="adminTab-general" class="admin-tab active">
-            <div class="admin-card"><h2>General Website Settings</h2><p class="help">Website ka naam, top bar aur footer text yahan se change karein.</p>
+            <div class="admin-card"><h2>General Website Settings</h2><p class="help">Website ka naam, WhatsApp, top bar aur footer text yahan se change karein.</p>
               <div class="admin-form-grid">
                 <div class="admin-field"><label>Website Name</label><input id="siteNameAdmin" value="Cheezay Dikhao"></div>
+                <div class="admin-field"><label>WhatsApp Number</label><input id="whatsappAdmin" value="923000000000" placeholder="e.g. 923001234567"></div>
                 <div class="admin-field"><label>Top Bar 1</label><input id="top1Admin" value="Lowest delivery price in Pakistan"></div>
                 <div class="admin-field"><label>Top Bar 2</label><input id="top2Admin" value="Cash on Delivery available"></div>
                 <div class="admin-field"><label>Top Bar 3</label><input id="top3Admin" value="7-day easy returns"></div>
@@ -449,11 +460,9 @@ function addToCart(id){
 }
 function changeQty(id,d){const i=cart.find(x=>x.id===id);if(!i)return;i.qty+=d;if(i.qty<=0)cart=cart.filter(x=>x.id!==id);save();renderCart()}
 
-// CART BUG FIX HERE
 function renderCart(){
  const b=document.getElementById("cartItems");
  
- // Purane invalid products ko cart se remove karne ka filter
  let initialLength = cart.length;
  cart = cart.filter(i => products.some(x => x.id === i.id));
  if(cart.length !== initialLength) save();
@@ -611,9 +620,53 @@ function resizeDataUrl(data,W,H,Q,mode,cb){const im=new Image();im.onload=()=>{c
 function resizeAdminImage(type){const data=adminImages[type];if(!data){toast('Pehle image upload karein');return}const W=Number(document.getElementById('logoWAdmin').value)||500,H=Number(document.getElementById('logoHAdmin').value)||500,Q=Number(document.getElementById('logoQAdmin').value)||.9;resizeDataUrl(data,W,H,Q,'contain',out=>{adminImages[type]=out;document.getElementById('logoPreviewAdmin').src=out;document.getElementById('logoStatus').textContent=`Logo resized: ${W} × ${H}px`})}
 function saveAdminImage(type){if(!firebaseReady){toast('Firebase connected nahi hai');return}const data=adminImages[type];if(!data){toast('Pehle logo upload/resize karein');return}db.ref('siteSettings/logo').set({data,updatedAt:Date.now()}).then(()=>{applyLogo(data);document.getElementById('logoStatus').textContent='Logo Firebase mein save ho gaya.'}).catch(e=>document.getElementById('logoStatus').textContent=e.message)}
 function applyLogo(data){document.querySelectorAll('.logo img').forEach(x=>x.src=data);const a=document.getElementById('adminBrandLogo');if(a)a.src=data;const l=document.querySelector('#adminLoginScreen img');if(l)l.src=data;}
-function saveGeneralSettings(){if(!firebaseReady){toast('Firebase connected nahi hai');return}const v={siteName:document.getElementById('siteNameAdmin').value,top1:document.getElementById('top1Admin').value,top2:document.getElementById('top2Admin').value,top3:document.getElementById('top3Admin').value,top4:document.getElementById('top4Admin').value,footer:document.getElementById('footerAdmin').value};db.ref('siteSettings/general').set(v).then(()=>{applyGeneralSettings(v);document.getElementById('generalStatus').textContent='General settings save ho gayi.'}).catch(e=>document.getElementById('generalStatus').textContent=e.message)}
-function applyGeneralSettings(v){const tops=document.querySelectorAll('.topitem span');[v.top1,v.top2,v.top3,v.top4].forEach((x,i)=>{if(tops[i]&&x)tops[i].textContent=x});if(v.footer)document.getElementById('footerText').textContent=v.footer;if(v.siteName){document.title=v.siteName+' - Shop';document.querySelectorAll('.logo span').forEach(x=>x.textContent=v.siteName)}}
-function loadAllAdminSettings(){if(!firebaseReady)return;db.ref('siteSettings/general').once('value').then(s=>{const v=s.val();if(!v)return;document.getElementById('siteNameAdmin').value=v.siteName||'Cheezay Dikhao';document.getElementById('top1Admin').value=v.top1||'';document.getElementById('top2Admin').value=v.top2||'';document.getElementById('top3Admin').value=v.top3||'';document.getElementById('top4Admin').value=v.top4||'';document.getElementById('footerAdmin').value=v.footer||'';applyGeneralSettings(v)})}
+
+function saveGeneralSettings(){
+  if(!firebaseReady){toast('Firebase connected nahi hai');return}
+  const v={
+    siteName:document.getElementById('siteNameAdmin').value,
+    whatsapp:document.getElementById('whatsappAdmin').value,
+    top1:document.getElementById('top1Admin').value,
+    top2:document.getElementById('top2Admin').value,
+    top3:document.getElementById('top3Admin').value,
+    top4:document.getElementById('top4Admin').value,
+    footer:document.getElementById('footerAdmin').value
+  };
+  db.ref('siteSettings/general').set(v).then(()=>{
+    applyGeneralSettings(v);
+    document.getElementById('generalStatus').textContent='General settings save ho gayi.';
+  }).catch(e=>document.getElementById('generalStatus').textContent=e.message)
+}
+
+function applyGeneralSettings(v){
+  const tops=document.querySelectorAll('.topitem span');
+  [v.top1,v.top2,v.top3,v.top4].forEach((x,i)=>{if(tops[i]&&x)tops[i].textContent=x});
+  if(v.footer)document.getElementById('footerText').textContent=v.footer;
+  if(v.siteName){
+    document.title=v.siteName+' - Shop';
+    document.querySelectorAll('.logo span').forEach(x=>x.textContent=v.siteName)
+  }
+  if(v.whatsapp){
+    document.getElementById('whatsappBtn').href = 'https://wa.me/' + v.whatsapp.replace(/[^0-9]/g, '');
+    document.getElementById('whatsappAdmin').value = v.whatsapp;
+  }
+}
+
+function loadAllAdminSettings(){
+  if(!firebaseReady)return;
+  db.ref('siteSettings/general').once('value').then(s=>{
+    const v=s.val();if(!v)return;
+    document.getElementById('siteNameAdmin').value=v.siteName||'Cheezay Dikhao';
+    document.getElementById('whatsappAdmin').value=v.whatsapp||'923000000000';
+    document.getElementById('top1Admin').value=v.top1||'';
+    document.getElementById('top2Admin').value=v.top2||'';
+    document.getElementById('top3Admin').value=v.top3||'';
+    document.getElementById('top4Admin').value=v.top4||'';
+    document.getElementById('footerAdmin').value=v.footer||'';
+    applyGeneralSettings(v)
+  })
+}
+
 function normalizeCategoriesData(raw){
  if(Array.isArray(raw)) return raw.filter(Boolean).map(c=>({
    name:String(c?.name||'').trim(),
@@ -779,7 +832,6 @@ function applyCategories(list){
  }
 }
 
-// Updated Admin Product Render for Description and Stock
 function renderProductAdmin(){
   const box=document.getElementById('productAdminList');
   box.innerHTML=`<div style="display:grid;grid-template-columns:50px 1.5fr 80px 80px 1fr 70px 1.5fr 110px 80px;gap:8px;font-weight:700;padding:10px 0;color:#445;font-size:12px;">
