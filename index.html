@@ -450,7 +450,7 @@ if(firebaseReady){
  db.ref("siteSettings/heroImage").once("value").then(s=>{const v=s.val();if(v&&v.data)applyHero(v.data)}).catch(console.warn);
  db.ref("siteSettings/general").once("value").then(s=>{const v=s.val();if(v)applyGeneralSettings(v)}).catch(console.warn);
  db.ref("siteSettings/logo").once("value").then(s=>{const v=s.val();if(v&&v.data)applyLogo(v.data)}).catch(console.warn);
- db.ref("siteSettings/categories").once("value").then(s=>{const v=s.val();if(v&&Array.isArray(v.items))applyCategories(v.items)}).catch(console.warn);
+ db.ref("siteSettings/categories").once("value").then(s=>{const list=normalizeCategoriesData(s.val());if(list.length)applyCategories(list)}).catch(console.warn);
  db.ref("siteSettings/products").once("value").then(s=>{const v=s.val();if(v&&Array.isArray(v.items)){products.splice(0,products.length,...v.items);renderProducts(products)}}).catch(console.warn);
  auth.onAuthStateChanged(user=>{updateAccountUI(user);if(user){const st=document.getElementById("loginStatus");if(st)st.textContent="Logged in: "+(user.displayName||user.email||"Google user")}});
 }
@@ -469,25 +469,64 @@ function applyLogo(data){document.querySelectorAll('.logo img').forEach(x=>x.src
 function saveGeneralSettings(){if(!firebaseReady){toast('Firebase connected nahi hai');return}const v={siteName:document.getElementById('siteNameAdmin').value,top1:document.getElementById('top1Admin').value,top2:document.getElementById('top2Admin').value,top3:document.getElementById('top3Admin').value,top4:document.getElementById('top4Admin').value,footer:document.getElementById('footerAdmin').value};db.ref('siteSettings/general').set(v).then(()=>{applyGeneralSettings(v);document.getElementById('generalStatus').textContent='General settings save ho gayi.'}).catch(e=>document.getElementById('generalStatus').textContent=e.message)}
 function applyGeneralSettings(v){const tops=document.querySelectorAll('.topitem span');[v.top1,v.top2,v.top3,v.top4].forEach((x,i)=>{if(tops[i]&&x)tops[i].textContent=x});if(v.footer)document.getElementById('footerText').textContent=v.footer;if(v.siteName){document.title=v.siteName+' - Shop';document.querySelectorAll('.logo span').forEach(x=>x.textContent=v.siteName)}}
 function loadAllAdminSettings(){if(!firebaseReady)return;db.ref('siteSettings/general').once('value').then(s=>{const v=s.val();if(!v)return;document.getElementById('siteNameAdmin').value=v.siteName||'Cheezay Dikhao';document.getElementById('top1Admin').value=v.top1||'';document.getElementById('top2Admin').value=v.top2||'';document.getElementById('top3Admin').value=v.top3||'';document.getElementById('top4Admin').value=v.top4||'';document.getElementById('footerAdmin').value=v.footer||'';applyGeneralSettings(v)})}
+function normalizeCategoriesData(raw){
+ if(Array.isArray(raw)) return raw.filter(Boolean).map(c=>({
+   name:String(c?.name||'').trim(),
+   cat:String(c?.cat||c?.key||c?.category||c?.name||'').trim(),
+   icon:String(c?.icon||'📦'),
+   image:c?.image||''
+ })).filter(c=>c.name);
+ if(raw && Array.isArray(raw.items)) return normalizeCategoriesData(raw.items);
+ if(raw && raw.items && typeof raw.items==='object') return normalizeCategoriesData(Object.values(raw.items));
+ if(raw && typeof raw==='object'){
+   const entries=Object.entries(raw).filter(([k])=>k!=='updatedAt');
+   if(entries.length) return normalizeCategoriesData(entries.map(([key,val])=>(
+     val && typeof val==='object' ? {...val,cat:val.cat||val.key||key} : {name:String(val),cat:key}
+   )));
+ }
+ return [];
+}
+
 function loadCategoriesAdmin(showMessage=false){
- if(!firebaseReady){renderCategoryAdmin();return Promise.resolve();}
+ if(!firebaseReady){
+   categoriesAdmin=normalizeCategoriesData(categoriesAdmin);
+   if(!categoriesAdmin.length) categoriesAdmin=defaultCategories.map(x=>({...x}));
+   localStorage.setItem('cd_categories',JSON.stringify(categoriesAdmin));
+   renderCategoryAdmin();
+   return Promise.resolve();
+ }
  return db.ref('siteSettings/categories').once('value').then(s=>{
-   const v=s.val();
-   if(v && Array.isArray(v.items)) categoriesAdmin=v.items;
-   else if(!Array.isArray(categoriesAdmin)||!categoriesAdmin.length) categoriesAdmin=defaultCategories.map(x=>({...x}));
+   const loaded=normalizeCategoriesData(s.val());
+   categoriesAdmin=loaded.length ? loaded : defaultCategories.map(x=>({...x}));
    localStorage.setItem('cd_categories',JSON.stringify(categoriesAdmin));
    renderCategoryAdmin();
    applyCategories(categoriesAdmin);
    if(showMessage) document.getElementById('categoryStatus').textContent='Categories Firebase se reload ho gayi.';
- }).catch(e=>{renderCategoryAdmin();document.getElementById('categoryStatus').textContent='Firebase read error: '+e.message;});
+ }).catch(e=>{
+   categoriesAdmin=normalizeCategoriesData(categoriesAdmin);
+   if(!categoriesAdmin.length) categoriesAdmin=defaultCategories.map(x=>({...x}));
+   renderCategoryAdmin();
+   document.getElementById('categoryStatus').textContent='Firebase read error: '+e.message;
+ });
 }
+
 function renderCategoryAdmin(){
  const box=document.getElementById('categoryAdminList');
  if(!box)return;
- if(!categoriesAdmin.length){box.innerHTML='<div class="empty">Abhi koi category nahi hai. Upar se Add Category karein.</div>';return;}
- box.innerHTML='<div style="display:grid;grid-template-columns:55px minmax(160px,1fr) minmax(160px,1fr) 180px 90px;gap:10px;font-weight:700;padding:10px 0;color:#445"><div>Image</div><div>Name</div><div>Category Key</div><div>Upload Image</div><div>Action</div></div>'+categoriesAdmin.map((c,i)=>`<div class="admin-category-row"><div class="admin-category-preview">${c.image?`<img src="${c.image}" alt="" style="width:45px;height:45px;object-fit:cover;border-radius:50%">`:`<span style="font-size:28px">${escapeHtml(c.icon||'📦')}</span>`}</div><input value="${escapeHtml(c.name||'')}" data-ci="${i}" data-k="name" onchange="updateCategoryField(${i},'name',this.value)"><input value="${escapeHtml(c.cat||'')}" data-ci="${i}" data-k="cat" onchange="updateCategoryField(${i},'cat',this.value)"><input type="file" accept="image/*" onchange="previewCategoryImage(event,${i})"><button class="btn-gray" type="button" onclick="removeCategoryAdmin(${i})">Remove</button></div>`).join('');
+ categoriesAdmin=normalizeCategoriesData(categoriesAdmin);
+ if(!categoriesAdmin.length){
+   box.innerHTML='<div class="empty">Abhi koi category nahi hai. Upar se Add Category karein.</div>';
+   return;
+ }
+ box.innerHTML='<div style="display:grid;grid-template-columns:55px minmax(160px,1fr) minmax(160px,1fr) 180px 90px;gap:10px;font-weight:700;padding:10px 0;color:#445"><div>Image</div><div>Name</div><div>Category Key</div><div>Upload Image</div><div>Action</div></div>'+
+ categoriesAdmin.map((c,i)=>`<div class="admin-category-row"><div class="admin-category-preview">${c.image?`<img src="${c.image}" alt="" style="width:45px;height:45px;object-fit:cover;border-radius:50%">`:`<span style="font-size:28px">${escapeHtml(c.icon||'📦')}</span>`}</div><input value="${escapeHtml(c.name||'')}" data-ci="${i}" data-k="name" onchange="updateCategoryField(${i},'name',this.value)"><input value="${escapeHtml(c.cat||'')}" data-ci="${i}" data-k="cat" onchange="updateCategoryField(${i},'cat',this.value)"><input type="file" accept="image/*" onchange="previewCategoryImage(event,${i})"><button class="btn-gray" type="button" onclick="removeCategoryAdmin(${i})">Remove</button></div>`).join('');
 }
-function updateCategoryField(i,k,v){if(categoriesAdmin[i])categoriesAdmin[i][k]=v}
+
+function updateCategoryField(i,k,v){
+ if(!categoriesAdmin[i])return;
+ categoriesAdmin[i][k]=String(v||'').trim();
+}
+
 function addCategoryAdmin(){
  const name=(document.getElementById('newCategoryName').value||'').trim();
  const cat=(document.getElementById('newCategoryKey').value||name).trim();
@@ -495,16 +534,60 @@ function addCategoryAdmin(){
  if(!name){toast('Category name likhein');return;}
  if(categoriesAdmin.some(c=>(c.cat||'').toLowerCase()===cat.toLowerCase())){toast('Ye category pehle se mojood hai');return;}
  categoriesAdmin.push({name,cat,icon});
- document.getElementById('newCategoryName').value='';document.getElementById('newCategoryKey').value='';document.getElementById('newCategoryIcon').value='📦';
+ document.getElementById('newCategoryName').value='';
+ document.getElementById('newCategoryKey').value='';
+ document.getElementById('newCategoryIcon').value='📦';
  renderCategoryAdmin();
  saveCategoriesAdmin(true);
 }
-function previewCategoryImage(e,i){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{resizeDataUrl(r.result,300,300,.82,'cover',out=>{categoriesAdmin[i].image=out;categoriesAdmin[i].icon='';renderCategoryAdmin();saveCategoriesAdmin(true)})};r.readAsDataURL(f)}
+
+function previewCategoryImage(e,i){
+ const f=e.target.files[0];
+ if(!f)return;
+ const r=new FileReader();
+ r.onload=()=>{
+   resizeDataUrl(r.result,300,300,.82,'cover',out=>{
+     categoriesAdmin[i].image=out;
+     categoriesAdmin[i].icon='';
+     renderCategoryAdmin();
+     saveCategoriesAdmin(true);
+   });
+ };
+ r.readAsDataURL(f);
+}
+
 function saveCategoriesAdmin(silent=false){
- document.querySelectorAll('#categoryAdminList [data-ci]').forEach(el=>{const i=Number(el.dataset.ci);if(categoriesAdmin[i])categoriesAdmin[i][el.dataset.k]=el.value});
+ document.querySelectorAll('#categoryAdminList [data-ci]').forEach(el=>{
+   const i=Number(el.dataset.ci);
+   if(categoriesAdmin[i]) categoriesAdmin[i][el.dataset.k]=String(el.value||'').trim();
+ });
+ categoriesAdmin=normalizeCategoriesData(categoriesAdmin);
  localStorage.setItem('cd_categories',JSON.stringify(categoriesAdmin));
- if(!firebaseReady){if(!silent)toast('Firebase connected nahi hai');return Promise.resolve();}
- return db.ref('siteSettings/categories').set({items:categoriesAdmin,updatedAt:Date.now()}).then(()=>{applyCategories(categoriesAdmin);if(!silent)document.getElementById('categoryStatus').textContent='Categories Firebase mein save ho gayi.';}).catch(e=>{document.getElementById('categoryStatus').textContent='Save error: '+e.message;toast('Categories save nahi hui');});
+ if(!firebaseReady){
+   if(!silent)toast('Firebase connected nahi hai');
+   return Promise.resolve();
+ }
+ const payload={items:categoriesAdmin.map(c=>({
+   name:c.name,
+   cat:c.cat,
+   icon:c.icon||'📦',
+   image:c.image||''
+ })),updatedAt:Date.now()};
+ return db.ref('siteSettings/categories').set(payload).then(()=>{
+   applyCategories(categoriesAdmin);
+   document.getElementById('categoryStatus').textContent='Categories Firebase mein save ho gayi.';
+   if(!silent)toast('Categories save ho gayi');
+ }).catch(e=>{
+   const msg=String(e?.message||e||'Unknown Firebase error');
+   if(msg.includes('PERMISSION_DENIED')){
+     document.getElementById('categoryStatus').textContent='Firebase write permission denied. Firebase Console → Realtime Database → Rules mein is ZIP ki database.rules.json publish karein, phir Reload from Firebase karein.';
+     toast('Firebase Rules mein write permission nahi hai');
+   }else{
+     document.getElementById('categoryStatus').textContent='Save error: '+msg;
+     toast('Categories save nahi hui: '+msg);
+   }
+   throw e;
+ });
 }
 function removeCategoryAdmin(i){
  if(i<0||i>=categoriesAdmin.length)return;
@@ -524,7 +607,7 @@ function previewProductImage(e,i){const f=e.target.files[0];if(!f)return;const r
 function addAdminProduct(){products.push({id:Date.now(),name:'New Product',price:0,old:0,cat:categoriesAdmin[0]?.cat||'Beauty & Care',icon:'📦'});renderProductAdmin()}
 function removeAdminProduct(i){products.splice(i,1);renderProductAdmin()}
 function saveProductsAdmin(){if(!firebaseReady){toast('Firebase connected nahi hai');return}document.querySelectorAll('#productAdminList [data-pi]').forEach(el=>{const i=Number(el.dataset.pi),k=el.dataset.k;products[i][k]=k==='price'||k==='old'?Number(el.value):el.value});db.ref('siteSettings/products').set({items:products,updatedAt:Date.now()}).then(()=>{renderProducts(products);document.getElementById('productStatus').textContent='Products Firebase mein save ho gaye.'}).catch(e=>document.getElementById('productStatus').textContent=e.message)}
-function testFirebaseConnection(){if(!firebaseReady){document.getElementById('firebaseAdminStatus').textContent='Firebase initialize nahi hua.';return}db.ref('siteSettings/connectionTest').set({time:Date.now()}).then(()=>{document.getElementById('firebaseDbStatus').textContent='Connected & writable';document.getElementById('firebaseAdminStatus').textContent='Firebase Realtime Database successfully test ho gaya.'}).catch(e=>{document.getElementById('firebaseDbStatus').textContent='Error';document.getElementById('firebaseAdminStatus').textContent=e.message})}
+function testFirebaseConnection(){if(!firebaseReady){document.getElementById('firebaseAdminStatus').textContent='Firebase initialize nahi hua.';return}db.ref('siteSettings/connectionTest').set({time:Date.now()}).then(()=>{document.getElementById('firebaseDbStatus').textContent='Connected & writable';document.getElementById('firebaseAdminStatus').textContent='Firebase Realtime Database successfully test ho gaya.'}).catch(e=>{document.getElementById('firebaseDbStatus').textContent='Write permission error';document.getElementById('firebaseAdminStatus').textContent=String(e?.message||e).includes('PERMISSION_DENIED')?'Firebase Rules write ko block kar rahe hain. Is ZIP ki database.rules.json ko Firebase Console → Realtime Database → Rules mein publish karein.':'Firebase error: '+(e?.message||e)})}
 function escapeHtml(v){return String(v??'').replace(/[&<>'"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[m]))}
 
 updateBadge();renderProducts(products);

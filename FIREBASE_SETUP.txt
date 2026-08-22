@@ -1,34 +1,31 @@
 CHEEZAY DIKHAO - FIREBASE SETUP
 
-1) Firebase Console > Authentication > Sign-in method
-   - Email/Password: ENABLED
-   - Google: ENABLED
-   - Anonymous: NOT REQUIRED
+IMPORTANT — CATEGORY SAVE ERROR
+If Admin > Categories shows:
+PERMISSION_DENIED: Permission denied
 
-2) Firebase Console > Authentication > Settings > Authorized domains
-   Add:
-   - localhost
-   - your Vercel domain, e.g. cheezay-dikhao.vercel.app
-   Do NOT add https:// to the domain.
+This means the Firebase Realtime Database Rules currently published in Firebase Console do not allow writes to siteSettings.
 
-3) Firebase Console > Realtime Database > Rules
-   Import/copy database.rules.json from this ZIP.
-   This project uses a password-only admin panel, so the admin's Firebase writes are allowed by these rules.
+Fix:
+1. Open Firebase Console for project school-c9633.
+2. Open Realtime Database.
+3. Open the Rules tab.
+4. Replace the current rules with the contents of database.rules.json in this ZIP.
+5. Click Publish.
+6. Return to the website, open Admin > Categories, and click Reload from Firebase.
+7. Click Save Categories again.
 
-4) Google Login
-   The website now uses signInWithPopup first and redirect as fallback.
-   If Google still shows auth/unauthorized-domain, add the exact Vercel hostname to Authorized domains.
-   If it shows auth/popup-blocked, allow popups for the site.
+The website can show "Firebase: Connected" even when Firebase writes are blocked. The "Connected" message only confirms that Firebase initialized; it does not mean write permission is granted.
 
-5) Admin
-   Click the logo 5 times quickly. Password: nabel3457
+CATEGORY DATA
+- Category names are normalized when loaded.
+- Add Category saves to siteSettings/categories.
+- Edit Name / Category Key and Save Categories saves the complete list.
+- Category images are resized before saving.
 
-6) Categories
-   Admin > Categories:
-   - Category names are loaded from Firebase/local data.
-   - Add Category saves immediately.
-   - Remove saves immediately.
-   - Edit name/key and click Save Categories.
-   - Upload category image, it is resized to 300x300 and saved.
+AUTHENTICATION
+- Email/Password and Google login can be enabled in Firebase Authentication.
+- Add the exact Vercel hostname under Authentication > Settings > Authorized domains.
 
-7) Products and images are saved under siteSettings/products and siteSettings/categories.
+NOTE
+The rules in this project intentionally allow writes to siteSettings because the current admin panel uses its own password screen rather than Firebase Authentication for admin access. For a production site, a server-side/admin-authenticated rules design is safer.
