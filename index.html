@@ -3,16 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cheezay Dikhao - Online Shop</title>
+<title>Cheezay Dikhao - Shop</title>
 <style>
 *{box-sizing:border-box}
-:root{
-  --orange:#e87500; --orange2:#f58a12; --green:#0b7d45; --green2:#0e9b59;
-  --dark:#171717; --cream:#fffaf4; --line:#e8e8e8; --text:#172033;
-}
+:root{--orange:#e87500;--green:#087b4b;--green2:#0da45e;--dark:#171717;--text:#172033;--line:#e8e8e8}
 body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#fff;color:var(--text)}
-button,input{font:inherit}
-button{cursor:pointer}
+button,input{font:inherit}button{cursor:pointer}
 .topbar{height:38px;background:#191919;color:#fff;display:flex;justify-content:center}
 .topinner{width:min(1400px,94%);display:flex;align-items:center;justify-content:space-between;font-size:13px}
 .topitem{display:flex;gap:8px;align-items:center}
@@ -32,430 +28,235 @@ button{cursor:pointer}
 .nav button{white-space:nowrap;border:0;background:none;padding:15px 4px;color:#202020;font-weight:600;border-bottom:3px solid transparent}
 .nav button:hover,.nav button.active{color:var(--orange);border-bottom-color:var(--orange)}
 main{width:min(1400px,94%);margin:20px auto 60px}
-.hero{display:grid;grid-template-columns:2fr 1fr;gap:18px}
-.hero-main{min-height:390px;border-radius:24px;background:#f8ecdf url("hero-banner.png") center/cover no-repeat;position:relative;overflow:hidden}
-.hero-copy{position:absolute;left:52px;top:58px;width:48%;z-index:2}
-.pill{display:inline-flex;align-items:center;gap:7px;background:#fff8;border:1px solid #e7d9c7;padding:8px 13px;border-radius:99px;font-size:12px;font-weight:700}
-.hero-copy h1{font-size:42px;line-height:1.12;margin:22px 0 12px;color:#20232b}
-.hero-copy h1 span{color:var(--orange)}
-.hero-copy p{font-size:16px;line-height:1.6;color:#4d5058}
-.hero-dots{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);display:flex;gap:8px}
-.hero-dots i{width:12px;height:6px;border-radius:10px;background:#fff}
-.side-banners{display:grid;gap:18px}
-.side{border-radius:22px;min-height:186px;padding:28px;position:relative;overflow:hidden;display:flex;align-items:center}
-.side h2{font-size:24px;line-height:1.2;max-width:170px;z-index:2;margin:0}
-.side.pk{background:linear-gradient(120deg,#f3f9ed,#d9edcf)}
-.side.pk h2{color:#12623b}
-.side.pk:after{content:"☾";position:absolute;right:18px;bottom:-30px;font-size:150px;color:#16814d;opacity:.18}
-.side.cn{background:linear-gradient(120deg,#fff2e8,#ffe0d2)}
-.side.cn h2{color:#a92c20}
-.side.cn:after{content:"★";position:absolute;right:35px;bottom:-35px;font-size:150px;color:#df2b1b;opacity:.17}
+.hero{width:100%;height:390px;border-radius:24px;overflow:hidden;position:relative;background:#064f3e}
+.hero img{width:100%;height:100%;display:block;object-fit:cover}
+.hero-placeholder{width:100%;height:100%;display:flex;align-items:center;padding:55px;color:#fff;background:linear-gradient(120deg,#07513f,#063d32)}
+.hero-placeholder h1{font-size:42px;line-height:1.1;margin:15px 0 10px;max-width:580px}
+.hero-placeholder p{max-width:560px;line-height:1.6}
 .section{background:#fff;border:1px solid #eee;border-radius:24px;margin-top:26px;padding:30px}
 .section-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
-.section h2{margin:0;font-size:26px}
-.seeall{color:var(--orange);font-weight:700;border:0;background:none}
+.section h2{margin:0;font-size:26px}.seeall{color:var(--orange);font-weight:700;border:0;background:none}
 .categories{display:grid;grid-template-columns:repeat(9,1fr);gap:16px}
 .cat{border:0;background:none;text-align:center;color:#222}
 .cat-img{height:105px;width:105px;margin:auto;border-radius:50%;background:#fafafa;border:1px solid #eee;display:flex;align-items:center;justify-content:center;font-size:42px;transition:.2s}
 .cat:hover .cat-img{transform:translateY(-5px);box-shadow:0 8px 20px #0001}
 .cat b{display:block;margin-top:12px;font-size:13px}
 .products{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
-.card{border:1px solid #e8e8e8;border-radius:18px;overflow:hidden;background:#fff;position:relative;transition:.2s}
+.card{border:1px solid #e8e8e8;border-radius:18px;overflow:hidden;background:#fff;transition:.2s}
 .card:hover{transform:translateY(-3px);box-shadow:0 10px 30px #00000010}
 .card-img{height:210px;background:#f7f7f7;display:flex;align-items:center;justify-content:center;font-size:80px}
-.card-body{padding:16px}
-.card h3{font-size:15px;line-height:1.35;margin:0 0 10px}
-.price{font-size:20px;font-weight:800;color:#111}
-.old{font-size:12px;color:#999;text-decoration:line-through;margin-left:6px}
+.card-body{padding:16px}.card h3{font-size:15px;line-height:1.35;margin:0 0 10px}
+.price{font-size:20px;font-weight:800}.old{font-size:12px;color:#999;text-decoration:line-through;margin-left:6px}
 .card-actions{display:flex;gap:8px;margin-top:14px}
 .add{flex:1;border:0;background:var(--orange);color:#fff;padding:10px;border-radius:9px;font-weight:700}
-.heart{width:42px;border:1px solid #ddd;background:#fff;border-radius:9px;font-size:19px}
-.heart.active{color:#e22;background:#fff1f1}
+.heart{width:42px;border:1px solid #ddd;background:#fff;border-radius:9px;font-size:19px}.heart.active{color:#e22;background:#fff1f1}
 .empty{padding:35px;text-align:center;color:#777}
 .overlay{display:none;position:fixed;inset:0;background:#0008;z-index:100}
 .overlay.show{display:flex;align-items:center;justify-content:center}
-.modal{width:min(720px,92%);max-height:90vh;overflow:auto;background:#fff;border-radius:20px;padding:25px;position:relative}.cart-drawer{margin-left:auto;width:min(470px,94vw);height:100%;max-height:none;border-radius:22px 0 0 22px;padding:0;overflow:hidden;display:flex;flex-direction:column}.cart-drawer-head{padding:22px 24px;border-bottom:1px solid #eee;display:flex;align-items:center;justify-content:space-between;background:#fff}.cart-drawer-head h2{margin:0;font-size:22px}.cart-drawer-body{padding:18px 22px;overflow:auto;flex:1;background:#fff}.cart-drawer-foot{padding:18px 22px;border-top:1px solid #eee;background:#fff}.delivery-card{background:#e8f8f0;border:1px solid #cceedd;border-radius:16px;padding:15px;margin-bottom:14px}.delivery-card b{display:block;color:#12623b;margin-bottom:5px}.delivery-card small{color:#555;line-height:1.45}.cart-empty-big{text-align:center;padding:60px 15px;color:#777}.cart-product-img{width:72px;height:72px;border-radius:12px;background:#f6f6f6;object-fit:cover;display:block}.cart-row .cart-info{min-width:0;flex:1}.cart-row .cart-info b{display:block;line-height:1.3}.cart-row .cart-info small{color:#777}.admin-img-preview{width:120px;height:120px;border:1px dashed #ccc;border-radius:12px;object-fit:contain;background:#fafafa;display:none}.upload-box{border:1px dashed #bbb;border-radius:12px;padding:14px;background:#fafafa}.upload-help{font-size:12px;color:#777;margin-top:5px}.hero-copy h1:empty,.hero-copy p:empty{display:none}.admin-no-password{background:#eefaf3;border:1px solid #ccebd9;color:#17643e;border-radius:10px;padding:10px;font-size:13px}
+.modal{width:min(760px,92%);max-height:92vh;overflow:auto;background:#fff;border-radius:20px;padding:25px;position:relative}
 .close{position:absolute;right:15px;top:12px;border:0;background:none;font-size:28px}
 .cart-row{display:flex;align-items:center;gap:15px;padding:14px 0;border-bottom:1px solid #eee}
 .cart-icon{width:60px;height:60px;background:#f7f7f7;border-radius:10px;display:grid;place-items:center;font-size:30px}
-.qty{display:flex;border:1px solid #ddd;border-radius:8px;overflow:hidden;margin-left:auto}
-.qty button{border:0;background:#fafafa;width:32px}
-.qty span{width:35px;text-align:center;padding:7px}
+.qty{display:flex;border:1px solid #ddd;border-radius:8px;overflow:hidden;margin-left:auto}.qty button{border:0;background:#fafafa;width:32px}.qty span{width:35px;text-align:center;padding:7px}
 .total{display:flex;justify-content:space-between;font-size:20px;font-weight:800;padding-top:18px}
 .checkout{width:100%;margin-top:18px;border:0;background:var(--green2);color:#fff;padding:14px;border-radius:10px;font-weight:800}
 .toast{position:fixed;right:25px;bottom:25px;background:#151515;color:#fff;padding:13px 18px;border-radius:10px;opacity:0;transform:translateY(15px);pointer-events:none;transition:.25s;z-index:200}
 .toast.show{opacity:1;transform:none}
-.login-form{display:grid;gap:12px}
-.login-form input{padding:12px;border:1px solid #ddd;border-radius:8px}
-.login-form button{border:0;background:var(--orange);color:#fff;padding:12px;border-radius:8px;font-weight:700}
+.login-form,.admin-grid{display:grid;gap:12px}.login-form input,.admin-grid input,.admin-grid select{padding:12px;border:1px solid #ddd;border-radius:8px}
+.login-form button,.admin-btn{border:0;background:var(--orange);color:#fff;padding:12px;border-radius:8px;font-weight:700}
+.admin-preview{width:100%;height:220px;border:1px dashed #ccc;border-radius:12px;object-fit:cover;background:#f7f7f7}
+.admin-toolbar{display:flex;gap:10px;flex-wrap:wrap}.admin-toolbar>*{flex:1;min-width:130px}
+.status{padding:10px;border-radius:8px;background:#f3f7f5;color:#276449;font-size:13px}
 footer{background:#171717;color:#ddd;padding:35px 4%;text-align:center}
-@media(max-width:1050px){
-  .header-main{flex-wrap:wrap;padding:10px 0}.logo{width:auto}.search-wrap{order:3;max-width:none;flex-basis:100%}
-  .actions{gap:8px}.categories{grid-template-columns:repeat(5,1fr)}.products{grid-template-columns:repeat(3,1fr)}
-}
-@media(max-width:760px){
-  .topinner{font-size:10px}.topitem:nth-child(3),.topitem:nth-child(4){display:none}
-  .hero{grid-template-columns:1fr}.hero-main{min-height:420px}.hero-copy{left:25px;top:30px;width:65%}.hero-copy h1{font-size:30px}
-  .side-banners{grid-template-columns:1fr 1fr}.side{min-height:150px;padding:18px}.side h2{font-size:18px}
-  .categories{grid-template-columns:repeat(3,1fr)}.products{grid-template-columns:repeat(2,1fr)}
-  .section{padding:18px}.actions .action span:last-child{display:none}.actions{margin-left:0}
-}
-@media(max-width:480px){
-  .header-main{gap:10px}.logo{font-size:17px}.logo img{width:52px;height:52px}
-  .products{grid-template-columns:1fr}.categories{grid-template-columns:repeat(2,1fr)}
-  .hero-copy{width:70%}.hero-copy p{font-size:13px}
-}
-
-/* Admin + checkout UI */
-.admin-overlay{z-index:100}
-.admin-shell{width:min(1200px,96vw);max-height:92vh;overflow:auto;background:#fff;border-radius:22px;padding:24px}
-.admin-head{display:flex;align-items:center;justify-content:space-between;gap:15px;border-bottom:1px solid #eee;padding-bottom:15px;margin-bottom:18px}
-.admin-head h2{margin:0}
-.admin-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
-.admin-tabs button{border:1px solid #ddd;background:#fff;border-radius:10px;padding:10px 14px;font-weight:700}
-.admin-tabs button.active{background:var(--orange);color:#fff;border-color:var(--orange)}
-.admin-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
-.admin-card{border:1px solid #eee;border-radius:16px;padding:16px}
-.admin-card h3{margin:0 0 12px}
-.admin-form{display:grid;gap:10px}
-.admin-form input,.admin-form textarea,.admin-form select{width:100%;padding:11px;border:1px solid #ddd;border-radius:9px}
-.admin-form textarea{min-height:90px;resize:vertical}
-.admin-row{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.admin-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-.btn{border:0;border-radius:9px;padding:10px 14px;font-weight:700}
-.btn.primary{background:var(--orange);color:#fff}.btn.green{background:var(--green);color:#fff}.btn.danger{background:#b42318;color:#fff}.btn.light{background:#f3f3f3}
-.admin-table{width:100%;border-collapse:collapse;font-size:13px}
-.admin-table th,.admin-table td{padding:10px;border-bottom:1px solid #eee;text-align:left;vertical-align:top}
-.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
-.stat{background:#faf7f2;border:1px solid #eee;border-radius:14px;padding:15px}.stat b{font-size:22px;display:block}
-.checkout-form{display:grid;gap:10px}.checkout-form input,.checkout-form textarea{width:100%;padding:12px;border:1px solid #ddd;border-radius:9px}.checkout-form textarea{min-height:80px}
-@media(max-width:760px){.admin-grid{grid-template-columns:1fr}.stat-grid{grid-template-columns:repeat(2,1fr)}.admin-row{grid-template-columns:1fr}.admin-shell{padding:15px}}
+footer button{border:0;background:none;color:#aaa;text-decoration:underline}
+@media(max-width:1050px){.header-main{flex-wrap:wrap;padding:10px 0}.logo{width:auto}.search-wrap{order:3;max-width:none;flex-basis:100%}.actions{gap:8px}.categories{grid-template-columns:repeat(5,1fr)}.products{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:760px){.topinner{font-size:10px}.topitem:nth-child(3),.topitem:nth-child(4){display:none}.hero{height:300px}.section{padding:18px}.categories{grid-template-columns:repeat(3,1fr)}.products{grid-template-columns:repeat(2,1fr)}.actions .action span:last-child{display:none}.actions{margin-left:0}}
+@media(max-width:480px){.logo{font-size:17px}.logo img{width:52px;height:52px}.products{grid-template-columns:1fr}.categories{grid-template-columns:repeat(2,1fr)}.hero{height:250px}.section h2{font-size:21px}}
 </style>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
 </head>
 <body>
+<div class="topbar"><div class="topinner">
+<div class="topitem">🚚 <span>Lowest delivery price in Pakistan</span></div>
+<div class="topitem">💳 <span>Cash on Delivery available</span></div>
+<div class="topitem">↩️ <span>7-day easy returns</span></div>
+<div class="topitem">🛡️ <span>Verified Suppliers</span></div>
+</div></div>
 
-<div class="topbar">
-  <div class="topinner">
-    <div class="topitem">🚚 <span>Lowest delivery price in Pakistan</span></div>
-    <div class="topitem">💳 <span>Cash on Delivery available</span></div>
-    <div class="topitem">↩️ <span>7-day easy returns</span></div>
-    <div class="topitem">🛡️ <span>Verified Suppliers</span></div>
+<header class="header"><div class="header-main">
+<a class="logo" href="#" onclick="goHome();return false;"><img src="cropped-logo.jpg" alt="Cheezay Dikhao"><span>Cheezay Dikhao</span></a>
+<form class="search-wrap" onsubmit="searchProducts(event)"><input id="searchInput" placeholder="Search products, brands & stores"><button>Search</button></form>
+<div class="actions">
+<button class="action" onclick="openLogin()"><span class="ico">◯</span><span>Log in</span></button>
+<button class="action" onclick="showOrders()"><span class="ico">📦</span><span>Orders</span></button>
+<button class="action" onclick="showWishlist()"><span class="ico">♡</span><span>Wishlist</span></button>
+<button class="action" onclick="openCart()" style="position:relative"><span class="ico">🛒<b id="cartBadge" class="badge">0</b></span><span>Cart</span></button>
+</div></div></header>
+
+<nav class="nav"><div class="navinner">
+<button class="active" onclick="filterCategory('All',this)">⌂ All</button>
+<button onclick="filterCategory('Kids & Mother',this)">👶 Kids & Mother</button>
+<button onclick="filterCategory('Women Corner',this)">👩 Women Corner</button>
+<button onclick="filterCategory('China',this)">🇨🇳 China</button>
+<button onclick="filterCategory('Urdu Bazaar',this)">📚 Urdu Bazaar</button>
+<button onclick="filterCategory('Beauty & Care',this)">💄 Beauty & Care</button>
+<button data-category="Men's Fashion" onclick="filterCategory(this.dataset.category,this)">👨 Men's Fashion</button>
+<button onclick="filterCategory('Home & Living',this)">🏠 Home & Living</button>
+<button onclick="filterCategory('Tech & Tools',this)">🔧 Tech & Tools</button>
+</div></nav>
+
+<main>
+<section class="hero" id="heroBox">
+  <img id="heroImage" src="default-hero.jpg" alt="Cheezay Dikhao hero banner" onerror="showHeroPlaceholder()">
+  <div id="heroPlaceholder" class="hero-placeholder" style="display:none">
+    <div><div>⭐ Shop or earn in Pakistan</div><h1>Buy for yourself or resell and earn.</h1><p>Millions shop on Cheezay Dikhao, thousands also resell. Start with just one, there's no minimum.</p></div>
   </div>
-</div>
+</section>
 
-<header class="header">
-  <div class="header-main">
-    <a class="logo" href="#" onclick="goHome();return false;">
-      <img src="cropped-logo.jpg" alt="Cheezay Dikhao">
-      <span>Cheezay Dikhao</span>
-    </a>
+<section class="section">
+<div class="section-head"><h2>Shop by category</h2><button class="seeall" onclick="renderProducts(products)">See all →</button></div>
+<div class="categories">
+<button class="cat" onclick="filterCategory('Beauty & Care')"><div class="cat-img">💄</div><b>Cosmetics</b></button>
+<button class="cat" onclick="filterCategory('Women Corner')"><div class="cat-img">👗</div><b>Womens<br>Stitched</b></button>
+<button class="cat" onclick="filterCategory('Kids & Mother')"><div class="cat-img">👕</div><b>Kids<br>Clothing</b></button>
+<button class="cat" data-category="Men's Fashion" onclick="filterCategory(this.dataset.category)"><div class="cat-img">👔</div><b>Mens<br>Stitched</b></button>
+<button class="cat" onclick="filterCategory('Women Corner')"><div class="cat-img">💍</div><b>Jewellery</b></button>
+<button class="cat" onclick="filterCategory('Beauty & Care')"><div class="cat-img">🕶️</div><b>Fashion<br>Accessories</b></button>
+<button class="cat" onclick="filterCategory('Home & Living')"><div class="cat-img">🛏️</div><b>Bedding</b></button>
+<button class="cat" onclick="filterCategory('Women Corner')"><div class="cat-img">🧣</div><b>Festive<br>Collection</b></button>
+<button class="cat" onclick="filterCategory('Urdu Bazaar')"><div class="cat-img">📖</div><b>Islamic<br>Accessories</b></button>
+</div></section>
 
-    <form class="search-wrap" onsubmit="searchProducts(event)">
-      <input id="searchInput" placeholder="Search products, brands & stores">
-      <button>Search</button>
-    </form>
-
-    <div class="actions">
-      <button class="action" onclick="openLogin()"><span class="ico">◯</span><span>Log in</span></button>
-      <button class="action" onclick="showOrders()"><span class="ico">📦</span><span>Orders</span></button>
-      <button class="action" onclick="showWishlist()"><span class="ico">♡</span><span>Wishlist</span></button>
-      <button class="action" onclick="openCart()" style="position:relative"><span class="ico">🛒<b id="cartBadge" class="badge">0</b></span><span>Cart</span></button>
-    </div>
-  </div>
-</header>
-
-<nav class="nav">
-  <div class="navinner">
-    <button class="active" data-category="All" onclick="filterCategory('All',this)">⌂ All</button>
-    <button data-category="Kids & Mother" onclick="filterCategory('Kids & Mother',this)">👶 Kids & Mother</button>
-    <button data-category="Women Corner" onclick="filterCategory('Women Corner',this)">👩 Women Corner</button>
-    <button data-category="China" onclick="filterCategory('China',this)">🇨🇳 China</button>
-    <button data-category="Urdu Bazaar" onclick="filterCategory('Urdu Bazaar',this)">📚 Urdu Bazaar</button>
-    <button data-category="Beauty & Care" onclick="filterCategory('Beauty & Care',this)">💄 Beauty & Care</button>
-    <button data-category="Men's Fashion" onclick="filterCategory(\"Men's Fashion\",this)">👨 Men's Fashion</button>
-    <button data-category="Home & Living" onclick="filterCategory('Home & Living',this)">🏠 Home & Living</button>
-    <button data-category="Tech & Tools" onclick="filterCategory('Tech & Tools',this)">🔧 Tech & Tools</button>
-  </div>
-</nav>
-
-<main id="home">
-  <section class="hero">
-    <div class="hero-main">
-      <div class="hero-copy">
-        <div class="pill">🛍️ Shopping in Pakistan</div>
-        <h1>Buy for yourself, love or <span>resell and earn.</span></h1>
-        <p>Millions shop on Cheezay Dikhao for quality products, best prices & trusted sellers.</p>
-      </div>
-      <div class="hero-dots"><i></i><i></i><i></i></div>
-    </div>
-    <div class="side-banners">
-      <div class="side pk" onclick="filterCategory('Pakistan',null)"><h2>Shop<br>from Pakistan</h2></div>
-      <div class="side cn" onclick="filterCategory('China',null)"><h2>Shop<br>from China →</h2></div>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="section-head">
-      <h2>Shop by category</h2>
-      <button class="seeall" onclick="renderProducts(products)">See all →</button>
-    </div>
-    <div class="categories">
-      <button class="cat" onclick="filterCategory('Beauty & Care')"><div class="cat-img">💄</div><b>Cosmetics</b></button>
-      <button class="cat" onclick="filterCategory('Women Corner')"><div class="cat-img">👗</div><b>Womens<br>Stitched</b></button>
-      <button class="cat" onclick="filterCategory('Kids & Mother')"><div class="cat-img">👕</div><b>Kids<br>Clothing</b></button>
-      <button class="cat" onclick="filterCategory(\"Men's Fashion\")"><div class="cat-img">👔</div><b>Mens<br>Stitched</b></button>
-      <button class="cat" onclick="filterCategory('Women Corner')"><div class="cat-img">💍</div><b>Jewellery</b></button>
-      <button class="cat" onclick="filterCategory('Beauty & Care')"><div class="cat-img">🕶️</div><b>Fashion<br>Accessories</b></button>
-      <button class="cat" onclick="filterCategory('Home & Living')"><div class="cat-img">🛏️</div><b>Bedding</b></button>
-      <button class="cat" onclick="filterCategory('Women Corner')"><div class="cat-img">🧣</div><b>Festive<br>Collection</b></button>
-      <button class="cat" onclick="filterCategory('Urdu Bazaar')"><div class="cat-img">📖</div><b>Islamic<br>Accessories</b></button>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="section-head">
-      <h2 id="productTitle">Featured Products</h2>
-      <button class="seeall" onclick="renderProducts(products)">Reset</button>
-    </div>
-    <div id="products" class="products"></div>
-  </section>
+<section class="section"><div class="section-head"><h2 id="productTitle">Featured Products</h2><button class="seeall" onclick="renderProducts(products)">Reset</button></div><div id="products" class="products"></div></section>
 </main>
 
-<footer>© 2026 Cheezay Dikhao — Online Shopping in Pakistan</footer>
+<footer>© 2026 Cheezay Dikhao — Online Shopping in Pakistan · <button onclick="openAdmin()">Admin Settings</button></footer>
 
-<div id="cartModal" class="overlay" onclick="closeOnBackdrop(event,'cartModal')">
-  <div class="cart-drawer">
-    <div class="cart-drawer-head"><h2>🛒 Your Cart</h2><button class="close" style="position:static" onclick="closeModal('cartModal')">×</button></div>
-    <div class="cart-drawer-body">
-      <div class="delivery-card"><b>🚚 Delivery in 3-5 days | Charges PKR 165</b><small>Cart mein multiple items add karein. Delivery charges per order apply honge.</small><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><span style="background:#ffd42a;padding:5px 9px;border-radius:7px;font-size:11px;font-weight:700">Leopards PKR 165</span><span style="background:#f1f1f1;padding:5px 9px;border-radius:7px;font-size:11px;font-weight:700">PostEx PKR 165</span><span style="background:#f1f1f1;padding:5px 9px;border-radius:7px;font-size:11px;font-weight:700">EasyShip PKR 165</span></div></div><div class="delivery-card" style="background:#fff;border-color:#eee"><b style="color:#17324d">↩️ Return allowed within 7 days</b><small>Product receive karne ke baad eligible items par 7-day return policy apply hogi.</small></div>
-      <div id="cartItems"></div>
-    </div>
-    <div class="cart-drawer-foot"><div class="total"><span>Total</span><span id="cartTotal">PKR 0</span></div><button class="checkout" onclick="checkout()">Place Cash on Delivery Order</button></div>
-  </div>
+<div id="cartModal" class="overlay" onclick="closeOnBackdrop(event,'cartModal')"><div class="modal"><button class="close" onclick="closeModal('cartModal')">×</button><h2>Your Cart</h2><div id="cartItems"></div><div class="total"><span>Total</span><span id="cartTotal">PKR 0</span></div><button class="checkout" onclick="checkout()">Place Cash on Delivery Order</button></div></div>
+
+<div id="loginModal" class="overlay" onclick="closeOnBackdrop(event,'loginModal')"><div class="modal"><button class="close" onclick="closeModal('loginModal')">×</button><h2>Login</h2><form class="login-form" onsubmit="login(event)"><input id="loginEmail" type="email" placeholder="Email address" required><input id="loginPassword" type="password" placeholder="Password" required><button>Login</button></form></div></div>
+
+<div id="ordersModal" class="overlay" onclick="closeOnBackdrop(event,'ordersModal')"><div class="modal"><button class="close" onclick="closeModal('ordersModal')">×</button><h2>Orders</h2><div id="ordersContent" class="empty">No orders yet.</div></div></div>
+<div id="wishlistModal" class="overlay" onclick="closeOnBackdrop(event,'wishlistModal')"><div class="modal"><button class="close" onclick="closeModal('wishlistModal')">×</button><h2>Wishlist</h2><div id="wishlistContent" class="empty">Your wishlist is empty.</div></div></div>
+
+<div id="adminModal" class="overlay" onclick="closeOnBackdrop(event,'adminModal')"><div class="modal">
+<button class="close" onclick="closeModal('adminModal')">×</button>
+<h2>Admin Settings</h2>
+<p style="color:#666">Hero banner ko device se upload karein, resize karein aur Firebase Realtime Database mein save karein.</p>
+<div id="adminLoginBox" class="login-form">
+<input id="adminEmail" type="email" placeholder="Admin email">
+<input id="adminPassword" type="password" placeholder="Admin password">
+<button onclick="adminLogin(event)">Firebase Admin Login</button>
 </div>
-
-<div id="loginModal" class="overlay" onclick="closeOnBackdrop(event,'loginModal')">
-  <div class="modal">
-    <button class="close" onclick="closeModal('loginModal')">×</button>
-    <h2>Login</h2>
-    <form class="login-form" onsubmit="login(event)">
-      <input id="loginEmail" type="email" placeholder="Email address" required>
-      <input id="loginPassword" type="password" placeholder="Password" required>
-      <button>Login</button>
-    </form>
-  </div>
+<div id="adminPanel" style="display:none">
+<div class="status" id="firebaseStatus">Firebase connected.</div>
+<br>
+<div class="admin-grid">
+<label><b>Upload hero image</b><input id="heroFile" type="file" accept="image/*" onchange="previewHeroFile(event)"></label>
+<div class="admin-toolbar">
+<label>Width (px)<input id="resizeW" type="number" value="1600" min="320" max="3000"></label>
+<label>Height (px)<input id="resizeH" type="number" value="390" min="120" max="1500"></label>
+<label>Quality<input id="resizeQ" type="number" value="0.85" min="0.3" max="1" step="0.05"></label>
 </div>
-
-<div id="ordersModal" class="overlay" onclick="closeOnBackdrop(event,'ordersModal')">
-  <div class="modal">
-    <button class="close" onclick="closeModal('ordersModal')">×</button>
-    <h2>Orders</h2>
-    <div id="ordersContent" class="empty">No orders yet.</div>
-  </div>
+<select id="fitMode"><option value="cover">Cover / Crop</option><option value="contain">Fit / No Crop</option></select>
+<img id="adminPreview" class="admin-preview" src="default-hero.jpg" alt="Preview">
+<div class="admin-toolbar">
+<button class="admin-btn" onclick="resizeHero()">Resize Image</button>
+<button class="admin-btn" style="background:#087b4b" onclick="saveHeroToFirebase()">Save Hero to Firebase</button>
+<button class="admin-btn" style="background:#555" onclick="loadHeroFromFirebase()">Reload from Firebase</button>
+<button class="admin-btn" style="background:#777" onclick="adminLogout()">Logout</button>
 </div>
+<div id="adminInfo" class="status">Recommended: 1600 × 390 px. Image is compressed before saving.</div>
+</div></div>
+</div></div>
 
-<div id="wishlistModal" class="overlay" onclick="closeOnBackdrop(event,'wishlistModal')">
-  <div class="modal">
-    <button class="close" onclick="closeModal('wishlistModal')">×</button>
-    <h2>Wishlist</h2>
-    <div id="wishlistContent" class="empty">Your wishlist is empty.</div>
-  </div>
-</div>
-
-
-<div id="checkoutModal" class="overlay" onclick="closeOnBackdrop(event,'checkoutModal')">
-  <div class="modal">
-    <button class="close" onclick="closeModal('checkoutModal')">×</button>
-    <h2>Cash on Delivery</h2>
-    <form class="checkout-form" onsubmit="placeOrder(event)">
-      <input id="custName" placeholder="Full name" required>
-      <input id="custPhone" placeholder="Mobile number" required>
-      <input id="custCity" placeholder="City" required>
-      <textarea id="custAddress" placeholder="Complete delivery address" required></textarea>
-      <button class="checkout">Confirm COD Order</button>
-    </form>
-  </div>
-</div>
-
-<div id="adminModal" class="overlay admin-overlay" onclick="closeOnBackdrop(event,'adminModal')">
-  <div class="admin-shell">
-    <div class="admin-head">
-      <div><h2>⚙️ Cheezay Dikhao Admin</h2><small>Complete store control panel</small></div>
-      <button class="btn light" onclick="adminLogout()">Logout</button>
-    </div>
-    <div class="admin-tabs">
-      <button id="tab-dashboard" onclick="showAdminTab('dashboard')">Dashboard</button>
-      <button id="tab-products" onclick="showAdminTab('products')">Products</button>
-      <button id="tab-orders" onclick="showAdminTab('orders')">Orders</button>
-      <button id="tab-categories" onclick="showAdminTab('categories')">Categories</button>
-      <button id="tab-store" onclick="showAdminTab('store')">Store Settings</button>
-      <button id="tab-data" onclick="showAdminTab('data')">Backup / Data</button>
-    </div>
-    <div id="adminContent"></div>
-  </div>
-</div>
 <div id="toast" class="toast"></div>
 
-
 <script>
-const defaultProducts = [
- {id:1,name:"Premium Ladies Handbag",price:2499,old:2999,cat:"Women Corner",icon:"👜"},
- {id:2,name:"Wireless Bluetooth Earbuds",price:1599,old:2199,cat:"Tech & Tools",icon:"🎧"},
- {id:3,name:"Kids Summer Dress Set",price:1899,old:2399,cat:"Kids & Mother",icon:"👗"},
- {id:4,name:"Classic Men's Polo Shirt",price:1299,old:1699,cat:"Men's Fashion",icon:"👕"},
- {id:5,name:"Makeup Beauty Kit",price:2199,old:2799,cat:"Beauty & Care",icon:"💄"},
- {id:6,name:"Elegant Jewellery Set",price:999,old:1399,cat:"Women Corner",icon:"💍"},
- {id:7,name:"Soft Comfort Bedding Set",price:3299,old:3999,cat:"Home & Living",icon:"🛏️"},
- {id:8,name:"Islamic Gift & Tasbeeh Set",price:899,old:1199,cat:"Urdu Bazaar",icon:"📿"},
- {id:9,name:"Smart LED Desk Lamp",price:1799,old:2299,cat:"Tech & Tools",icon:"💡"},
- {id:10,name:"Fashion Sunglasses",price:799,old:1099,cat:"Beauty & Care",icon:"🕶️"},
- {id:11,name:"Festive Women's Suit",price:2899,old:3499,cat:"Women Corner",icon:"🥻"},
- {id:12,name:"Remote Control Flying Toy",price:4029,old:4699,cat:"Kids & Mother",icon:"✈️"}
-];
-const defaultCategories=["Kids & Mother","Women Corner","China","Urdu Bazaar","Beauty & Care","Men's Fashion","Home & Living","Tech & Tools"];
-const defaultSettings={
- storeName:"Cheezay Dikhao",deliveryText:"Lowest delivery price in Pakistan",cod:true,returns:"7-day easy returns",
- heroTitle:"",heroText:"Millions shop on Cheezay Dikhao for quality products, best prices & trusted sellers.",
- currency:"PKR"
+const firebaseConfig={
+ apiKey:"AIzaSyBsr72VFXwgW3dsJyhjGnisWgtlSA4ynYVY",
+ authDomain:"school-c9633.firebaseapp.com",
+ databaseURL:"https://school-c9633-default-rtdb.asia-southeast1.firebasedatabase.app",
+ projectId:"school-c9633",
+ storageBucket:"school-c9633.firebasestorage.app",
+ messagingSenderId:"293275030223",
+ appId:"1:293275030223:web:7394cb9fe64f72c1019dba"
 };
-let products=JSON.parse(localStorage.getItem("cd_products")||"null")||defaultProducts;
-let categories=JSON.parse(localStorage.getItem("cd_categories")||"null")||defaultCategories;
-let settings=Object.assign({},defaultSettings,JSON.parse(localStorage.getItem("cd_settings")||"{}"));
-let cart=JSON.parse(localStorage.getItem("cd_cart")||"[]");
-let wishlist=JSON.parse(localStorage.getItem("cd_wishlist")||"[]");
-let orders=JSON.parse(localStorage.getItem("cd_orders")||"[]");
-let adminAuthed=false, adminTab="dashboard", logoTaps=0, logoTapTimer=null, editingProductId=null;
+let firebaseReady=false, db=null, auth=null;
+try{
+ firebase.initializeApp(firebaseConfig); auth=firebase.auth(); db=firebase.database(); firebaseReady=true;
+}catch(e){console.error(e)}
 
-function money(n){return settings.currency+" "+Number(n||0).toLocaleString("en-PK")}
-function persist(){
- localStorage.setItem("cd_products",JSON.stringify(products));
- localStorage.setItem("cd_categories",JSON.stringify(categories));
- localStorage.setItem("cd_settings",JSON.stringify(settings));
- localStorage.setItem("cd_cart",JSON.stringify(cart));
- localStorage.setItem("cd_wishlist",JSON.stringify(wishlist));
- localStorage.setItem("cd_orders",JSON.stringify(orders));
- updateBadge();
-}
+const products=[
+{id:1,name:"Premium Ladies Handbag",price:2499,old:2999,cat:"Women Corner",icon:"👜"},
+{id:2,name:"Wireless Bluetooth Earbuds",price:1599,old:2199,cat:"Tech & Tools",icon:"🎧"},
+{id:3,name:"Kids Summer Dress Set",price:1899,old:2399,cat:"Kids & Mother",icon:"👗"},
+{id:4,name:"Classic Men's Polo Shirt",price:1299,old:1699,cat:"Men's Fashion",icon:"👕"},
+{id:5,name:"Makeup Beauty Kit",price:2199,old:2799,cat:"Beauty & Care",icon:"💄"},
+{id:6,name:"Elegant Jewellery Set",price:999,old:1399,cat:"Women Corner",icon:"💍"},
+{id:7,name:"Soft Comfort Bedding Set",price:3299,old:3999,cat:"Home & Living",icon:"🛏️"},
+{id:8,name:"Islamic Gift & Tasbeeh Set",price:899,old:1199,cat:"Urdu Bazaar",icon:"📿"},
+{id:9,name:"Smart LED Desk Lamp",price:1799,old:2299,cat:"Tech & Tools",icon:"💡"},
+{id:10,name:"Fashion Sunglasses",price:799,old:1099,cat:"Beauty & Care",icon:"🕶️"},
+{id:11,name:"Festive Women's Suit",price:2899,old:3499,cat:"Women Corner",icon:"🥻"},
+{id:12,name:"Remote Control Flying Toy",price:4029,old:4699,cat:"Kids & Mother",icon:"✈️"}
+];
+let cart=JSON.parse(localStorage.getItem("cd_cart")||"[]"),wishlist=JSON.parse(localStorage.getItem("cd_wishlist")||"[]"),orders=JSON.parse(localStorage.getItem("cd_orders")||"[]");
+function money(n){return "PKR "+Number(n).toLocaleString("en-PK")}
+function save(){localStorage.setItem("cd_cart",JSON.stringify(cart));localStorage.setItem("cd_wishlist",JSON.stringify(wishlist));localStorage.setItem("cd_orders",JSON.stringify(orders));updateBadge()}
 function updateBadge(){document.getElementById("cartBadge").textContent=cart.reduce((s,x)=>s+x.qty,0)}
 function renderProducts(list){
- const box=document.getElementById("products");
- document.getElementById("productTitle").textContent=list.length?"Products":"No Products Found";
- box.innerHTML=list.length?list.map(p=>`<article class="card"><div class="card-img">${p.image?`<img src="${escapeHtml(p.image)}" alt="${escapeHtml(p.name)}" style="width:100%;height:100%;object-fit:cover">`:p.icon||"🛍️"}</div><div class="card-body"><h3>${escapeHtml(p.name)}</h3><div><span class="price">${money(p.price)}</span><span class="old">${money(p.old||p.price)}</span></div><div class="card-actions"><button class="add" onclick="addToCart(${p.id})">Add to Cart</button><button class="heart ${wishlist.includes(p.id)?"active":""}" onclick="toggleWish(${p.id})">${wishlist.includes(p.id)?"♥":"♡"}</button></div></div></article>`).join(""):'<div class="empty" style="grid-column:1/-1">Try another search or category.</div>';
+ document.getElementById("products").innerHTML=list.length?list.map(p=>`<article class="card"><div class="card-img">${p.icon}</div><div class="card-body"><h3>${p.name}</h3><div><span class="price">${money(p.price)}</span><span class="old">${money(p.old)}</span></div><div class="card-actions"><button class="add" onclick="addToCart(${p.id})">Add to Cart</button><button class="heart ${wishlist.includes(p.id)?"active":""}" onclick="toggleWish(${p.id})">${wishlist.includes(p.id)?"♥":"♡"}</button></div></div></article>`).join(""):'<div class="empty" style="grid-column:1/-1">No products found.</div>';
 }
-function filterCategory(cat,btn){
- if(btn){document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("active"));btn.classList.add("active")}
- const list=cat==="All"?products:products.filter(p=>p.cat===cat||(cat==="Pakistan"&&p.cat!=="China"));
- document.getElementById("searchInput").value="";renderProducts(list);
- document.getElementById("productTitle").textContent=cat==="All"?"Featured Products":cat;
- window.scrollTo({top:document.getElementById("products").offsetTop-150,behavior:"smooth"});
-}
-function searchProducts(e){e.preventDefault();const q=document.getElementById("searchInput").value.trim().toLowerCase();const list=q?products.filter(p=>(p.name+" "+p.cat).toLowerCase().includes(q)):products;renderProducts(list);document.getElementById("productTitle").textContent=q?"Search results":"Featured Products"}
-function addToCart(id){const p=products.find(x=>x.id===id);if(!p)return;const item=cart.find(x=>x.id===id);if(item)item.qty++;else cart.push({id,qty:1});persist();renderCart();openModal("cartModal");toast(p.name+" cart mein add ho gaya")}
-function changeQty(id,delta){const item=cart.find(x=>x.id===id);if(!item)return;item.qty+=delta;if(item.qty<=0)cart=cart.filter(x=>x.id!==id);persist();renderCart()}
-function renderCart(){
- const box=document.getElementById("cartItems");if(!cart.length){box.innerHTML='<div class="empty">Your cart is empty.</div>';document.getElementById("cartTotal").textContent=money(0);return}
- let total=0;box.innerHTML=cart.map(item=>{const p=products.find(x=>x.id===item.id);if(!p)return "";total+=p.price*item.qty;return `<div class="cart-row"><div>${p.image?`<img class="cart-product-img" src="${escapeHtml(p.image)}" alt="">`:`<div class="cart-icon">${p.icon||"🛍️"}</div>`}</div><div class="cart-info"><b>${escapeHtml(p.name)}</b><small>${money(p.price)} each</small></div><div class="qty"><button onclick="changeQty(${p.id},-1)">−</button><span>${item.qty}</span><button onclick="changeQty(${p.id},1)">+</button></div></div>`}).join("");document.getElementById("cartTotal").textContent=money(total)
-}
+function filterCategory(cat,btn){if(btn){document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("active"));btn.classList.add("active")}const list=cat==="All"?products:products.filter(p=>p.cat===cat);renderProducts(list);document.getElementById("productTitle").textContent=cat==="All"?"Featured Products":cat}
+function searchProducts(e){e.preventDefault();const q=document.getElementById("searchInput").value.trim().toLowerCase();renderProducts(q?products.filter(p=>(p.name+" "+p.cat).toLowerCase().includes(q)):products);document.getElementById("productTitle").textContent=q?"Search results":"Featured Products"}
+function addToCart(id){const p=products.find(x=>x.id===id),i=cart.find(x=>x.id===id);i?i.qty++:cart.push({id,qty:1});save();toast(p.name+" cart mein add ho gaya")}
+function changeQty(id,d){const i=cart.find(x=>x.id===id);if(!i)return;i.qty+=d;if(i.qty<=0)cart=cart.filter(x=>x.id!==id);save();renderCart()}
+function renderCart(){const b=document.getElementById("cartItems");if(!cart.length){b.innerHTML='<div class="empty">Your cart is empty.</div>';document.getElementById("cartTotal").textContent="PKR 0";return}let t=0;b.innerHTML=cart.map(i=>{const p=products.find(x=>x.id===i.id);t+=p.price*i.qty;return `<div class="cart-row"><div class="cart-icon">${p.icon}</div><div><b>${p.name}</b><div>${money(p.price)}</div></div><div class="qty"><button onclick="changeQty(${p.id},-1)">−</button><span>${i.qty}</span><button onclick="changeQty(${p.id},1)">+</button></div></div>`}).join("");document.getElementById("cartTotal").textContent=money(t)}
 function openCart(){renderCart();openModal("cartModal")}
-function toggleWish(id){wishlist=wishlist.includes(id)?wishlist.filter(x=>x!==id):[...wishlist,id];persist();renderProducts(products);toast(wishlist.includes(id)?"Wishlist mein add ho gaya":"Wishlist se remove ho gaya")}
-function showWishlist(){const list=products.filter(p=>wishlist.includes(p.id));document.getElementById("wishlistContent").innerHTML=list.length?list.map(p=>`<div class="cart-row"><div class="cart-icon">${p.icon||"🛍️"}</div><div><b>${escapeHtml(p.name)}</b><div>${money(p.price)}</div></div><button class="add" style="max-width:130px" onclick="addToCart(${p.id})">Add to Cart</button></div>`).join(""):'<div class="empty">Your wishlist is empty.</div>';openModal("wishlistModal")}
-function showOrders(){document.getElementById("ordersContent").innerHTML=orders.length?orders.map((o,i)=>`<div class="cart-row"><div><b>Order #${escapeHtml(o.id||String(i+1))}</b><div>${o.items} items • ${money(o.total)}</div><small>${escapeHtml(o.date||"")}</small></div><b style="margin-left:auto">${escapeHtml(o.status||"Pending")}</b></div>`).join(""):'<div class="empty">No orders yet.</div>';openModal("ordersModal")}
-function checkout(){if(!cart.length){toast("Cart khali hai");return}if(!settings.cod){toast("Cash on Delivery filhal disabled hai");return}openModal("checkoutModal")}
-function placeOrder(e){
- e.preventDefault();if(!cart.length)return;
- const total=cart.reduce((s,i)=>{const p=products.find(x=>x.id===i.id);return s+(p?p.price*i.qty:0)},0);
- const count=cart.reduce((s,i)=>s+i.qty,0);
- const order={id:"CD-"+Date.now().toString().slice(-8),items:count,total,date:new Date().toLocaleString(),status:"Pending",customer:{name:document.getElementById("custName").value,phone:document.getElementById("custPhone").value,city:document.getElementById("custCity").value,address:document.getElementById("custAddress").value},cart:[...cart]};
- orders.unshift(order);cart=[];persist();closeModal("checkoutModal");showOrders();toast("Order successfully place ho gaya")
-}
-function openLogin(){openModal("loginModal")}
-function login(e){e.preventDefault();closeModal("loginModal");toast("Customer login demo successful")}
-function openModal(id){document.getElementById(id).classList.add("show")}
-function closeModal(id){document.getElementById(id).classList.remove("show")}
-function closeOnBackdrop(e,id){if(e.target.id===id)closeModal(id)}
+function toggleWish(id){wishlist.includes(id)?wishlist=wishlist.filter(x=>x!==id):wishlist.push(id);save();renderProducts(products);toast(wishlist.includes(id)?"Wishlist mein add ho gaya":"Wishlist se remove ho gaya")}
+function showWishlist(){const b=document.getElementById("wishlistContent"),list=products.filter(p=>wishlist.includes(p.id));b.innerHTML=list.length?list.map(p=>`<div class="cart-row"><div class="cart-icon">${p.icon}</div><div><b>${p.name}</b><div>${money(p.price)}</div></div><button class="add" style="max-width:130px" onclick="addToCart(${p.id})">Add to Cart</button></div>`).join(""):'<div class="empty">Your wishlist is empty.</div>';openModal("wishlistModal")}
+function showOrders(){const b=document.getElementById("ordersContent");b.innerHTML=orders.length?orders.map((o,i)=>`<div class="cart-row"><div><b>Order #${i+1}</b><div>${o.items} items • ${money(o.total)}</div><small>${o.date}</small></div><b style="margin-left:auto">COD</b></div>`).join(""):'<div class="empty">No orders yet.</div>';openModal("ordersModal")}
+function checkout(){if(!cart.length){toast("Cart khali hai");return}let total=0,count=0;cart.forEach(i=>{const p=products.find(x=>x.id===i.id);total+=p.price*i.qty;count+=i.qty});orders.unshift({items:count,total,date:new Date().toLocaleString()});cart=[];save();closeModal("cartModal");showOrders();toast("Order successfully place ho gaya")}
+function openLogin(){openModal("loginModal")}function login(e){e.preventDefault();closeModal("loginModal");toast("Login demo successful")}
+function openModal(id){document.getElementById(id).classList.add("show")}function closeModal(id){document.getElementById(id).classList.remove("show")}function closeOnBackdrop(e,id){if(e.target.id===id)closeModal(id)}
 function goHome(){window.scrollTo({top:0,behavior:"smooth"});renderProducts(products)}
-function escapeHtml(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m]))}
-let toastTimer;function toast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove("show"),2200)}
+function toast(m){const t=document.getElementById("toast");t.textContent=m;t.classList.add("show");clearTimeout(window.__tt);window.__tt=setTimeout(()=>t.classList.remove("show"),2200)}
+function showHeroPlaceholder(){document.getElementById("heroImage").style.display="none";document.getElementById("heroPlaceholder").style.display="flex"}
 
-/* Hidden admin: logo par 5 quick taps. Password intentionally removed for customer demo. */
-document.querySelector(".logo").addEventListener("click",function(e){
- logoTaps++;clearTimeout(logoTapTimer);logoTapTimer=setTimeout(()=>logoTaps=0,1800);
- if(logoTaps>=5){e.preventDefault();logoTaps=0;adminAuthed=true;openModal("adminModal");showAdminTab("dashboard")}
-});
-function adminLogout(){adminAuthed=false;closeModal("adminModal")}
-function showAdminTab(tab){
- if(!adminAuthed)return;adminTab=tab;
- document.querySelectorAll(".admin-tabs button").forEach(b=>b.classList.remove("active"));
- const el=document.getElementById("tab-"+tab);if(el)el.classList.add("active");
- const box=document.getElementById("adminContent");
- if(tab==="dashboard")box.innerHTML=adminDashboard();
- if(tab==="products")box.innerHTML=adminProducts();
- if(tab==="orders")box.innerHTML=adminOrders();
- if(tab==="categories")box.innerHTML=adminCategories();
- if(tab==="store")box.innerHTML=adminStore();
- if(tab==="data")box.innerHTML=adminData();
+function openAdmin(){openModal("adminModal");document.getElementById("firebaseStatus").textContent=firebaseReady?"Firebase connected.":"Firebase failed to initialize."}
+function adminLogin(e){if(e)e.preventDefault();if(!firebaseReady){toast("Firebase initialize nahi hua");return}const email=document.getElementById("adminEmail").value.trim(),pass=document.getElementById("adminPassword").value;if(!email||!pass)return;auth.signInWithEmailAndPassword(email,pass).then(()=>{document.getElementById("adminLoginBox").style.display="none";document.getElementById("adminPanel").style.display="block";document.getElementById("firebaseStatus").textContent="Admin login successful.";loadHeroFromFirebase()}).catch(err=>{document.getElementById("firebaseStatus").textContent=err.message;toast("Admin login failed")})}
+function adminLogout(){auth.signOut();document.getElementById("adminPanel").style.display="none";document.getElementById("adminLoginBox").style.display="grid";toast("Admin logout")}
+let originalHeroData=null;
+function previewHeroFile(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{originalHeroData=r.result;document.getElementById("adminPreview").src=r.result};r.readAsDataURL(f)}
+function resizeHero(){
+ if(!originalHeroData){toast("Pehle image upload karein");return}
+ const W=Math.max(320,Math.min(3000,Number(document.getElementById("resizeW").value)||1600)),H=Math.max(120,Math.min(1500,Number(document.getElementById("resizeH").value)||390)),Q=Math.max(.3,Math.min(1,Number(document.getElementById("resizeQ").value)||.85)),mode=document.getElementById("fitMode").value;
+ const im=new Image();im.onload=()=>{
+  const c=document.createElement("canvas");c.width=W;c.height=H;const x=c.getContext("2d");
+  x.fillStyle="#064f3e";x.fillRect(0,0,W,H);
+  const scale=mode==="cover"?Math.max(W/im.width,H/im.height):Math.min(W/im.width,H/im.height);
+  const nw=im.width*scale,nh=im.height*scale;x.drawImage(im,(W-nw)/2,(H-nh)/2,nw,nh);
+  originalHeroData=c.toDataURL("image/jpeg",Q);document.getElementById("adminPreview").src=originalHeroData;
+  document.getElementById("adminInfo").textContent=`Resized: ${W} × ${H}px. Ready to save to Firebase.`;
+ };im.src=originalHeroData;
 }
-function adminDashboard(){
- const revenue=orders.reduce((s,o)=>s+Number(o.total||0),0);
- return `<div class="stat-grid"><div class="stat">Products<b>${products.length}</b></div><div class="stat">Orders<b>${orders.length}</b></div><div class="stat">Revenue<b>${money(revenue)}</b></div><div class="stat">Wishlist<b>${wishlist.length}</b></div></div>
- <div class="admin-grid"><div class="admin-card"><h3>Store status</h3><p>🟢 Site active • COD ${settings.cod?"enabled":"disabled"}</p><p>${escapeHtml(settings.deliveryText)}</p><p>${escapeHtml(settings.returns)}</p></div>
- <div class="admin-card"><h3>Quick actions</h3><div class="admin-actions"><button class="btn primary" onclick="showAdminTab('products')">Add Product</button><button class="btn green" onclick="showAdminTab('orders')">Manage Orders</button><button class="btn light" onclick="showAdminTab('store')">Store Settings</button></div></div></div>`;
+function saveHeroToFirebase(){
+ if(!auth.currentUser){toast("Admin login zaroori hai");return}
+ if(!originalHeroData){toast("Image upload/resize karein");return}
+ const size=Math.round(originalHeroData.length/1024);
+ if(size>5000){toast("Image bohat bari hai. Quality ya size kam karein.");return}
+ db.ref("siteSettings/heroImage").set({data:originalHeroData,updatedAt:Date.now(),updatedBy:auth.currentUser.email||""}).then(()=>{applyHero(originalHeroData);toast("Hero Firebase mein save ho gaya")}).catch(err=>{document.getElementById("adminInfo").textContent=err.message})
 }
-function adminProducts(){
- window.productImageDraft="";
- const edit=editingProductId?products.find(p=>p.id===editingProductId):null;
- return `<div class="admin-card"><h3>${edit?"Edit Product":"Add Product"}</h3><form class="admin-form" onsubmit="saveProduct(event)">
- <div class="admin-row"><input id="pName" placeholder="Product name" value="${escapeHtml(edit?.name||"")}" required><select id="pCat">${categories.map(c=>`<option ${edit?.cat===c?"selected":""}>${escapeHtml(c)}</option>`).join("")}</select></div>
- <div class="admin-row"><input id="pPrice" type="number" min="0" placeholder="Sale price" value="${edit?.price??""}" required><input id="pOld" type="number" min="0" placeholder="Old price" value="${edit?.old??""}"></div>
- <div class="upload-box"><label><b>Product Image</b><input id="pImageFile" type="file" accept="image/*" onchange="previewProductImage(event)"></label><div class="upload-help">Device se image upload karein. Neeche resize size select karke image automatically optimized ho jayegi.</div><div class="admin-row" style="margin-top:10px"><select id="pImageSize"><option value="500">500 × 500</option><option value="800" selected>800 × 800</option><option value="1200">1200 × 1200</option><option value="1600">1600 × 1600</option></select><button type="button" class="btn light" onclick="applyProductImageResize()">Resize Image</button><input id="pIcon" placeholder="Emoji / icon (optional)" value="${escapeHtml(edit?.icon||"🛍️")}"></div><img id="pImagePreview" class="admin-img-preview" src="${escapeHtml(edit?.image||"")}" style="${edit?.image?'display:block':''}" alt="Preview"></div>
- <div class="admin-actions"><button class="btn primary">${edit?"Update":"Add Product"}</button>${edit?'<button type="button" class="btn light" onclick="cancelEdit()">Cancel</button>':""}</div></form></div>
- <div class="admin-card" style="margin-top:16px"><h3>All Products</h3><table class="admin-table"><tr><th>Product</th><th>Category</th><th>Price</th><th>Actions</th></tr>${products.map(p=>`<tr><td>${p.icon||""} ${escapeHtml(p.name)}</td><td>${escapeHtml(p.cat)}</td><td>${money(p.price)}</td><td><button class="btn light" onclick="editProduct(${p.id})">Edit</button> <button class="btn danger" onclick="deleteProduct(${p.id})">Delete</button></td></tr>`).join("")}</table></div>`;
+function loadHeroFromFirebase(){
+ if(!firebaseReady)return;
+ db.ref("siteSettings/heroImage").once("value").then(s=>{const v=s.val();if(v&&v.data){applyHero(v.data);originalHeroData=v.data;document.getElementById("adminPreview").src=v.data;document.getElementById("adminInfo").textContent="Firebase se hero load ho gaya."}else document.getElementById("adminInfo").textContent="Firebase mein hero image abhi save nahi hai."}).catch(e=>document.getElementById("adminInfo").textContent=e.message)
 }
-function editExistingImage(){const p=editingProductId?products.find(x=>x.id===editingProductId):null;return p?.image||""}
-function resizeProductImage(source){const max=Number(document.getElementById("pImageSize")?.value||800);const img=new Image();img.onload=()=>{const scale=Math.min(1,max/Math.max(img.width,img.height));const w=Math.max(1,Math.round(img.width*scale)),h=Math.max(1,Math.round(img.height*scale));const c=document.createElement("canvas");c.width=w;c.height=h;const ctx=c.getContext("2d");ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality="high";ctx.drawImage(img,0,0,w,h);window.productImageDraft=c.toDataURL("image/webp",0.92);const preview=document.getElementById("pImagePreview");preview.src=window.productImageDraft;preview.style.display="block";toast(`Image resize ho gayi: ${w}×${h}`)};img.src=source}
-function previewProductImage(e){const file=e.target.files?.[0];if(!file)return;if(!file.type.startsWith("image/")){toast("Sirf image file upload karein");return}const reader=new FileReader();reader.onload=()=>{window.productImageSource=reader.result;resizeProductImage(reader.result)};reader.readAsDataURL(file)}
-function applyProductImageResize(){if(window.productImageSource)resizeProductImage(window.productImageSource);else toast("Pehle image upload karein")}
-function saveProduct(e){
- e.preventDefault();const data={name:pName.value.trim(),cat:pCat.value,price:Number(pPrice.value),old:Number(pOld.value||pPrice.value),icon:pIcon.value.trim()||"🛍️",image:window.productImageDraft||editExistingImage()};
- if(editingProductId){const p=products.find(x=>x.id===editingProductId);Object.assign(p,data);toast("Product updated")}
- else{data.id=products.length?Math.max(...products.map(x=>x.id))+1:1;products.push(data);toast("Product added")}
- editingProductId=null;persist();renderProducts(products);showAdminTab("products")
-}
-function editProduct(id){editingProductId=id;window.productImageDraft="";window.productImageSource="";showAdminTab("products")} function cancelEdit(){editingProductId=null;window.productImageDraft="";window.productImageSource="";showAdminTab("products")}
-function deleteProduct(id){const p=products.find(x=>x.id===id);if(!p||!confirm("Delete "+p.name+"?"))return;products=products.filter(x=>x.id!==id);cart=cart.filter(x=>x.id!==id);wishlist=wishlist.filter(x=>x!==id);persist();renderProducts(products);showAdminTab("products");toast("Product deleted")}
-function adminOrders(){
- return `<div class="admin-card"><h3>Customer Orders</h3>${orders.length?`<table class="admin-table"><tr><th>Order</th><th>Customer</th><th>Total</th><th>Status</th><th>Action</th></tr>${orders.map((o,i)=>`<tr><td><b>${escapeHtml(o.id)}</b><br><small>${escapeHtml(o.date)}</small></td><td>${escapeHtml(o.customer?.name||"") }<br>${escapeHtml(o.customer?.phone||"")}<br>${escapeHtml(o.customer?.city||"")}<br>${escapeHtml(o.customer?.address||"")}</td><td>${money(o.total)}</td><td><select onchange="setOrderStatus(${i},this.value)">${["Pending","Confirmed","Packed","Shipped","Delivered","Cancelled"].map(s=>`<option ${o.status===s?"selected":""}>${s}</option>`).join("")}</select></td><td><button class="btn danger" onclick="deleteOrder(${i})">Delete</button></td></tr>`).join("")}</table>`:'<div class="empty">No orders yet.</div>'}</div>`;
-}
-function setOrderStatus(i,status){if(orders[i]){orders[i].status=status;persist();showAdminTab("orders");toast("Order status updated")}}
-function deleteOrder(i){if(confirm("Delete this order?")){orders.splice(i,1);persist();showAdminTab("orders")}}
-function adminCategories(){
- return `<div class="admin-grid"><div class="admin-card"><h3>Add Category</h3><form class="admin-form" onsubmit="addCategory(event)"><input id="newCat" placeholder="Category name" required><button class="btn primary">Add Category</button></form></div><div class="admin-card"><h3>Categories</h3>${categories.map((c,i)=>`<div class="cart-row"><b>${escapeHtml(c)}</b><button class="btn danger" onclick="deleteCategory(${i})">Delete</button></div>`).join("")}</div></div>`;
-}
-function addCategory(e){e.preventDefault();const n=newCat.value.trim();if(n&&!categories.includes(n)){categories.push(n);persist();showAdminTab("categories");toast("Category added")}}
-function deleteCategory(i){if(categories.length<=1){toast("At least one category required");return}if(confirm("Delete category? Existing products keep their category.")){categories.splice(i,1);persist();showAdminTab("categories")}}
-function adminStore(){
- return `<div class="admin-card"><h3>Store Settings</h3><form class="admin-form" onsubmit="saveStore(event)">
- <label>Store name<input id="sName" value="${escapeHtml(settings.storeName)}" required></label>
- <label>Delivery message<input id="sDelivery" value="${escapeHtml(settings.deliveryText)}"></label>
- <label>Return policy<input id="sReturns" value="${escapeHtml(settings.returns)}"></label>
- <label>Currency<input id="sCurrency" value="${escapeHtml(settings.currency)}"></label>
- <label>Hero title<input id="sHeroTitle" value="${escapeHtml(settings.heroTitle)}"></label>
- <label>Hero text<textarea id="sHeroText">${escapeHtml(settings.heroText)}</textarea></label>
- <label><input id="sCod" type="checkbox" ${settings.cod?"checked":""}> Enable Cash on Delivery</label>
- <button class="btn primary">Save Store Settings</button></form></div>`;
-}
-function saveStore(e){e.preventDefault();settings.storeName=sName.value.trim();settings.deliveryText=sDelivery.value.trim();settings.returns=sReturns.value.trim();settings.currency=sCurrency.value.trim()||"PKR";settings.heroTitle=sHeroTitle.value.trim();settings.heroText=sHeroText.value.trim();settings.cod=sCod.checked;persist();applyStoreSettings();showAdminTab("store");toast("Store settings saved")}
-function applyStoreSettings(){
- document.title=settings.storeName+" - Online Shop";
- const hero=document.querySelector(".hero-copy h1");if(hero){hero.innerHTML=settings.heroTitle?escapeHtml(settings.heroTitle):""}
- const hp=document.querySelector(".hero-copy p");if(hp){hp.textContent=settings.heroText||""}
- const logoText=document.querySelector(".logo span");if(logoText)logoText.textContent=settings.storeName;
- const footer=document.querySelector("footer");if(footer)footer.textContent="© 2026 "+settings.storeName+" — Online Shopping in Pakistan";
-}
-function exportData(){const data={products,categories,settings,orders,wishlist};const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="cheezay-dikhao-backup.json";a.click();URL.revokeObjectURL(a.href)}
-function resetStore(){if(!confirm("Reset all store data?"))return;products=JSON.parse(JSON.stringify(defaultProducts));categories=[...defaultCategories];settings=Object.assign({},defaultSettings);orders=[];wishlist=[];cart=[];persist();applyStoreSettings();renderProducts(products);showAdminTab("dashboard");toast("Store reset complete")}
-
-updateBadge();applyStoreSettings();renderProducts(products);
+function applyHero(data){const img=document.getElementById("heroImage");img.src=data;img.style.display="block";document.getElementById("heroPlaceholder").style.display="none"}
+if(firebaseReady){db.ref("siteSettings/heroImage").once("value").then(s=>{const v=s.val();if(v&&v.data)applyHero(v.data)}).catch(console.warn)}
+updateBadge();renderProducts(products);
 </script>
 </body>
 </html>

@@ -1,0 +1,11 @@
+{
+  "rules": {
+    ".read": true,
+    ".write": "auth != null",
+    "siteSettings": {
+      "heroImage": {
+        ".validate": "newData.hasChildren(['data','updatedAt'])"
+      }
+    }
+  }
+}
