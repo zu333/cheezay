@@ -1,14 +1,25 @@
 CHEEZAY DIKHAO - FIREBASE SETUP
 
-1) Firebase Console -> project school-c9633
-2) Authentication -> Sign-in method -> Email/Password -> Enable.
-3) Authentication -> Users -> Add user. This email/password will be used in the website Admin Settings.
-4) Realtime Database -> Rules -> paste database.rules.json.
-   NOTE: These rules allow ANY authenticated Firebase user to write. For a private production admin,
-   change the write rule to an admin email/claim after you create your admin account.
-5) Hosting is not required for this version. Vercel can host index.html directly.
-6) Admin Settings is at the bottom of the website. Login with the Firebase admin account.
-7) Upload image -> set width/height -> Resize Image -> Save Hero to Firebase.
-8) The public homepage reads siteSettings/heroImage from Realtime Database.
+1. Firebase Console > Authentication > Sign-in method:
+   - Enable Google.
+   - Enable Anonymous (required for the hidden admin password flow).
 
-The Firebase Web config is included in index.html as provided by the owner.
+2. Realtime Database:
+   - Import/apply database.rules.json.
+   - The current rule allows authenticated users to write. Because the admin password is stored in frontend code, this is a convenience/demo admin gate, NOT strong security.
+
+3. Hidden Admin:
+   - Footer Admin Settings link has been removed.
+   - Cheezay Dikhao logo ko 5 dafa jaldi click karne par Admin Settings open hoti hain.
+   - Sirf password: nabel3457
+   - Admin mein device se hero image upload, resize/crop, preview, Firebase save/reload available hai.
+
+4. Normal Login:
+   - Login button mein Google login active code added hai.
+   - Google provider Firebase Console mein enable karna zaroori hai.
+   - Email/password login bhi Firebase Auth se connected hai.
+
+5. Vercel/GitHub:
+   - index.html, cropped-logo.jpg, default-hero.jpg aur database.rules.json ko same project root mein rakhein.
+   - Build command: empty
+   - Output directory: .

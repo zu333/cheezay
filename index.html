@@ -63,6 +63,7 @@ main{width:min(1400px,94%);margin:20px auto 60px}
 .toast{position:fixed;right:25px;bottom:25px;background:#151515;color:#fff;padding:13px 18px;border-radius:10px;opacity:0;transform:translateY(15px);pointer-events:none;transition:.25s;z-index:200}
 .toast.show{opacity:1;transform:none}
 .login-form,.admin-grid{display:grid;gap:12px}.login-form input,.admin-grid input,.admin-grid select{padding:12px;border:1px solid #ddd;border-radius:8px}
+.google-btn{width:100%;border:1px solid #ddd;background:#fff;color:#222;padding:12px;border-radius:8px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px}.google-btn:hover{background:#f7f7f7}.or{display:flex;align-items:center;gap:10px;margin:14px 0;color:#999}.or:before,.or:after{content:"";height:1px;background:#e5e5e5;flex:1}
 .login-form button,.admin-btn{border:0;background:var(--orange);color:#fff;padding:12px;border-radius:8px;font-weight:700}
 .admin-preview{width:100%;height:220px;border:1px dashed #ccc;border-radius:12px;object-fit:cover;background:#f7f7f7}
 .admin-toolbar{display:flex;gap:10px;flex-wrap:wrap}.admin-toolbar>*{flex:1;min-width:130px}
@@ -86,7 +87,7 @@ footer button{border:0;background:none;color:#aaa;text-decoration:underline}
 </div></div>
 
 <header class="header"><div class="header-main">
-<a class="logo" href="#" onclick="goHome();return false;"><img src="cropped-logo.jpg" alt="Cheezay Dikhao"><span>Cheezay Dikhao</span></a>
+<a class="logo" href="#" onclick="goHome();handleLogoAdminClick(event);return false;" title="Cheezay Dikhao"><img src="cropped-logo.jpg" alt="Cheezay Dikhao"><span>Cheezay Dikhao</span></a>
 <form class="search-wrap" onsubmit="searchProducts(event)"><input id="searchInput" placeholder="Search products, brands & stores"><button>Search</button></form>
 <div class="actions">
 <button class="action" onclick="openLogin()"><span class="ico">◯</span><span>Log in</span></button>
@@ -132,11 +133,23 @@ footer button{border:0;background:none;color:#aaa;text-decoration:underline}
 <section class="section"><div class="section-head"><h2 id="productTitle">Featured Products</h2><button class="seeall" onclick="renderProducts(products)">Reset</button></div><div id="products" class="products"></div></section>
 </main>
 
-<footer>© 2026 Cheezay Dikhao — Online Shopping in Pakistan · <button onclick="openAdmin()">Admin Settings</button></footer>
+<footer>© 2026 Cheezay Dikhao — Online Shopping in Pakistan</footer>
 
 <div id="cartModal" class="overlay" onclick="closeOnBackdrop(event,'cartModal')"><div class="modal"><button class="close" onclick="closeModal('cartModal')">×</button><h2>Your Cart</h2><div id="cartItems"></div><div class="total"><span>Total</span><span id="cartTotal">PKR 0</span></div><button class="checkout" onclick="checkout()">Place Cash on Delivery Order</button></div></div>
 
-<div id="loginModal" class="overlay" onclick="closeOnBackdrop(event,'loginModal')"><div class="modal"><button class="close" onclick="closeModal('loginModal')">×</button><h2>Login</h2><form class="login-form" onsubmit="login(event)"><input id="loginEmail" type="email" placeholder="Email address" required><input id="loginPassword" type="password" placeholder="Password" required><button>Login</button></form></div></div>
+<div id="loginModal" class="overlay" onclick="closeOnBackdrop(event,'loginModal')"><div class="modal">
+<button class="close" onclick="closeModal('loginModal')">×</button>
+<h2>Login</h2>
+<p style="color:#666;margin-top:-5px">Google se foran login karein.</p>
+<button class="google-btn" onclick="loginWithGoogle()">🇬 Google se Login</button>
+<div class="or"><span>ya</span></div>
+<form class="login-form" onsubmit="login(event)">
+<input id="loginEmail" type="email" placeholder="Email address" required>
+<input id="loginPassword" type="password" placeholder="Password" required>
+<button>Login</button>
+</form>
+<div id="loginStatus" class="status" style="margin-top:12px">Firebase ready.</div>
+</div></div>
 
 <div id="ordersModal" class="overlay" onclick="closeOnBackdrop(event,'ordersModal')"><div class="modal"><button class="close" onclick="closeModal('ordersModal')">×</button><h2>Orders</h2><div id="ordersContent" class="empty">No orders yet.</div></div></div>
 <div id="wishlistModal" class="overlay" onclick="closeOnBackdrop(event,'wishlistModal')"><div class="modal"><button class="close" onclick="closeModal('wishlistModal')">×</button><h2>Wishlist</h2><div id="wishlistContent" class="empty">Your wishlist is empty.</div></div></div>
@@ -144,11 +157,10 @@ footer button{border:0;background:none;color:#aaa;text-decoration:underline}
 <div id="adminModal" class="overlay" onclick="closeOnBackdrop(event,'adminModal')"><div class="modal">
 <button class="close" onclick="closeModal('adminModal')">×</button>
 <h2>Admin Settings</h2>
-<p style="color:#666">Hero banner ko device se upload karein, resize karein aur Firebase Realtime Database mein save karein.</p>
 <div id="adminLoginBox" class="login-form">
-<input id="adminEmail" type="email" placeholder="Admin email">
-<input id="adminPassword" type="password" placeholder="Admin password">
-<button onclick="adminLogin(event)">Firebase Admin Login</button>
+<p style="color:#666;margin:0">Admin password enter karein.</p>
+<input id="adminPassword" type="password" placeholder="Admin password" autocomplete="current-password">
+<button onclick="adminLogin(event)">Open Admin</button>
 </div>
 <div id="adminPanel" style="display:none">
 <div class="status" id="firebaseStatus">Firebase connected.</div>
@@ -186,7 +198,10 @@ const firebaseConfig={
 };
 let firebaseReady=false, db=null, auth=null;
 try{
- firebase.initializeApp(firebaseConfig); auth=firebase.auth(); db=firebase.database(); firebaseReady=true;
+ firebase.initializeApp(firebaseConfig);
+ auth=firebase.auth();
+ db=firebase.database();
+ firebaseReady=true;
 }catch(e){console.error(e)}
 
 const products=[
@@ -220,15 +235,81 @@ function toggleWish(id){wishlist.includes(id)?wishlist=wishlist.filter(x=>x!==id
 function showWishlist(){const b=document.getElementById("wishlistContent"),list=products.filter(p=>wishlist.includes(p.id));b.innerHTML=list.length?list.map(p=>`<div class="cart-row"><div class="cart-icon">${p.icon}</div><div><b>${p.name}</b><div>${money(p.price)}</div></div><button class="add" style="max-width:130px" onclick="addToCart(${p.id})">Add to Cart</button></div>`).join(""):'<div class="empty">Your wishlist is empty.</div>';openModal("wishlistModal")}
 function showOrders(){const b=document.getElementById("ordersContent");b.innerHTML=orders.length?orders.map((o,i)=>`<div class="cart-row"><div><b>Order #${i+1}</b><div>${o.items} items • ${money(o.total)}</div><small>${o.date}</small></div><b style="margin-left:auto">COD</b></div>`).join(""):'<div class="empty">No orders yet.</div>';openModal("ordersModal")}
 function checkout(){if(!cart.length){toast("Cart khali hai");return}let total=0,count=0;cart.forEach(i=>{const p=products.find(x=>x.id===i.id);total+=p.price*i.qty;count+=i.qty});orders.unshift({items:count,total,date:new Date().toLocaleString()});cart=[];save();closeModal("cartModal");showOrders();toast("Order successfully place ho gaya")}
-function openLogin(){openModal("loginModal")}function login(e){e.preventDefault();closeModal("loginModal");toast("Login demo successful")}
+function openLogin(){openModal("loginModal")}function login(e){
+ e.preventDefault();
+ if(!firebaseReady){toast("Firebase initialize nahi hua");return}
+ const email=document.getElementById("loginEmail").value.trim();
+ const pass=document.getElementById("loginPassword").value;
+ document.getElementById("loginStatus").textContent="Login ho raha hai...";
+ auth.signInWithEmailAndPassword(email,pass).then(user=>{
+   document.getElementById("loginStatus").textContent="Login successful: "+(user.user.email||"");
+   closeModal("loginModal");toast("Login successful");
+ }).catch(err=>{
+   document.getElementById("loginStatus").textContent=err.message;
+   toast("Login failed");
+ });
+}
+function loginWithGoogle(){
+ if(!firebaseReady){toast("Firebase initialize nahi hua");return}
+ const provider=new firebase.auth.GoogleAuthProvider();
+ document.getElementById("loginStatus").textContent="Google login ho raha hai...";
+ auth.signInWithPopup(provider).then(result=>{
+   const name=result.user.displayName||result.user.email||"Google user";
+   document.getElementById("loginStatus").textContent="Welcome "+name;
+   closeModal("loginModal");toast("Google login successful");
+ }).catch(err=>{
+   document.getElementById("loginStatus").textContent=err.message;
+   toast("Google login failed");
+ });
+}
 function openModal(id){document.getElementById(id).classList.add("show")}function closeModal(id){document.getElementById(id).classList.remove("show")}function closeOnBackdrop(e,id){if(e.target.id===id)closeModal(id)}
 function goHome(){window.scrollTo({top:0,behavior:"smooth"});renderProducts(products)}
 function toast(m){const t=document.getElementById("toast");t.textContent=m;t.classList.add("show");clearTimeout(window.__tt);window.__tt=setTimeout(()=>t.classList.remove("show"),2200)}
 function showHeroPlaceholder(){document.getElementById("heroImage").style.display="none";document.getElementById("heroPlaceholder").style.display="flex"}
 
-function openAdmin(){openModal("adminModal");document.getElementById("firebaseStatus").textContent=firebaseReady?"Firebase connected.":"Firebase failed to initialize."}
-function adminLogin(e){if(e)e.preventDefault();if(!firebaseReady){toast("Firebase initialize nahi hua");return}const email=document.getElementById("adminEmail").value.trim(),pass=document.getElementById("adminPassword").value;if(!email||!pass)return;auth.signInWithEmailAndPassword(email,pass).then(()=>{document.getElementById("adminLoginBox").style.display="none";document.getElementById("adminPanel").style.display="block";document.getElementById("firebaseStatus").textContent="Admin login successful.";loadHeroFromFirebase()}).catch(err=>{document.getElementById("firebaseStatus").textContent=err.message;toast("Admin login failed")})}
-function adminLogout(){auth.signOut();document.getElementById("adminPanel").style.display="none";document.getElementById("adminLoginBox").style.display="grid";toast("Admin logout")}
+let logoClickCount=0,logoClickTimer=null;
+function handleLogoAdminClick(e){
+ logoClickCount++;
+ clearTimeout(logoClickTimer);
+ logoClickTimer=setTimeout(()=>logoClickCount=0,1500);
+ if(logoClickCount>=5){
+   logoClickCount=0;
+   clearTimeout(logoClickTimer);
+   openAdmin();
+ }
+}
+function openAdmin(){
+ openModal("adminModal");
+ document.getElementById("adminPassword").value="";
+ document.getElementById("adminLoginBox").style.display="grid";
+ document.getElementById("adminPanel").style.display="none";
+ document.getElementById("firebaseStatus").textContent=firebaseReady?"Firebase connected.":"Firebase failed to initialize.";
+}
+function adminLogin(e){
+ if(e)e.preventDefault();
+ const pass=document.getElementById("adminPassword").value;
+ if(pass!=="nabel3457"){toast("Wrong admin password");return}
+ if(!firebaseReady){toast("Firebase initialize nahi hua");return}
+ const showPanel=()=>{
+   document.getElementById("adminLoginBox").style.display="none";
+   document.getElementById("adminPanel").style.display="block";
+   document.getElementById("firebaseStatus").textContent="Admin login successful.";
+   loadHeroFromFirebase();
+ };
+ if(auth.currentUser){showPanel();return}
+ auth.signInAnonymously().then(showPanel).catch(err=>{
+   document.getElementById("firebaseStatus").textContent="Firebase Anonymous Auth enable karein: "+err.message;
+   toast("Anonymous Authentication enable karein");
+ });
+}
+function adminLogout(){
+ if(auth.currentUser && auth.currentUser.isAnonymous) auth.signOut();
+ document.getElementById("adminPanel").style.display="none";
+ document.getElementById("adminLoginBox").style.display="grid";
+ document.getElementById("adminPassword").value="";
+ toast("Admin logout");
+}
+
 let originalHeroData=null;
 function previewHeroFile(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{originalHeroData=r.result;document.getElementById("adminPreview").src=r.result};r.readAsDataURL(f)}
 function resizeHero(){
@@ -255,7 +336,15 @@ function loadHeroFromFirebase(){
  db.ref("siteSettings/heroImage").once("value").then(s=>{const v=s.val();if(v&&v.data){applyHero(v.data);originalHeroData=v.data;document.getElementById("adminPreview").src=v.data;document.getElementById("adminInfo").textContent="Firebase se hero load ho gaya."}else document.getElementById("adminInfo").textContent="Firebase mein hero image abhi save nahi hai."}).catch(e=>document.getElementById("adminInfo").textContent=e.message)
 }
 function applyHero(data){const img=document.getElementById("heroImage");img.src=data;img.style.display="block";document.getElementById("heroPlaceholder").style.display="none"}
-if(firebaseReady){db.ref("siteSettings/heroImage").once("value").then(s=>{const v=s.val();if(v&&v.data)applyHero(v.data)}).catch(console.warn)}
+if(firebaseReady){
+ db.ref("siteSettings/heroImage").once("value").then(s=>{const v=s.val();if(v&&v.data)applyHero(v.data)}).catch(console.warn);
+ auth.onAuthStateChanged(user=>{
+   if(user && !user.isAnonymous){
+     const st=document.getElementById("loginStatus");
+     if(st)st.textContent="Logged in: "+(user.displayName||user.email||"Google user");
+   }
+ });
+}
 updateBadge();renderProducts(products);
 </script>
 </body>
