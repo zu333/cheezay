@@ -1,0 +1,31 @@
+CHEEZAY DIKHAO - FIREBASE SETUP
+
+IMPORTANT — CATEGORY SAVE ERROR
+If Admin > Categories shows:
+PERMISSION_DENIED: Permission denied
+
+This means the Firebase Realtime Database Rules currently published in Firebase Console do not allow writes to siteSettings.
+
+Fix:
+1. Open Firebase Console for project school-c9633.
+2. Open Realtime Database.
+3. Open the Rules tab.
+4. Replace the current rules with the contents of database.rules.json in this ZIP.
+5. Click Publish.
+6. Return to the website, open Admin > Categories, and click Reload from Firebase.
+7. Click Save Categories again.
+
+The website can show "Firebase: Connected" even when Firebase writes are blocked. The "Connected" message only confirms that Firebase initialized; it does not mean write permission is granted.
+
+CATEGORY DATA
+- Category names are normalized when loaded.
+- Add Category saves to siteSettings/categories.
+- Edit Name / Category Key and Save Categories saves the complete list.
+- Category images are resized before saving.
+
+AUTHENTICATION
+- Email/Password and Google login can be enabled in Firebase Authentication.
+- Add the exact Vercel hostname under Authentication > Settings > Authorized domains.
+
+NOTE
+The rules in this project intentionally allow writes to siteSettings because the current admin panel uses its own password screen rather than Firebase Authentication for admin access. For a production site, a server-side/admin-authenticated rules design is safer.

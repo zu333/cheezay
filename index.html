@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cheezay Dikhao - Shop</title>
+<style>
+*{box-sizing:border-box}
+:root{--orange:#e87500;--green:#087b4b;--green2:#0da45e;--dark:#171717;--text:#172033;--line:#e8e8e8}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#fff;color:var(--text)}
+button,input{font:inherit}button{cursor:pointer}
+.topbar{height:38px;background:#191919;color:#fff;display:flex;justify-content:center}
+.topinner{width:min(1400px,94%);display:flex;align-items:center;justify-content:space-between;font-size:13px}
+.topitem{display:flex;gap:8px;align-items:center}
+.header{background:#fff;border-bottom:1px solid #eee;position:sticky;top:0;z-index:30}
+.header-main{width:min(1400px,94%);margin:auto;min-height:90px;display:flex;align-items:center;gap:28px}
+.logo{width:205px;display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--orange);font-weight:800;font-size:22px}
+.logo img{width:68px;height:68px;object-fit:contain}
+.search-wrap{flex:1;display:flex;max-width:720px;height:48px;border:1px solid #ddd;border-radius:28px;overflow:hidden;background:#fff}
+.search-wrap input{flex:1;border:0;outline:0;padding:0 20px;font-size:15px}
+.search-wrap button{width:120px;border:0;background:var(--orange);color:#fff;font-weight:700}
+.actions{margin-left:auto;display:flex;gap:22px}
+.action{border:0;background:none;color:#111;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:12px;min-width:52px}
+.action .ico{font-size:22px}
+.badge{background:var(--orange);color:white;border-radius:99px;padding:2px 6px;font-size:10px;position:absolute;margin-left:25px;margin-top:-4px}
+.nav{border-bottom:1px solid #eee;background:#fff}
+.navinner{width:min(1400px,94%);margin:auto;display:flex;gap:30px;overflow:auto}
+.nav button{white-space:nowrap;border:0;background:none;padding:15px 4px;color:#202020;font-weight:600;border-bottom:3px solid transparent}
+.nav button:hover,.nav button.active{color:var(--orange);border-bottom-color:var(--orange)}
+main{width:min(1400px,94%);margin:20px auto 60px}
+.hero{width:100%;height:390px;border-radius:24px;overflow:hidden;position:relative;background:#064f3e}
+.hero img{width:100%;height:100%;display:block;object-fit:cover}
+.hero-placeholder{width:100%;height:100%;display:flex;align-items:center;padding:55px;color:#fff;background:linear-gradient(120deg,#07513f,#063d32)}
+.hero-placeholder h1{font-size:42px;line-height:1.1;margin:15px 0 10px;max-width:580px}
+.hero-placeholder p{max-width:560px;line-height:1.6}
+.section{background:#fff;border:1px solid #eee;border-radius:24px;margin-top:26px;padding:30px}
+.section-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
+.section h2{margin:0;font-size:26px}.seeall{color:var(--orange);font-weight:700;border:0;background:none}
+.categories{display:grid;grid-template-columns:repeat(9,1fr);gap:16px}
+.cat{border:0;background:none;text-align:center;color:#222}
+.cat-img{height:105px;width:105px;margin:auto;border-radius:50%;background:#fafafa;border:1px solid #eee;display:flex;align-items:center;justify-content:center;font-size:42px;transition:.2s}
+.cat:hover .cat-img{transform:translateY(-5px);box-shadow:0 8px 20px #0001}
+.cat b{display:block;margin-top:12px;font-size:13px}
+.products{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.card{border:1px solid #e8e8e8;border-radius:18px;overflow:hidden;background:#fff;transition:.2s}
+.card:hover{transform:translateY(-3px);box-shadow:0 10px 30px #00000010}
+.card-img{height:210px;background:#f7f7f7;display:flex;align-items:center;justify-content:center;font-size:80px}
+.card-body{padding:16px}.card h3{font-size:15px;line-height:1.35;margin:0 0 10px}
+.price{font-size:20px;font-weight:800}.old{font-size:12px;color:#999;text-decoration:line-through;margin-left:6px}
+.card-actions{display:flex;gap:8px;margin-top:14px}
+.add{flex:1;border:0;background:var(--orange);color:#fff;padding:10px;border-radius:9px;font-weight:700}
+.heart{width:42px;border:1px solid #ddd;background:#fff;border-radius:9px;font-size:19px}.heart.active{color:#e22;background:#fff1f1}
+.empty{padding:35px;text-align:center;color:#777}
+.overlay{display:none;position:fixed;inset:0;background:#0008;z-index:100}
+.overlay.show{display:flex;align-items:center;justify-content:center}
+.modal{width:min(760px,92%);max-height:92vh;overflow:auto;background:#fff;border-radius:20px;padding:25px;position:relative}
+.close{position:absolute;right:15px;top:12px;border:0;background:none;font-size:28px}
+.cart-row{display:flex;align-items:center;gap:15px;padding:14px 0;border-bottom:1px solid #eee}
+.cart-icon{width:60px;height:60px;background:#f7f7f7;border-radius:10px;display:grid;place-items:center;font-size:30px}
+.qty{display:flex;border:1px solid #ddd;border-radius:8px;overflow:hidden;margin-left:auto}.qty button{border:0;background:#fafafa;width:32px}.qty span{width:35px;text-align:center;padding:7px}
+.total{display:flex;justify-content:space-between;font-size:20px;font-weight:800;padding-top:18px}
+.checkout{width:100%;margin-top:18px;border:0;background:var(--green2);color:#fff;padding:14px;border-radius:10px;font-weight:800}
+.toast{position:fixed;right:25px;bottom:25px;background:#151515;color:#fff;padding:13px 18px;border-radius:10px;opacity:0;transform:translateY(15px);pointer-events:none;transition:.25s;z-index:200}
+.toast.show{opacity:1;transform:none}
+.login-form,.admin-grid{display:grid;gap:12px}.login-form input,.admin-grid input,.admin-grid select{padding:12px;border:1px solid #ddd;border-radius:8px}
+.google-btn{width:100%;border:1px solid #ddd;background:#fff;color:#222;padding:12px;border-radius:8px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px}.google-btn:hover{background:#f7f7f7}.or{display:flex;align-items:center;gap:10px;margin:14px 0;color:#999}.or:before,.or:after{content:"";height:1px;background:#e5e5e5;flex:1}
+.login-form button,.admin-btn{border:0;background:var(--orange);color:#fff;padding:12px;border-radius:8px;font-weight:700}
+.admin-preview{width:100%;height:220px;border:1px dashed #ccc;border-radius:12px;object-fit:cover;background:#f7f7f7}
+.admin-toolbar{display:flex;gap:10px;flex-wrap:wrap}.admin-toolbar>*{flex:1;min-width:130px}
+.status{padding:10px;border-radius:8px;background:#f3f7f5;color:#276449;font-size:13px}
+footer{background:#171717;color:#ddd;padding:35px 4%;text-align:center}
+footer button{border:0;background:none;color:#aaa;text-decoration:underline}
+
+.admin-screen{display:none;position:fixed;inset:0;background:linear-gradient(135deg,#f7fbf9,#fff7ef);z-index:1000;overflow:auto}
+.admin-screen.show{display:block}
+.admin-top{height:76px;background:#fff;border-bottom:1px solid #e8ecea;display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:5;box-shadow:0 2px 12px #00000008}
+.admin-brand{display:flex;align-items:center;gap:12px;font-weight:800;color:var(--orange);font-size:20px}.admin-brand img{width:48px;height:48px;object-fit:contain}
+.admin-back{border:1px solid #ddd;background:#fff;padding:10px 16px;border-radius:10px;font-weight:700}
+.admin-wrap{width:min(1200px,94%);margin:28px auto 60px}
+.admin-title{margin-bottom:22px}.admin-title h1{margin:0 0 6px;font-size:30px}.admin-title p{margin:0;color:#68736f}
+.admin-layout{display:grid;grid-template-columns:280px 1fr;gap:22px}
+.admin-side,.admin-card{background:#fff;border:1px solid #e4ebe7;border-radius:18px;box-shadow:0 8px 28px #123d2a0a}
+.admin-side{padding:18px;height:max-content}.admin-side-item{padding:12px 14px;border-radius:10px;font-weight:700;color:#43504a;background:#f5f8f6;margin-bottom:8px}.admin-side-item.active{background:#eaf8f0;color:#087b4b}
+.admin-card{padding:24px}.admin-card h2{margin:0 0 6px}.admin-card p.help{color:#68736f;margin-top:0}.admin-preview-large{width:100%;height:320px;object-fit:cover;border-radius:14px;background:#f5f7f6;border:1px solid #e2e8e5;margin:14px 0}
+.admin-form-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.admin-field label{display:block;font-size:13px;font-weight:700;margin-bottom:6px;color:#39433f}.admin-field input,.admin-field select{width:100%;padding:11px 12px;border:1px solid #d9e0dd;border-radius:9px;outline:0}.admin-field input:focus,.admin-field select:focus{border-color:#0da45e;box-shadow:0 0 0 3px #0da45e18}
+.admin-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}.admin-actions button{border:0;padding:12px 16px;border-radius:9px;font-weight:800}.btn-orange{background:var(--orange);color:#fff}.btn-green{background:#087b4b;color:#fff}.btn-gray{background:#eef1ef;color:#33403a}.admin-status{margin-top:16px;padding:12px 14px;border-radius:10px;background:#f1f8f4;color:#276449;font-size:13px;line-height:1.5}
+.admin-login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}.admin-login-card{width:min(430px,94%);background:#fff;border:1px solid #e4ebe7;border-radius:22px;padding:32px;box-shadow:0 18px 60px #00000012;text-align:center}.admin-login-card img{width:90px;height:90px;object-fit:contain}.admin-login-card h2{margin:12px 0 6px}.admin-login-card p{color:#68736f}.admin-login-card input{width:100%;padding:13px;border:1px solid #d9e0dd;border-radius:10px;margin:10px 0;outline:0}.admin-login-card button{width:100%;border:0;background:var(--orange);color:#fff;padding:13px;border-radius:10px;font-weight:800}
+
+.admin-content{min-width:0}.admin-tab{display:none}.admin-tab.active{display:block}.admin-side-item{width:100%;border:0;text-align:left;cursor:pointer}.admin-image-editor{display:grid;grid-template-columns:220px 1fr;gap:22px;align-items:center}.admin-preview-square{width:200px;height:200px;object-fit:contain;border:1px solid #e2e8e5;border-radius:14px;background:#f7f8f7}.firebase-check-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.firebase-check-grid>div{padding:16px;background:#f5f8f6;border-radius:12px;display:flex;flex-direction:column;gap:6px}.firebase-check-grid span{color:#68736f}.admin-product-row{display:grid;grid-template-columns:70px 1.5fr .7fr .7fr 1fr 120px;gap:8px;align-items:center;padding:12px 0;border-bottom:1px solid #edf0ee}.admin-product-row input,.admin-product-row select{padding:9px;border:1px solid #d9e0dd;border-radius:8px;width:100%}.admin-product-img{width:60px;height:60px;border-radius:10px;object-fit:cover;background:#f3f5f4}.admin-category-row{display:grid;grid-template-columns:55px minmax(160px,1fr) minmax(160px,1fr) 180px 90px;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid #edf0ee}.admin-category-row input{padding:10px;border:1px solid #d9e0dd;border-radius:8px;width:100%}
+@media(max-width:760px){.admin-layout{grid-template-columns:1fr}.admin-side{display:flex;gap:7px;overflow:auto}.admin-side-item{min-width:170px}.admin-form-grid{grid-template-columns:1fr}.admin-image-editor{grid-template-columns:1fr}.firebase-check-grid{grid-template-columns:1fr}.admin-product-row{grid-template-columns:55px 1fr 1fr}.admin-product-row>*:nth-child(n+4){grid-column:span 1}.admin-category-row{grid-template-columns:45px 1fr 1fr}.admin-preview-square{width:160px;height:160px}}
+
+@media(max-width:1050px){.header-main{flex-wrap:wrap;padding:10px 0}.logo{width:auto}.search-wrap{order:3;max-width:none;flex-basis:100%}.actions{gap:8px}.categories{grid-template-columns:repeat(5,1fr)}.products{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:760px){.topinner{font-size:10px}.topitem:nth-child(3),.topitem:nth-child(4){display:none}.hero{height:300px}.section{padding:18px}.categories{grid-template-columns:repeat(3,1fr)}.products{grid-template-columns:repeat(2,1fr)}.actions .action span:last-child{display:none}.actions{margin-left:0}}
+@media(max-width:480px){.logo{font-size:17px}.logo img{width:52px;height:52px}.products{grid-template-columns:1fr}.categories{grid-template-columns:repeat(2,1fr)}.hero{height:250px}.section h2{font-size:21px}}
+</style>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
+</head>
+<body>
+<div class="topbar"><div class="topinner">
+<div class="topitem">🚚 <span>Lowest delivery price in Pakistan</span></div>
+<div class="topitem">💳 <span>Cash on Delivery available</span></div>
+<div class="topitem">↩️ <span>7-day easy returns</span></div>
+<div class="topitem">🛡️ <span>Verified Suppliers</span></div>
+</div></div>
+
+<header class="header"><div class="header-main">
+<a class="logo" href="#" onclick="handleLogoAdminClick(event);return false;" title="Cheezay Dikhao"><img src="cropped-logo.jpg" alt="Cheezay Dikhao"><span>Cheezay Dikhao</span></a>
+<form class="search-wrap" onsubmit="searchProducts(event)"><input id="searchInput" placeholder="Search products, brands & stores"><button>Search</button></form>
+<div class="actions">
+<button id="accountAction" class="action" onclick="handleAccountAction()"><span class="ico" id="accountIcon">◯</span><span id="accountLabel">Log in</span></button>
+<button class="action" onclick="showOrders()"><span class="ico">📦</span><span>Orders</span></button>
+<button class="action" onclick="showWishlist()"><span class="ico">♡</span><span>Wishlist</span></button>
+<button class="action" onclick="openCart()" style="position:relative"><span class="ico">🛒<b id="cartBadge" class="badge">0</b></span><span>Cart</span></button>
+</div></div></header>
+
+<nav class="nav"><div class="navinner">
+<button class="active" onclick="filterCategory('All',this)">⌂ All</button>
+<button onclick="filterCategory('Kids & Mother',this)">👶 Kids & Mother</button>
+<button onclick="filterCategory('Women Corner',this)">👩 Women Corner</button>
+<button onclick="filterCategory('China',this)">🇨🇳 China</button>
+<button onclick="filterCategory('Urdu Bazaar',this)">📚 Urdu Bazaar</button>
+<button onclick="filterCategory('Beauty & Care',this)">💄 Beauty & Care</button>
+<button data-category="Men's Fashion" onclick="filterCategory(this.dataset.category,this)">👨 Men's Fashion</button>
+<button onclick="filterCategory('Home & Living',this)">🏠 Home & Living</button>
+<button onclick="filterCategory('Tech & Tools',this)">🔧 Tech & Tools</button>
+</div></nav>
+
+<main>
+<section class="hero" id="heroBox">
+  <img id="heroImage" src="default-hero.jpg" alt="Cheezay Dikhao hero banner" onerror="showHeroPlaceholder()">
+  <div id="heroPlaceholder" class="hero-placeholder" style="display:none">
+    <div><div>⭐ Shop or earn in Pakistan</div><h1>Buy for yourself or resell and earn.</h1><p>Millions shop on Cheezay Dikhao, thousands also resell. Start with just one, there's no minimum.</p></div>
+  </div>
+</section>
+
+<section class="section">
+<div class="section-head"><h2>Shop by category</h2><button class="seeall" onclick="renderProducts(products)">See all →</button></div>
+<div class="categories">
+<button class="cat" onclick="filterCategory('Beauty & Care')"><div class="cat-img">💄</div><b>Cosmetics</b></button>
+<button class="cat" onclick="filterCategory('Women Corner')"><div class="cat-img">👗</div><b>Womens<br>Stitched</b></button>
+<button class="cat" onclick="filterCategory('Kids & Mother')"><div class="cat-img">👕</div><b>Kids<br>Clothing</b></button>
+<button class="cat" data-category="Men's Fashion" onclick="filterCategory(this.dataset.category)"><div class="cat-img">👔</div><b>Mens<br>Stitched</b></button>
+<button class="cat" onclick="filterCategory('Women Corner')"><div class="cat-img">💍</div><b>Jewellery</b></button>
+<button class="cat" onclick="filterCategory('Beauty & Care')"><div class="cat-img">🕶️</div><b>Fashion<br>Accessories</b></button>
+<button class="cat" onclick="filterCategory('Home & Living')"><div class="cat-img">🛏️</div><b>Bedding</b></button>
+<button class="cat" onclick="filterCategory('Women Corner')"><div class="cat-img">🧣</div><b>Festive<br>Collection</b></button>
+<button class="cat" onclick="filterCategory('Urdu Bazaar')"><div class="cat-img">📖</div><b>Islamic<br>Accessories</b></button>
+</div></section>
+
+<section class="section"><div class="section-head"><h2 id="productTitle">Featured Products</h2><button class="seeall" onclick="renderProducts(products)">Reset</button></div><div id="products" class="products"></div></section>
+</main>
+
+<footer><span id="footerText">© 2026 Cheezay Dikhao — Online Shopping in Pakistan</span></footer>
+
+<div id="adminScreen" class="admin-screen">
+  <div id="adminLoginScreen" class="admin-login-screen">
+    <div class="admin-login-card">
+      <img src="cropped-logo.jpg" alt="Cheezay Dikhao">
+      <h2>Admin Settings</h2>
+      <p>Website ki hero image aur settings manage karein.</p>
+      <input id="adminPasswordFull" type="password" placeholder="Admin password" autocomplete="current-password">
+      <button onclick="adminLoginFull(event)">Open Admin Panel</button>
+      <div id="adminFullLoginStatus" class="admin-status" style="display:none"></div>
+    </div>
+  </div>
+  <div id="adminDashboard" style="display:none">
+    <div class="admin-top">
+      <div class="admin-brand"><img id="adminBrandLogo" src="cropped-logo.jpg" alt="Logo"><span>Cheezay Dikhao Admin</span></div>
+      <button class="admin-back" onclick="closeAdminFull()">← Back to Website</button>
+    </div>
+    <div class="admin-wrap">
+      <div class="admin-title"><h1>Website Admin Panel</h1><p>Yahan se website ki tamam basic settings, images, categories aur products manage karein.</p></div>
+      <div class="admin-layout">
+        <aside class="admin-side">
+          <button class="admin-side-item active" onclick="showAdminTab('general',this)">⚙️ General Settings</button>
+          <button class="admin-side-item" onclick="showAdminTab('images',this)">🖼️ Images & Banners</button>
+          <button class="admin-side-item" onclick="showAdminTab('categories',this)">🗂️ Categories</button>
+          <button class="admin-side-item" onclick="showAdminTab('products',this)">🛍️ Products</button>
+          <button class="admin-side-item" onclick="showAdminTab('firebase',this)">🔥 Firebase</button>
+          <div class="admin-status">Firebase: <b id="adminFirebaseState">Checking...</b></div>
+        </aside>
+        <section class="admin-content">
+          <div id="adminTab-general" class="admin-tab active">
+            <div class="admin-card"><h2>General Website Settings</h2><p class="help">Website ka naam, top bar aur footer text yahan se change karein.</p>
+              <div class="admin-form-grid">
+                <div class="admin-field"><label>Website Name</label><input id="siteNameAdmin" value="Cheezay Dikhao"></div>
+                <div class="admin-field"><label>Top Bar 1</label><input id="top1Admin" value="Lowest delivery price in Pakistan"></div>
+                <div class="admin-field"><label>Top Bar 2</label><input id="top2Admin" value="Cash on Delivery available"></div>
+                <div class="admin-field"><label>Top Bar 3</label><input id="top3Admin" value="7-day easy returns"></div>
+                <div class="admin-field"><label>Top Bar 4</label><input id="top4Admin" value="Verified Suppliers"></div>
+                <div class="admin-field"><label>Footer Text</label><input id="footerAdmin" value="© 2026 Cheezay Dikhao — Online Shopping in Pakistan"></div>
+              </div>
+              <div class="admin-actions"><button class="btn-green" onclick="saveGeneralSettings()">Save General Settings</button><button class="btn-gray" onclick="loadAllAdminSettings()">Reload</button></div>
+              <div id="generalStatus" class="admin-status">Ready.</div>
+            </div>
+            <div class="admin-card" style="margin-top:18px"><h2>Logo</h2><p class="help">Device se logo upload karein. Resize karke Firebase mein save ho jayega.</p>
+              <div class="admin-image-editor"><div><input id="logoFileAdmin" type="file" accept="image/*" onchange="previewAdminImage(event,'logo')"><img id="logoPreviewAdmin" class="admin-preview-square" src="cropped-logo.jpg"></div><div>
+                <div class="admin-form-grid"><div class="admin-field"><label>Width</label><input id="logoWAdmin" type="number" value="500" min="80" max="2000"></div><div class="admin-field"><label>Height</label><input id="logoHAdmin" type="number" value="500" min="80" max="2000"></div><div class="admin-field"><label>Quality</label><input id="logoQAdmin" type="number" value="0.9" min="0.3" max="1" step="0.05"></div></div>
+                <div class="admin-actions"><button class="btn-orange" onclick="resizeAdminImage('logo')">Resize Image</button><button class="btn-green" onclick="saveAdminImage('logo')">Save Logo</button></div></div></div><div id="logoStatus" class="admin-status">Logo ready.</div>
+            </div>
+          </div>
+
+          <div id="adminTab-images" class="admin-tab">
+            <div class="admin-card"><h2>Main Hero Banner</h2><p class="help">Recommended: 1600 × 390 px. Device se image upload, resize aur Firebase save karein.</p>
+              <input id="heroFileFull" type="file" accept="image/*" onchange="previewHeroFileFull(event)">
+              <img id="adminPreviewFull" class="admin-preview-large" src="default-hero.jpg" alt="Hero preview">
+              <div class="admin-form-grid"><div class="admin-field"><label>Width</label><input id="resizeWFull" type="number" value="1600" min="320" max="3000"></div><div class="admin-field"><label>Height</label><input id="resizeHFull" type="number" value="390" min="120" max="1500"></div><div class="admin-field"><label>Quality</label><input id="resizeQFull" type="number" value="0.85" min="0.3" max="1" step="0.05"></div></div>
+              <div class="admin-form-grid" style="margin-top:14px"><div class="admin-field"><label>Resize mode</label><select id="fitModeFull"><option value="cover">Cover / Crop</option><option value="contain">Fit / No Crop</option></select></div></div>
+              <div class="admin-actions"><button class="btn-orange" onclick="resizeHeroFull()">Resize Image</button><button class="btn-green" onclick="saveHeroToFirebaseFull()">Save Hero</button><button class="btn-gray" onclick="loadHeroFromFirebaseFull()">Reload</button></div><div id="adminInfoFull" class="admin-status">Ready.</div>
+            </div>
+            <div class="admin-card" style="margin-top:18px"><h2>Image Rules</h2><p class="help">Images Firebase Realtime Database mein compressed data ke tor par save hoti hain. Behtar result ke liye resize aur quality kam karke save karein.</p></div>
+          </div>
+
+          <div id="adminTab-categories" class="admin-tab">
+            <div class="admin-card"><h2>Categories</h2><p class="help">Category ka naam, icon/emoji aur optional image set karein.</p><div class="admin-form-grid" style="margin:15px 0">
+<div class="admin-field"><label>New Category Name</label><input id="newCategoryName" placeholder="e.g. Electronics"></div>
+<div class="admin-field"><label>Category Key</label><input id="newCategoryKey" placeholder="e.g. Electronics"></div>
+<div class="admin-field"><label>Icon / Emoji</label><input id="newCategoryIcon" value="📦" maxlength="4"></div>
+</div>
+<div class="admin-actions"><button class="btn-orange" onclick="addCategoryAdmin()">+ Add Category</button><button class="btn-green" onclick="saveCategoriesAdmin()">Save Categories</button><button class="btn-gray" onclick="loadCategoriesAdmin(true)">Reload from Firebase</button></div>
+<div id="categoryAdminList"></div><div id="categoryStatus" class="admin-status">Categories loaded.</div></div>
+          </div>
+
+          <div id="adminTab-products" class="admin-tab">
+            <div class="admin-card"><h2>Products</h2><p class="help">Product name, price, old price, category aur product image manage karein.</p><div id="productAdminList"></div><div class="admin-actions"><button class="btn-green" onclick="saveProductsAdmin()">Save Products</button><button class="btn-orange" onclick="addAdminProduct()">+ Add Product</button></div><div id="productStatus" class="admin-status">Products loaded.</div></div>
+          </div>
+
+          <div id="adminTab-firebase" class="admin-tab">
+            <div class="admin-card"><h2>Firebase Status</h2><div class="firebase-check-grid"><div><b>Project</b><span>school-c9633</span></div><div><b>Realtime Database</b><span id="firebaseDbStatus">Connected check...</span></div><div><b>Authentication</b><span>Email/Password + Google</span></div></div><div class="admin-actions"><button class="btn-green" onclick="testFirebaseConnection()">Test Firebase</button><button class="btn-gray" onclick="logoutUser()">Logout User</button></div><div id="firebaseAdminStatus" class="admin-status">Firebase configuration active.</div></div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="cartModal" class="overlay" onclick="closeOnBackdrop(event,'cartModal')"><div class="modal"><button class="close" onclick="closeModal('cartModal')">×</button><h2>Your Cart</h2><div id="cartItems"></div><div class="total"><span>Total</span><span id="cartTotal">PKR 0</span></div><button class="checkout" onclick="checkout()">Place Cash on Delivery Order</button></div></div>
+
+<div id="loginModal" class="overlay" onclick="closeOnBackdrop(event,'loginModal')"><div class="modal">
+<button class="close" onclick="closeModal('loginModal')">×</button>
+<h2>Login</h2>
+<p style="color:#666;margin-top:-5px">Google se foran login karein.</p>
+<button class="google-btn" onclick="loginWithGoogle()">🇬 Google se Login</button>
+<div class="or"><span>ya</span></div>
+<form class="login-form" onsubmit="login(event)">
+<input id="loginEmail" type="email" placeholder="Email address" required>
+<input id="loginPassword" type="password" placeholder="Password" required>
+<button>Login</button>
+<button type="button" class="google-btn" style="margin-top:8px" onclick="createEmailAccount()">Naya Email Account Banayein</button>
+</form>
+<div id="loginStatus" class="status" style="margin-top:12px">Firebase ready.</div>
+</div></div>
+
+<div id="ordersModal" class="overlay" onclick="closeOnBackdrop(event,'ordersModal')"><div class="modal"><button class="close" onclick="closeModal('ordersModal')">×</button><h2>Orders</h2><div id="ordersContent" class="empty">No orders yet.</div></div></div>
+<div id="wishlistModal" class="overlay" onclick="closeOnBackdrop(event,'wishlistModal')"><div class="modal"><button class="close" onclick="closeModal('wishlistModal')">×</button><h2>Wishlist</h2><div id="wishlistContent" class="empty">Your wishlist is empty.</div></div></div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+const firebaseConfig={
+ apiKey:"AIzaSyBsr72VFXwgW3dsJyhjGnisWgtlSA4ynVY",
+ authDomain:"school-c9633.firebaseapp.com",
+ databaseURL:"https://school-c9633-default-rtdb.asia-southeast1.firebasedatabase.app",
+ projectId:"school-c9633",
+ storageBucket:"school-c9633.firebasestorage.app",
+ messagingSenderId:"293275030223",
+ appId:"1:293275030223:web:7394cb9fe64f72c1019dba"
+};
+let firebaseReady=false, db=null, auth=null;
+try{
+ firebase.initializeApp(firebaseConfig);
+ auth=firebase.auth();
+ auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(console.warn);
+ db=firebase.database();
+ firebaseReady=true;
+}catch(e){console.error(e);firebaseReady=false;window.firebaseInitError=e}
+
+const products=[
+{id:1,name:"Premium Ladies Handbag",price:2499,old:2999,cat:"Women Corner",icon:"👜"},
+{id:2,name:"Wireless Bluetooth Earbuds",price:1599,old:2199,cat:"Tech & Tools",icon:"🎧"},
+{id:3,name:"Kids Summer Dress Set",price:1899,old:2399,cat:"Kids & Mother",icon:"👗"},
+{id:4,name:"Classic Men's Polo Shirt",price:1299,old:1699,cat:"Men's Fashion",icon:"👕"},
+{id:5,name:"Makeup Beauty Kit",price:2199,old:2799,cat:"Beauty & Care",icon:"💄"},
+{id:6,name:"Elegant Jewellery Set",price:999,old:1399,cat:"Women Corner",icon:"💍"},
+{id:7,name:"Soft Comfort Bedding Set",price:3299,old:3999,cat:"Home & Living",icon:"🛏️"},
+{id:8,name:"Islamic Gift & Tasbeeh Set",price:899,old:1199,cat:"Urdu Bazaar",icon:"📿"},
+{id:9,name:"Smart LED Desk Lamp",price:1799,old:2299,cat:"Tech & Tools",icon:"💡"},
+{id:10,name:"Fashion Sunglasses",price:799,old:1099,cat:"Beauty & Care",icon:"🕶️"},
+{id:11,name:"Festive Women's Suit",price:2899,old:3499,cat:"Women Corner",icon:"🥻"},
+{id:12,name:"Remote Control Flying Toy",price:4029,old:4699,cat:"Kids & Mother",icon:"✈️"}
+];
+let cart=JSON.parse(localStorage.getItem("cd_cart")||"[]"),wishlist=JSON.parse(localStorage.getItem("cd_wishlist")||"[]"),orders=JSON.parse(localStorage.getItem("cd_orders")||"[]");
+function money(n){return "PKR "+Number(n).toLocaleString("en-PK")}
+function save(){localStorage.setItem("cd_cart",JSON.stringify(cart));localStorage.setItem("cd_wishlist",JSON.stringify(wishlist));localStorage.setItem("cd_orders",JSON.stringify(orders));updateBadge()}
+function updateBadge(){document.getElementById("cartBadge").textContent=cart.reduce((s,x)=>s+x.qty,0)}
+function renderProducts(list){
+ document.getElementById("products").innerHTML=list.length?list.map(p=>`<article class="card"><div class="card-img">${p.image?`<img src="${p.image}" alt="${escapeHtml(p.name)}" style="width:100%;height:100%;object-fit:cover">`:p.icon}</div><div class="card-body"><h3>${p.name}</h3><div><span class="price">${money(p.price)}</span><span class="old">${money(p.old)}</span></div><div class="card-actions"><button class="add" onclick="addToCart(${p.id})">Add to Cart</button><button class="heart ${wishlist.includes(p.id)?"active":""}" onclick="toggleWish(${p.id})">${wishlist.includes(p.id)?"♥":"♡"}</button></div></div></article>`).join(""):'<div class="empty" style="grid-column:1/-1">No products found.</div>';
+}
+function filterCategory(cat,btn){if(btn){document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("active"));btn.classList.add("active")}const list=cat==="All"?products:products.filter(p=>p.cat===cat);renderProducts(list);document.getElementById("productTitle").textContent=cat==="All"?"Featured Products":cat}
+function searchProducts(e){e.preventDefault();const q=document.getElementById("searchInput").value.trim().toLowerCase();renderProducts(q?products.filter(p=>(p.name+" "+p.cat).toLowerCase().includes(q)):products);document.getElementById("productTitle").textContent=q?"Search results":"Featured Products"}
+function addToCart(id){const p=products.find(x=>x.id===id),i=cart.find(x=>x.id===id);i?i.qty++:cart.push({id,qty:1});save();toast(p.name+" cart mein add ho gaya")}
+function changeQty(id,d){const i=cart.find(x=>x.id===id);if(!i)return;i.qty+=d;if(i.qty<=0)cart=cart.filter(x=>x.id!==id);save();renderCart()}
+function renderCart(){const b=document.getElementById("cartItems");if(!cart.length){b.innerHTML='<div class="empty">Your cart is empty.</div>';document.getElementById("cartTotal").textContent="PKR 0";return}let t=0;b.innerHTML=cart.map(i=>{const p=products.find(x=>x.id===i.id);t+=p.price*i.qty;return `<div class="cart-row"><div class="cart-icon">${p.icon}</div><div><b>${p.name}</b><div>${money(p.price)}</div></div><div class="qty"><button onclick="changeQty(${p.id},-1)">−</button><span>${i.qty}</span><button onclick="changeQty(${p.id},1)">+</button></div></div>`}).join("");document.getElementById("cartTotal").textContent=money(t)}
+function openCart(){renderCart();openModal("cartModal")}
+function toggleWish(id){wishlist.includes(id)?wishlist=wishlist.filter(x=>x!==id):wishlist.push(id);save();renderProducts(products);toast(wishlist.includes(id)?"Wishlist mein add ho gaya":"Wishlist se remove ho gaya")}
+function showWishlist(){const b=document.getElementById("wishlistContent"),list=products.filter(p=>wishlist.includes(p.id));b.innerHTML=list.length?list.map(p=>`<div class="cart-row"><div class="cart-icon">${p.icon}</div><div><b>${p.name}</b><div>${money(p.price)}</div></div><button class="add" style="max-width:130px" onclick="addToCart(${p.id})">Add to Cart</button></div>`).join(""):'<div class="empty">Your wishlist is empty.</div>';openModal("wishlistModal")}
+function showOrders(){const b=document.getElementById("ordersContent");b.innerHTML=orders.length?orders.map((o,i)=>`<div class="cart-row"><div><b>Order #${i+1}</b><div>${o.items} items • ${money(o.total)}</div><small>${o.date}</small></div><b style="margin-left:auto">COD</b></div>`).join(""):'<div class="empty">No orders yet.</div>';openModal("ordersModal")}
+function checkout(){if(!cart.length){toast("Cart khali hai");return}let total=0,count=0;cart.forEach(i=>{const p=products.find(x=>x.id===i.id);total+=p.price*i.qty;count+=i.qty});orders.unshift({items:count,total,date:new Date().toLocaleString()});cart=[];save();closeModal("cartModal");showOrders();toast("Order successfully place ho gaya")}
+function openLogin(){openModal("loginModal")}function login(e){
+ e.preventDefault();
+ if(!firebaseReady){toast("Firebase initialize nahi hua");return}
+ const email=document.getElementById("loginEmail").value.trim();
+ const pass=document.getElementById("loginPassword").value;
+ document.getElementById("loginStatus").textContent="Login ho raha hai...";
+ auth.signInWithEmailAndPassword(email,pass).then(user=>{
+   document.getElementById("loginStatus").textContent="Login successful: "+(user.user.email||"");
+   closeModal("loginModal");toast("Login successful");
+ }).catch(err=>{
+   document.getElementById("loginStatus").textContent=err.message;
+   toast("Login failed");
+ });
+}
+function createEmailAccount(){
+ if(!firebaseReady){toast("Firebase initialize nahi hua");return}
+ const email=document.getElementById("loginEmail").value.trim(),pass=document.getElementById("loginPassword").value;
+ if(!email||!pass){toast("Email aur password enter karein");return}
+ document.getElementById("loginStatus").textContent="Account ban raha hai...";
+ auth.createUserWithEmailAndPassword(email,pass).then(r=>{document.getElementById("loginStatus").textContent="Account create ho gaya: "+r.user.email;toast("Account created");}).catch(err=>{document.getElementById("loginStatus").textContent=err.message;toast("Account create nahi hua")});
+}
+function loginWithGoogle(){
+ if(!firebaseReady){toast("Firebase initialize nahi hua");return}
+ const provider=new firebase.auth.GoogleAuthProvider();
+ provider.setCustomParameters({prompt:"select_account"});
+ const st=document.getElementById("loginStatus");
+ if(st)st.textContent="Google login ho raha hai...";
+ auth.signInWithPopup(provider).then(result=>{
+   closeModal("loginModal");
+   updateAccountUI(result.user);
+   toast("Google login successful");
+ }).catch(err=>{
+   console.error("Google login error:",err);
+   if(st)st.textContent="Google login error: "+err.code+" — "+err.message;
+   toast("Google login failed");
+   // If popup is blocked or unsupported, use redirect as fallback.
+   if(err.code==="auth/popup-blocked" || err.code==="auth/popup-cancelled-by-user" || err.code==="auth/operation-not-supported-in-this-environment"){
+      auth.signInWithRedirect(provider).catch(e=>{if(st)st.textContent="Google login error: "+e.code+" — "+e.message;});
+   }
+ });
+}
+if(firebaseReady){
+ auth.getRedirectResult().then(result=>{
+   if(result && result.user){ closeModal("loginModal"); updateAccountUI(result.user); toast("Google login successful"); }
+ }).catch(err=>{
+   const st=document.getElementById("loginStatus"); if(st)st.textContent="Google login error: "+err.code+" — "+err.message;
+   console.error("Google redirect error:",err);
+ });
+}
+function handleAccountAction(){ if(auth && auth.currentUser){ logoutUser(); } else openLogin(); }
+function updateAccountUI(user){
+ const label=document.getElementById("accountLabel"),icon=document.getElementById("accountIcon");
+ if(user){ label.textContent="Logout"; icon.textContent="↪"; }
+ else { label.textContent="Log in"; icon.textContent="◯"; }
+}
+function logoutUser(){
+ if(!auth){openLogin();return}
+ auth.signOut().then(()=>{updateAccountUI(null);toast("Logout ho gaya")}).catch(e=>toast(e.message));
+}
+function openModal(id){document.getElementById(id).classList.add("show")}function closeModal(id){document.getElementById(id).classList.remove("show")}function closeOnBackdrop(e,id){if(e.target.id===id)closeModal(id)}
+function goHome(){window.scrollTo({top:0,behavior:"smooth"});renderProducts(products)}
+function toast(m){const t=document.getElementById("toast");t.textContent=m;t.classList.add("show");clearTimeout(window.__tt);window.__tt=setTimeout(()=>t.classList.remove("show"),2200)}
+function showHeroPlaceholder(){document.getElementById("heroImage").style.display="none";document.getElementById("heroPlaceholder").style.display="flex"}
+
+let logoClickCount=0,logoClickTimer=null;
+function handleLogoAdminClick(e){
+ e.preventDefault();
+ logoClickCount++;
+ clearTimeout(logoClickTimer);
+ logoClickTimer=setTimeout(()=>logoClickCount=0,1600);
+ if(logoClickCount>=5){logoClickCount=0;clearTimeout(logoClickTimer);openAdminFull();}
+}
+function openAdminFull(){
+ document.getElementById("adminScreen").classList.add("show");
+ document.getElementById("adminLoginScreen").style.display="flex";
+ document.getElementById("adminDashboard").style.display="none";
+ document.getElementById("adminPasswordFull").value="";
+ document.getElementById("adminFullLoginStatus").style.display="none";
+}
+function adminLoginFull(e){
+ if(e)e.preventDefault();
+ const pass=document.getElementById("adminPasswordFull").value;
+ const st=document.getElementById("adminFullLoginStatus");
+ st.style.display="block";
+ if(pass!=="nabel3457"){st.textContent="Wrong admin password.";st.style.background="#fff1f1";st.style.color="#a52a2a";return}
+ st.textContent=firebaseReady?"Password accepted. Firebase connected.":"Password accepted. Firebase initialize nahi hua.";
+ st.style.background="#f1f8f4";st.style.color="#276449";
+ document.getElementById("adminLoginScreen").style.display="none";
+ document.getElementById("adminDashboard").style.display="block";
+ document.getElementById("adminFirebaseState").textContent=firebaseReady?"Connected":"Not connected";
+ loadHeroFromFirebaseFull(); loadAllAdminSettings(); loadCategoriesAdmin(); if(firebaseReady){db.ref('siteSettings/logo').once('value').then(s=>{const v=s.val();if(v&&v.data){adminImages.logo=v.data;document.getElementById('logoPreviewAdmin').src=v.data}});}
+}
+function closeAdminFull(){document.getElementById("adminScreen").classList.remove("show");document.getElementById("adminLoginScreen").style.display="flex";document.getElementById("adminDashboard").style.display="none"}
+
+let originalHeroData=null;
+function previewHeroFileFull(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{originalHeroData=r.result;document.getElementById("adminPreviewFull").src=r.result;document.getElementById("adminInfoFull").textContent="Image loaded. Ab Resize Image par click karein."};r.readAsDataURL(f)}
+function resizeHeroFull(){
+ if(!originalHeroData){document.getElementById("adminInfoFull").textContent="Pehle image upload karein.";return}
+ const W=Math.max(320,Math.min(3000,Number(document.getElementById("resizeWFull").value)||1600));
+ const H=Math.max(120,Math.min(1500,Number(document.getElementById("resizeHFull").value)||390));
+ const Q=Math.max(.3,Math.min(1,Number(document.getElementById("resizeQFull").value)||.85));
+ const mode=document.getElementById("fitModeFull").value;
+ const im=new Image();im.onload=()=>{const c=document.createElement("canvas");c.width=W;c.height=H;const x=c.getContext("2d");x.fillStyle="#064f3e";x.fillRect(0,0,W,H);const scale=mode==="cover"?Math.max(W/im.width,H/im.height):Math.min(W/im.width,H/im.height);const nw=im.width*scale,nh=im.height*scale;x.drawImage(im,(W-nw)/2,(H-nh)/2,nw,nh);originalHeroData=c.toDataURL("image/jpeg",Q);document.getElementById("adminPreviewFull").src=originalHeroData;document.getElementById("adminInfoFull").textContent=`Resized: ${W} × ${H}px. Ready to save.`};im.src=originalHeroData}
+function saveHeroToFirebaseFull(){
+ if(!firebaseReady){document.getElementById("adminInfoFull").textContent="Firebase initialize nahi hua. API key check karein.";return}
+ if(!originalHeroData){document.getElementById("adminInfoFull").textContent="Pehle image upload/resize karein.";return}
+ const size=Math.round(originalHeroData.length/1024);if(size>5000){document.getElementById("adminInfoFull").textContent="Image bohat bari hai. Quality ya dimensions kam karein.";return}
+ db.ref("siteSettings/heroImage").set({data:originalHeroData,updatedAt:Date.now(),updatedBy:"admin-password"}).then(()=>{applyHero(originalHeroData);document.getElementById("adminInfoFull").textContent="Hero image Firebase mein successfully save ho gayi."}).catch(err=>{document.getElementById("adminInfoFull").textContent="Firebase error: "+err.message})
+}
+function loadHeroFromFirebaseFull(){
+ if(!firebaseReady){document.getElementById("adminInfoFull").textContent="Firebase initialize nahi hua.";return}
+ db.ref("siteSettings/heroImage").once("value").then(s=>{const v=s.val();if(v&&v.data){applyHero(v.data);originalHeroData=v.data;document.getElementById("adminPreviewFull").src=v.data;document.getElementById("adminInfoFull").textContent="Firebase se latest hero image load ho gayi."}else document.getElementById("adminInfoFull").textContent="Firebase mein hero image abhi save nahi hai."}).catch(e=>document.getElementById("adminInfoFull").textContent="Firebase error: "+e.message)
+}
+
+function previewHeroFile(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{originalHeroData=r.result;document.getElementById("adminPreview").src=r.result};r.readAsDataURL(f)}
+function resizeHero(){
+ if(!originalHeroData){toast("Pehle image upload karein");return}
+ const W=Math.max(320,Math.min(3000,Number(document.getElementById("resizeW").value)||1600)),H=Math.max(120,Math.min(1500,Number(document.getElementById("resizeH").value)||390)),Q=Math.max(.3,Math.min(1,Number(document.getElementById("resizeQ").value)||.85)),mode=document.getElementById("fitMode").value;
+ const im=new Image();im.onload=()=>{
+  const c=document.createElement("canvas");c.width=W;c.height=H;const x=c.getContext("2d");
+  x.fillStyle="#064f3e";x.fillRect(0,0,W,H);
+  const scale=mode==="cover"?Math.max(W/im.width,H/im.height):Math.min(W/im.width,H/im.height);
+  const nw=im.width*scale,nh=im.height*scale;x.drawImage(im,(W-nw)/2,(H-nh)/2,nw,nh);
+  originalHeroData=c.toDataURL("image/jpeg",Q);document.getElementById("adminPreview").src=originalHeroData;
+  document.getElementById("adminInfo").textContent=`Resized: ${W} × ${H}px. Ready to save to Firebase.`;
+ };im.src=originalHeroData;
+}
+function saveHeroToFirebase(){
+ if(!originalHeroData){toast("Image upload/resize karein");return}
+ const size=Math.round(originalHeroData.length/1024);
+ if(size>5000){toast("Image bohat bari hai. Quality ya size kam karein.");return}
+ db.ref("siteSettings/heroImage").set({data:originalHeroData,updatedAt:Date.now(),updatedBy:"admin-password"}).then(()=>{applyHero(originalHeroData);toast("Hero Firebase mein save ho gaya")}).catch(err=>{document.getElementById("adminInfo").textContent=err.message})
+}
+function loadHeroFromFirebase(){
+ if(!firebaseReady)return;
+ db.ref("siteSettings/heroImage").once("value").then(s=>{const v=s.val();if(v&&v.data){applyHero(v.data);originalHeroData=v.data;document.getElementById("adminPreview").src=v.data;document.getElementById("adminInfo").textContent="Firebase se hero load ho gaya."}else document.getElementById("adminInfo").textContent="Firebase mein hero image abhi save nahi hai."}).catch(e=>document.getElementById("adminInfo").textContent=e.message)
+}
+function applyHero(data){const img=document.getElementById("heroImage");img.src=data;img.style.display="block";document.getElementById("heroPlaceholder").style.display="none"}
+if(firebaseReady){
+ db.ref("siteSettings/heroImage").once("value").then(s=>{const v=s.val();if(v&&v.data)applyHero(v.data)}).catch(console.warn);
+ db.ref("siteSettings/general").once("value").then(s=>{const v=s.val();if(v)applyGeneralSettings(v)}).catch(console.warn);
+ db.ref("siteSettings/logo").once("value").then(s=>{const v=s.val();if(v&&v.data)applyLogo(v.data)}).catch(console.warn);
+ db.ref("siteSettings/categories").once("value").then(s=>{const list=normalizeCategoriesData(s.val());if(list.length)applyCategories(list)}).catch(console.warn);
+ db.ref("siteSettings/products").once("value").then(s=>{const v=s.val();if(v&&Array.isArray(v.items)){products.splice(0,products.length,...v.items);renderProducts(products)}}).catch(console.warn);
+ auth.onAuthStateChanged(user=>{updateAccountUI(user);if(user){const st=document.getElementById("loginStatus");if(st)st.textContent="Logged in: "+(user.displayName||user.email||"Google user")}});
+}
+
+let adminImages={logo:null};
+const defaultCategories=[
+ {name:"Cosmetics",cat:"Beauty & Care",icon:"💄"},{name:"Womens Stitched",cat:"Women Corner",icon:"👗"},{name:"Kids Clothing",cat:"Kids & Mother",icon:"👕"},{name:"Mens Stitched",cat:"Men's Fashion",icon:"👔"},{name:"Jewellery",cat:"Women Corner",icon:"💍"},{name:"Fashion Accessories",cat:"Beauty & Care",icon:"🕶️"},{name:"Bedding",cat:"Home & Living",icon:"🛏️"},{name:"Festive Collection",cat:"Women Corner",icon:"🧣"},{name:"Islamic Accessories",cat:"Urdu Bazaar",icon:"📖"}
+];
+let categoriesAdmin=JSON.parse(localStorage.getItem("cd_categories")||"null")||defaultCategories;
+function showAdminTab(name,btn){document.querySelectorAll('.admin-tab').forEach(x=>x.classList.remove('active'));document.getElementById('adminTab-'+name).classList.add('active');document.querySelectorAll('.admin-side-item').forEach(x=>x.classList.remove('active'));if(btn)btn.classList.add('active');if(name==='categories')loadCategoriesAdmin();if(name==='products')renderProductAdmin();if(name==='firebase')testFirebaseConnection();}
+function previewAdminImage(e,type){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{adminImages[type]=r.result;document.getElementById(type==='logo'?'logoPreviewAdmin':'adminPreviewFull').src=r.result};r.readAsDataURL(f)}
+function resizeDataUrl(data,W,H,Q,mode,cb){const im=new Image();im.onload=()=>{const c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,W,H);const scale=mode==='cover'?Math.max(W/im.width,H/im.height):Math.min(W/im.width,H/im.height);const nw=im.width*scale,nh=im.height*scale;x.drawImage(im,(W-nw)/2,(H-nh)/2,nw,nh);cb(c.toDataURL('image/jpeg',Q))};im.src=data}
+function resizeAdminImage(type){const data=adminImages[type];if(!data){toast('Pehle image upload karein');return}const W=Number(document.getElementById('logoWAdmin').value)||500,H=Number(document.getElementById('logoHAdmin').value)||500,Q=Number(document.getElementById('logoQAdmin').value)||.9;resizeDataUrl(data,W,H,Q,'contain',out=>{adminImages[type]=out;document.getElementById('logoPreviewAdmin').src=out;document.getElementById('logoStatus').textContent=`Logo resized: ${W} × ${H}px`})}
+function saveAdminImage(type){if(!firebaseReady){toast('Firebase connected nahi hai');return}const data=adminImages[type];if(!data){toast('Pehle logo upload/resize karein');return}db.ref('siteSettings/logo').set({data,updatedAt:Date.now()}).then(()=>{applyLogo(data);document.getElementById('logoStatus').textContent='Logo Firebase mein save ho gaya.'}).catch(e=>document.getElementById('logoStatus').textContent=e.message)}
+function applyLogo(data){document.querySelectorAll('.logo img').forEach(x=>x.src=data);const a=document.getElementById('adminBrandLogo');if(a)a.src=data;const l=document.querySelector('#adminLoginScreen img');if(l)l.src=data;}
+function saveGeneralSettings(){if(!firebaseReady){toast('Firebase connected nahi hai');return}const v={siteName:document.getElementById('siteNameAdmin').value,top1:document.getElementById('top1Admin').value,top2:document.getElementById('top2Admin').value,top3:document.getElementById('top3Admin').value,top4:document.getElementById('top4Admin').value,footer:document.getElementById('footerAdmin').value};db.ref('siteSettings/general').set(v).then(()=>{applyGeneralSettings(v);document.getElementById('generalStatus').textContent='General settings save ho gayi.'}).catch(e=>document.getElementById('generalStatus').textContent=e.message)}
+function applyGeneralSettings(v){const tops=document.querySelectorAll('.topitem span');[v.top1,v.top2,v.top3,v.top4].forEach((x,i)=>{if(tops[i]&&x)tops[i].textContent=x});if(v.footer)document.getElementById('footerText').textContent=v.footer;if(v.siteName){document.title=v.siteName+' - Shop';document.querySelectorAll('.logo span').forEach(x=>x.textContent=v.siteName)}}
+function loadAllAdminSettings(){if(!firebaseReady)return;db.ref('siteSettings/general').once('value').then(s=>{const v=s.val();if(!v)return;document.getElementById('siteNameAdmin').value=v.siteName||'Cheezay Dikhao';document.getElementById('top1Admin').value=v.top1||'';document.getElementById('top2Admin').value=v.top2||'';document.getElementById('top3Admin').value=v.top3||'';document.getElementById('top4Admin').value=v.top4||'';document.getElementById('footerAdmin').value=v.footer||'';applyGeneralSettings(v)})}
+function normalizeCategoriesData(raw){
+ if(Array.isArray(raw)) return raw.filter(Boolean).map(c=>({
+   name:String(c?.name||'').trim(),
+   cat:String(c?.cat||c?.key||c?.category||c?.name||'').trim(),
+   icon:String(c?.icon||'📦'),
+   image:c?.image||''
+ })).filter(c=>c.name);
+ if(raw && Array.isArray(raw.items)) return normalizeCategoriesData(raw.items);
+ if(raw && raw.items && typeof raw.items==='object') return normalizeCategoriesData(Object.values(raw.items));
+ if(raw && typeof raw==='object'){
+   const entries=Object.entries(raw).filter(([k])=>k!=='updatedAt');
+   if(entries.length) return normalizeCategoriesData(entries.map(([key,val])=>(
+     val && typeof val==='object' ? {...val,cat:val.cat||val.key||key} : {name:String(val),cat:key}
+   )));
+ }
+ return [];
+}
+
+function loadCategoriesAdmin(showMessage=false){
+ if(!firebaseReady){
+   categoriesAdmin=normalizeCategoriesData(categoriesAdmin);
+   if(!categoriesAdmin.length) categoriesAdmin=defaultCategories.map(x=>({...x}));
+   localStorage.setItem('cd_categories',JSON.stringify(categoriesAdmin));
+   renderCategoryAdmin();
+   return Promise.resolve();
+ }
+ return db.ref('siteSettings/categories').once('value').then(s=>{
+   const loaded=normalizeCategoriesData(s.val());
+   categoriesAdmin=loaded.length ? loaded : defaultCategories.map(x=>({...x}));
+   localStorage.setItem('cd_categories',JSON.stringify(categoriesAdmin));
+   renderCategoryAdmin();
+   applyCategories(categoriesAdmin);
+   if(showMessage) document.getElementById('categoryStatus').textContent='Categories Firebase se reload ho gayi.';
+ }).catch(e=>{
+   categoriesAdmin=normalizeCategoriesData(categoriesAdmin);
+   if(!categoriesAdmin.length) categoriesAdmin=defaultCategories.map(x=>({...x}));
+   renderCategoryAdmin();
+   document.getElementById('categoryStatus').textContent='Firebase read error: '+e.message;
+ });
+}
+
+function renderCategoryAdmin(){
+ const box=document.getElementById('categoryAdminList');
+ if(!box)return;
+ categoriesAdmin=normalizeCategoriesData(categoriesAdmin);
+ if(!categoriesAdmin.length){
+   box.innerHTML='<div class="empty">Abhi koi category nahi hai. Upar se Add Category karein.</div>';
+   return;
+ }
+ box.innerHTML='<div style="display:grid;grid-template-columns:55px minmax(160px,1fr) minmax(160px,1fr) 180px 90px;gap:10px;font-weight:700;padding:10px 0;color:#445"><div>Image</div><div>Name</div><div>Category Key</div><div>Upload Image</div><div>Action</div></div>'+
+ categoriesAdmin.map((c,i)=>`<div class="admin-category-row"><div class="admin-category-preview">${c.image?`<img src="${c.image}" alt="" style="width:45px;height:45px;object-fit:cover;border-radius:50%">`:`<span style="font-size:28px">${escapeHtml(c.icon||'📦')}</span>`}</div><input value="${escapeHtml(c.name||'')}" data-ci="${i}" data-k="name" onchange="updateCategoryField(${i},'name',this.value)"><input value="${escapeHtml(c.cat||'')}" data-ci="${i}" data-k="cat" onchange="updateCategoryField(${i},'cat',this.value)"><input type="file" accept="image/*" onchange="previewCategoryImage(event,${i})"><button class="btn-gray" type="button" onclick="removeCategoryAdmin(${i})">Remove</button></div>`).join('');
+}
+
+function updateCategoryField(i,k,v){
+ if(!categoriesAdmin[i])return;
+ categoriesAdmin[i][k]=String(v||'').trim();
+}
+
+function addCategoryAdmin(){
+ const name=(document.getElementById('newCategoryName').value||'').trim();
+ const cat=(document.getElementById('newCategoryKey').value||name).trim();
+ const icon=(document.getElementById('newCategoryIcon').value||'📦').trim();
+ if(!name){toast('Category name likhein');return;}
+ if(categoriesAdmin.some(c=>(c.cat||'').toLowerCase()===cat.toLowerCase())){toast('Ye category pehle se mojood hai');return;}
+ categoriesAdmin.push({name,cat,icon});
+ document.getElementById('newCategoryName').value='';
+ document.getElementById('newCategoryKey').value='';
+ document.getElementById('newCategoryIcon').value='📦';
+ renderCategoryAdmin();
+ saveCategoriesAdmin(true);
+}
+
+function previewCategoryImage(e,i){
+ const f=e.target.files[0];
+ if(!f)return;
+ const r=new FileReader();
+ r.onload=()=>{
+   resizeDataUrl(r.result,300,300,.82,'cover',out=>{
+     categoriesAdmin[i].image=out;
+     categoriesAdmin[i].icon='';
+     renderCategoryAdmin();
+     saveCategoriesAdmin(true);
+   });
+ };
+ r.readAsDataURL(f);
+}
+
+function saveCategoriesAdmin(silent=false){
+ document.querySelectorAll('#categoryAdminList [data-ci]').forEach(el=>{
+   const i=Number(el.dataset.ci);
+   if(categoriesAdmin[i]) categoriesAdmin[i][el.dataset.k]=String(el.value||'').trim();
+ });
+ categoriesAdmin=normalizeCategoriesData(categoriesAdmin);
+ localStorage.setItem('cd_categories',JSON.stringify(categoriesAdmin));
+ if(!firebaseReady){
+   if(!silent)toast('Firebase connected nahi hai');
+   return Promise.resolve();
+ }
+ const payload={items:categoriesAdmin.map(c=>({
+   name:c.name,
+   cat:c.cat,
+   icon:c.icon||'📦',
+   image:c.image||''
+ })),updatedAt:Date.now()};
+ return db.ref('siteSettings/categories').set(payload).then(()=>{
+   applyCategories(categoriesAdmin);
+   document.getElementById('categoryStatus').textContent='Categories Firebase mein save ho gayi.';
+   if(!silent)toast('Categories save ho gayi');
+ }).catch(e=>{
+   const msg=String(e?.message||e||'Unknown Firebase error');
+   if(msg.includes('PERMISSION_DENIED')){
+     document.getElementById('categoryStatus').textContent='Firebase write permission denied. Firebase Console → Realtime Database → Rules mein is ZIP ki database.rules.json publish karein, phir Reload from Firebase karein.';
+     toast('Firebase Rules mein write permission nahi hai');
+   }else{
+     document.getElementById('categoryStatus').textContent='Save error: '+msg;
+     toast('Categories save nahi hui: '+msg);
+   }
+   throw e;
+ });
+}
+function removeCategoryAdmin(i){
+ if(i<0||i>=categoriesAdmin.length)return;
+ const name=categoriesAdmin[i].name;
+ categoriesAdmin.splice(i,1);
+ renderCategoryAdmin();
+ saveCategoriesAdmin(true).then(()=>{document.getElementById('categoryStatus').textContent='"'+name+'" remove ho gayi.';toast('Category remove ho gayi');});
+}
+function applyCategories(list){
+ categoriesAdmin=list||[];
+ localStorage.setItem('cd_categories',JSON.stringify(categoriesAdmin));
+ const box=document.querySelector('.categories');if(!box)return;
+ box.innerHTML=categoriesAdmin.map(c=>`<button class="cat" onclick="filterCategory(${JSON.stringify(c.cat||'')})"><div class="cat-img">${c.image?`<img src="${c.image}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:escapeHtml(c.icon||'📦')}</div><b>${escapeHtml(c.name||'Category')}</b></button>`).join('');
+}
+function renderProductAdmin(){const box=document.getElementById('productAdminList');box.innerHTML=products.map((p,i)=>`<div class="admin-product-row"><div class="admin-product-img">${p.image?`<img src="${p.image}" style="width:100%;height:100%;object-fit:cover;border-radius:10px">`:p.icon||'📦'}</div><input data-pi="${i}" data-k="name" value="${escapeHtml(p.name)}"><input data-pi="${i}" data-k="price" type="number" value="${p.price}"><input data-pi="${i}" data-k="old" type="number" value="${p.old||''}"><select data-pi="${i}" data-k="cat">${categoriesAdmin.map(c=>`<option ${c.cat===p.cat?'selected':''}>${escapeHtml(c.cat)}</option>`).join('')}</select><input type="file" accept="image/*" onchange="previewProductImage(event,${i})"><button class="btn-gray" onclick="removeAdminProduct(${i})">Remove</button></div>`).join('')}
+function previewProductImage(e,i){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{resizeDataUrl(r.result,600,600,.82,'contain',out=>{products[i].image=out;products[i].icon='';renderProductAdmin()})};r.readAsDataURL(f)}
+function addAdminProduct(){products.push({id:Date.now(),name:'New Product',price:0,old:0,cat:categoriesAdmin[0]?.cat||'Beauty & Care',icon:'📦'});renderProductAdmin()}
+function removeAdminProduct(i){products.splice(i,1);renderProductAdmin()}
+function saveProductsAdmin(){if(!firebaseReady){toast('Firebase connected nahi hai');return}document.querySelectorAll('#productAdminList [data-pi]').forEach(el=>{const i=Number(el.dataset.pi),k=el.dataset.k;products[i][k]=k==='price'||k==='old'?Number(el.value):el.value});db.ref('siteSettings/products').set({items:products,updatedAt:Date.now()}).then(()=>{renderProducts(products);document.getElementById('productStatus').textContent='Products Firebase mein save ho gaye.'}).catch(e=>document.getElementById('productStatus').textContent=e.message)}
+function testFirebaseConnection(){if(!firebaseReady){document.getElementById('firebaseAdminStatus').textContent='Firebase initialize nahi hua.';return}db.ref('siteSettings/connectionTest').set({time:Date.now()}).then(()=>{document.getElementById('firebaseDbStatus').textContent='Connected & writable';document.getElementById('firebaseAdminStatus').textContent='Firebase Realtime Database successfully test ho gaya.'}).catch(e=>{document.getElementById('firebaseDbStatus').textContent='Write permission error';document.getElementById('firebaseAdminStatus').textContent=String(e?.message||e).includes('PERMISSION_DENIED')?'Firebase Rules write ko block kar rahe hain. Is ZIP ki database.rules.json ko Firebase Console → Realtime Database → Rules mein publish karein.':'Firebase error: '+(e?.message||e)})}
+function escapeHtml(v){return String(v??'').replace(/[&<>'"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[m]))}
+
+updateBadge();renderProducts(products);
+</script>
+</body>
+</html>
