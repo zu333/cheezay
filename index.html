@@ -6,8 +6,8 @@
 <title>Cheezay Dikhao - Shop</title>
 <style>
 *{box-sizing:border-box}
-:root{--orange:#e87500;--green:#087b4b;--green2:#0da45e;--dark:#171717;--text:#172033;--line:#e8e8e8}
-body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#fff;color:var(--text)}
+:root{--orange:#e87500;--green:#087b4b;--green2:#0da45e;--dark:#171717;--text:#172033;--line:#e8e8e8;--bg:#f8f9fa}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text)}
 button,input{font:inherit}button{cursor:pointer}
 .topbar{height:38px;background:#191919;color:#fff;display:flex;justify-content:center}
 .topinner{width:min(1400px,94%);display:flex;align-items:center;justify-content:space-between;font-size:13px}
@@ -44,41 +44,60 @@ main{width:min(1400px,94%);margin:20px auto 60px}
 .products{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
 .card{border:1px solid #e8e8e8;border-radius:18px;overflow:hidden;background:#fff;transition:.2s}
 .card:hover{transform:translateY(-3px);box-shadow:0 10px 30px #00000010}
-.card-img{height:210px;background:#f7f7f7;display:flex;align-items:center;justify-content:center;font-size:80px}
-.card-body{padding:16px}.card h3{font-size:15px;line-height:1.35;margin:0 0 10px}
+.card-img{height:210px;background:#f7f7f7;display:flex;align-items:center;justify-content:center;font-size:80px;cursor:pointer}
+.card-body{padding:16px}.card h3{font-size:15px;line-height:1.35;margin:0 0 10px;cursor:pointer}
+.card h3:hover{color:var(--orange)}
 .price{font-size:20px;font-weight:800}.old{font-size:12px;color:#999;text-decoration:line-through;margin-left:6px}
 .card-actions{display:flex;gap:8px;margin-top:14px}
 .add{flex:1;border:0;background:var(--orange);color:#fff;padding:10px;border-radius:9px;font-weight:700}
 .heart{width:42px;border:1px solid #ddd;background:#fff;border-radius:9px;font-size:19px}.heart.active{color:#e22;background:#fff1f1}
 .empty{padding:35px;text-align:center;color:#777}
-.overlay{display:none;position:fixed;inset:0;background:#0008;z-index:100}
+.overlay{display:none;position:fixed;inset:0;background:#0008;z-index:100;overflow:auto}
 .overlay.show{display:flex;align-items:center;justify-content:center}
-.modal{width:min(760px,92%);max-height:92vh;overflow:auto;background:#fff;border-radius:20px;padding:25px;position:relative}
-.close{position:absolute;right:15px;top:12px;border:0;background:none;font-size:28px}
+.modal{width:min(760px,92%);max-height:92vh;overflow:auto;background:#fff;border-radius:20px;padding:25px;position:relative;margin:auto}
+.close{position:absolute;right:15px;top:12px;border:0;background:none;font-size:28px;z-index:10}
 .cart-row{display:flex;align-items:center;gap:15px;padding:14px 0;border-bottom:1px solid #eee}
 .cart-icon{width:60px;height:60px;background:#f7f7f7;border-radius:10px;display:grid;place-items:center;font-size:30px}
-.qty{display:flex;border:1px solid #ddd;border-radius:8px;overflow:hidden;margin-left:auto}.qty button{border:0;background:#fafafa;width:32px}.qty span{width:35px;text-align:center;padding:7px}
+.qty{display:flex;border:1px solid #ddd;border-radius:8px;overflow:hidden;margin-left:auto;background:#fff}.qty button{border:0;background:#fafafa;width:32px}.qty span{width:35px;text-align:center;padding:7px;font-weight:700}
 .total{display:flex;justify-content:space-between;font-size:20px;font-weight:800;padding-top:18px}
 .checkout{width:100%;margin-top:18px;border:0;background:var(--green2);color:#fff;padding:14px;border-radius:10px;font-weight:800}
+
+/* Product Detail Modal (Markaz Style) */
+.pd-modal{width:min(1050px,96%);background:#fdfaf6;padding:30px;border-radius:24px;position:relative;margin:auto;max-height:95vh;overflow-y:auto;box-shadow:0 20px 60px #0004}
+.pd-layout{display:grid;grid-template-columns:1fr 1fr 300px;gap:28px}
+.pd-image-col{background:#fff;border-radius:16px;padding:20px;display:flex;align-items:center;justify-content:center;border:1px solid #eee;min-height:350px;font-size:120px}
+.pd-image-col img{width:100%;height:auto;max-height:450px;object-fit:contain}
+.pd-info-col h1{font-size:24px;margin:0 0 12px;color:#111;line-height:1.3}
+.pd-stock{font-size:14px;color:#555;margin-bottom:15px;display:flex;align-items:center;gap:6px}
+.pd-price-wrap{margin-bottom:24px}.pd-price-wrap .pd-price{font-size:32px;font-weight:800;color:#0e1b4d;display:inline-block}.pd-price-wrap .pd-old{font-size:16px;color:#999;text-decoration:line-through;margin-left:10px}
+.pd-qty-wrap{margin-bottom:24px}
+.pd-actions{display:flex;gap:12px;margin-top:20px}
+.pd-btn-outline{flex:1;padding:14px;border:1px solid #111;background:transparent;border-radius:10px;font-weight:700;color:#111;display:flex;align-items:center;justify-content:center;gap:8px}
+.pd-btn-solid{flex:1;padding:14px;border:0;background:#0da45e;border-radius:10px;font-weight:700;color:#fff}
+.pd-btn-outline:hover{background:#f4f4f4}.pd-btn-solid:hover{background:#087b4b}
+.pd-desc{margin-top:30px;font-size:15px;color:#444;line-height:1.7;border-top:1px solid #eee;padding-top:20px}
+.pd-side-box{background:#eaf8f0;padding:20px;border-radius:14px;font-size:13.5px;color:#222;border:1px solid #c9e8d7}
+.pd-side-box h4{margin:0 0 10px;font-size:15px;color:#064f3e;display:flex;align-items:center;gap:8px}
+
 .toast{position:fixed;right:25px;bottom:25px;background:#151515;color:#fff;padding:13px 18px;border-radius:10px;opacity:0;transform:translateY(15px);pointer-events:none;transition:.25s;z-index:200}
 .toast.show{opacity:1;transform:none}
 .login-form,.admin-grid{display:grid;gap:12px}.login-form input,.admin-grid input,.admin-grid select{padding:12px;border:1px solid #ddd;border-radius:8px}
 .google-btn{width:100%;border:1px solid #ddd;background:#fff;color:#222;padding:12px;border-radius:8px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px}.google-btn:hover{background:#f7f7f7}.or{display:flex;align-items:center;gap:10px;margin:14px 0;color:#999}.or:before,.or:after{content:"";height:1px;background:#e5e5e5;flex:1}
 .login-form button,.admin-btn{border:0;background:var(--orange);color:#fff;padding:12px;border-radius:8px;font-weight:700}
-.admin-preview{width:100%;height:220px;border:1px dashed #ccc;border-radius:12px;object-fit:cover;background:#f7f7f7}
 .admin-toolbar{display:flex;gap:10px;flex-wrap:wrap}.admin-toolbar>*{flex:1;min-width:130px}
 .status{padding:10px;border-radius:8px;background:#f3f7f5;color:#276449;font-size:13px}
 footer{background:#171717;color:#ddd;padding:35px 4%;text-align:center}
 footer button{border:0;background:none;color:#aaa;text-decoration:underline}
 
+/* Admin Panel CSS */
 .admin-screen{display:none;position:fixed;inset:0;background:linear-gradient(135deg,#f7fbf9,#fff7ef);z-index:1000;overflow:auto}
 .admin-screen.show{display:block}
 .admin-top{height:76px;background:#fff;border-bottom:1px solid #e8ecea;display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:5;box-shadow:0 2px 12px #00000008}
 .admin-brand{display:flex;align-items:center;gap:12px;font-weight:800;color:var(--orange);font-size:20px}.admin-brand img{width:48px;height:48px;object-fit:contain}
 .admin-back{border:1px solid #ddd;background:#fff;padding:10px 16px;border-radius:10px;font-weight:700}
-.admin-wrap{width:min(1200px,94%);margin:28px auto 60px}
+.admin-wrap{width:min(1300px,96%);margin:28px auto 60px}
 .admin-title{margin-bottom:22px}.admin-title h1{margin:0 0 6px;font-size:30px}.admin-title p{margin:0;color:#68736f}
-.admin-layout{display:grid;grid-template-columns:280px 1fr;gap:22px}
+.admin-layout{display:grid;grid-template-columns:260px 1fr;gap:22px}
 .admin-side,.admin-card{background:#fff;border:1px solid #e4ebe7;border-radius:18px;box-shadow:0 8px 28px #123d2a0a}
 .admin-side{padding:18px;height:max-content}.admin-side-item{padding:12px 14px;border-radius:10px;font-weight:700;color:#43504a;background:#f5f8f6;margin-bottom:8px}.admin-side-item.active{background:#eaf8f0;color:#087b4b}
 .admin-card{padding:24px}.admin-card h2{margin:0 0 6px}.admin-card p.help{color:#68736f;margin-top:0}.admin-preview-large{width:100%;height:320px;object-fit:cover;border-radius:14px;background:#f5f7f6;border:1px solid #e2e8e5;margin:14px 0}
@@ -86,11 +105,26 @@ footer button{border:0;background:none;color:#aaa;text-decoration:underline}
 .admin-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}.admin-actions button{border:0;padding:12px 16px;border-radius:9px;font-weight:800}.btn-orange{background:var(--orange);color:#fff}.btn-green{background:#087b4b;color:#fff}.btn-gray{background:#eef1ef;color:#33403a}.admin-status{margin-top:16px;padding:12px 14px;border-radius:10px;background:#f1f8f4;color:#276449;font-size:13px;line-height:1.5}
 .admin-login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}.admin-login-card{width:min(430px,94%);background:#fff;border:1px solid #e4ebe7;border-radius:22px;padding:32px;box-shadow:0 18px 60px #00000012;text-align:center}.admin-login-card img{width:90px;height:90px;object-fit:contain}.admin-login-card h2{margin:12px 0 6px}.admin-login-card p{color:#68736f}.admin-login-card input{width:100%;padding:13px;border:1px solid #d9e0dd;border-radius:10px;margin:10px 0;outline:0}.admin-login-card button{width:100%;border:0;background:var(--orange);color:#fff;padding:13px;border-radius:10px;font-weight:800}
 
-.admin-content{min-width:0}.admin-tab{display:none}.admin-tab.active{display:block}.admin-side-item{width:100%;border:0;text-align:left;cursor:pointer}.admin-image-editor{display:grid;grid-template-columns:220px 1fr;gap:22px;align-items:center}.admin-preview-square{width:200px;height:200px;object-fit:contain;border:1px solid #e2e8e5;border-radius:14px;background:#f7f8f7}.firebase-check-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.firebase-check-grid>div{padding:16px;background:#f5f8f6;border-radius:12px;display:flex;flex-direction:column;gap:6px}.firebase-check-grid span{color:#68736f}.admin-product-row{display:grid;grid-template-columns:70px 1.5fr .7fr .7fr 1fr 120px;gap:8px;align-items:center;padding:12px 0;border-bottom:1px solid #edf0ee}.admin-product-row input,.admin-product-row select{padding:9px;border:1px solid #d9e0dd;border-radius:8px;width:100%}.admin-product-img{width:60px;height:60px;border-radius:10px;object-fit:cover;background:#f3f5f4}.admin-category-row{display:grid;grid-template-columns:55px minmax(160px,1fr) minmax(160px,1fr) 180px 90px;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid #edf0ee}.admin-category-row input{padding:10px;border:1px solid #d9e0dd;border-radius:8px;width:100%}
-@media(max-width:760px){.admin-layout{grid-template-columns:1fr}.admin-side{display:flex;gap:7px;overflow:auto}.admin-side-item{min-width:170px}.admin-form-grid{grid-template-columns:1fr}.admin-image-editor{grid-template-columns:1fr}.firebase-check-grid{grid-template-columns:1fr}.admin-product-row{grid-template-columns:55px 1fr 1fr}.admin-product-row>*:nth-child(n+4){grid-column:span 1}.admin-category-row{grid-template-columns:45px 1fr 1fr}.admin-preview-square{width:160px;height:160px}}
+.admin-content{min-width:0;overflow:auto;padding-bottom:10px}.admin-tab{display:none}.admin-tab.active{display:block}.admin-side-item{width:100%;border:0;text-align:left;cursor:pointer}.admin-image-editor{display:grid;grid-template-columns:220px 1fr;gap:22px;align-items:center}.admin-preview-square{width:200px;height:200px;object-fit:contain;border:1px solid #e2e8e5;border-radius:14px;background:#f7f8f7}.firebase-check-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.firebase-check-grid>div{padding:16px;background:#f5f8f6;border-radius:12px;display:flex;flex-direction:column;gap:6px}.firebase-check-grid span{color:#68736f}
 
-@media(max-width:1050px){.header-main{flex-wrap:wrap;padding:10px 0}.logo{width:auto}.search-wrap{order:3;max-width:none;flex-basis:100%}.actions{gap:8px}.categories{grid-template-columns:repeat(5,1fr)}.products{grid-template-columns:repeat(3,1fr)}}
-@media(max-width:760px){.topinner{font-size:10px}.topitem:nth-child(3),.topitem:nth-child(4){display:none}.hero{height:300px}.section{padding:18px}.categories{grid-template-columns:repeat(3,1fr)}.products{grid-template-columns:repeat(2,1fr)}.actions .action span:last-child{display:none}.actions{margin-left:0}}
+/* Updated Admin Product Grid for Detailed Fields */
+.admin-product-row{display:grid;grid-template-columns:50px 1.5fr 80px 80px 1fr 70px 1.5fr 110px 80px;gap:8px;align-items:center;padding:12px 0;border-bottom:1px solid #edf0ee}
+.admin-product-row input,.admin-product-row select{padding:9px;border:1px solid #d9e0dd;border-radius:8px;width:100%;font-size:13px}
+.admin-product-img{width:46px;height:46px;border-radius:8px;object-fit:cover;background:#f3f5f4;display:flex;align-items:center;justify-content:center;font-size:24px}
+
+.admin-category-row{display:grid;grid-template-columns:55px minmax(160px,1fr) minmax(160px,1fr) 180px 90px;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid #edf0ee}.admin-category-row input{padding:10px;border:1px solid #d9e0dd;border-radius:8px;width:100%}
+
+@media(max-width:1050px){
+  .header-main{flex-wrap:wrap;padding:10px 0}.logo{width:auto}.search-wrap{order:3;max-width:none;flex-basis:100%}.actions{gap:8px}.categories{grid-template-columns:repeat(5,1fr)}.products{grid-template-columns:repeat(3,1fr)}
+  .pd-layout{grid-template-columns:1fr 1fr} .pd-side-col{grid-column:1 / -1}
+  .admin-product-row{grid-template-columns:1fr;gap:6px;background:#f9f9f9;padding:15px;border-radius:12px;margin-bottom:10px}
+}
+@media(max-width:760px){
+  .topinner{font-size:10px}.topitem:nth-child(3),.topitem:nth-child(4){display:none}.hero{height:300px}.section{padding:18px}.categories{grid-template-columns:repeat(3,1fr)}.products{grid-template-columns:repeat(2,1fr)}.actions .action span:last-child{display:none}.actions{margin-left:0}
+  .admin-layout{grid-template-columns:1fr}.admin-side{display:flex;gap:7px;overflow:auto}.admin-side-item{min-width:170px}.admin-form-grid{grid-template-columns:1fr}.admin-image-editor{grid-template-columns:1fr}.firebase-check-grid{grid-template-columns:1fr}
+  .admin-category-row{grid-template-columns:45px 1fr 1fr}.admin-preview-square{width:160px;height:160px}
+  .pd-layout{grid-template-columns:1fr}
+}
 @media(max-width:480px){.logo{font-size:17px}.logo img{width:52px;height:52px}.products{grid-template-columns:1fr}.categories{grid-template-columns:repeat(2,1fr)}.hero{height:250px}.section h2{font-size:21px}}
 </style>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
@@ -144,6 +178,57 @@ footer button{border:0;background:none;color:#aaa;text-decoration:underline}
 </main>
 
 <footer><span id="footerText">© 2026 Cheezay Dikhao — Online Shopping in Pakistan</span></footer>
+
+<!-- Product Detail Modal (Markaz Style) -->
+<div id="productDetailModal" class="overlay" onclick="closeOnBackdrop(event,'productDetailModal')">
+  <div class="pd-modal">
+    <button class="close" onclick="closeModal('productDetailModal')">×</button>
+    <div class="pd-layout">
+      <div class="pd-image-col" id="pdImgBox">
+        <!-- Image injected here -->
+      </div>
+      <div class="pd-info-col">
+        <h1 id="pdTitle">Product Title</h1>
+        <div class="pd-stock">📦 <span id="pdStockText">41 in stock</span></div>
+        <div class="pd-price-wrap">
+           <span class="pd-price" id="pdPrice">PKR 0</span>
+           <span class="pd-old" id="pdOldPrice"></span>
+        </div>
+        
+        <div class="pd-qty-wrap">
+          <label style="display:block;margin-bottom:8px;font-size:13px;font-weight:700">Quantity</label>
+          <div class="qty" style="margin-left:0;width:max-content;border-color:#ccc">
+             <button onclick="modPdQty(-1)">−</button>
+             <span id="pdQtyVal">1</span>
+             <button onclick="modPdQty(1)">+</button>
+          </div>
+        </div>
+
+        <div class="pd-actions">
+          <button class="pd-btn-outline" onclick="addToCartFromDetail()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg> 
+            Add to bag
+          </button>
+          <button class="pd-btn-solid" onclick="buyNowFromDetail()">Buy Now</button>
+        </div>
+
+        <div class="pd-desc" id="pdDescText">
+          No description available.
+        </div>
+      </div>
+      
+      <div class="pd-side-col">
+        <div class="pd-side-box">
+          <h4 style="display:flex;align-items:center;gap:6px">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#064f3e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+            Delivery in 3-5 days | Charges PKR 165
+          </h4>
+          <p style="color:#555;margin:10px 0 0">Aik he Catalog ke multiple items agar aap "Add to Cart" kar ke aik he address per order karein ge tou un multiple items per aik he delivery charges lage ge.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <div id="adminScreen" class="admin-screen">
   <div id="adminLoginScreen" class="admin-login-screen">
@@ -201,7 +286,6 @@ footer button{border:0;background:none;color:#aaa;text-decoration:underline}
               <div class="admin-form-grid" style="margin-top:14px"><div class="admin-field"><label>Resize mode</label><select id="fitModeFull"><option value="cover">Cover / Crop</option><option value="contain">Fit / No Crop</option></select></div></div>
               <div class="admin-actions"><button class="btn-orange" onclick="resizeHeroFull()">Resize Image</button><button class="btn-green" onclick="saveHeroToFirebaseFull()">Save Hero</button><button class="btn-gray" onclick="loadHeroFromFirebaseFull()">Reload</button></div><div id="adminInfoFull" class="admin-status">Ready.</div>
             </div>
-            <div class="admin-card" style="margin-top:18px"><h2>Image Rules</h2><p class="help">Images Firebase Realtime Database mein compressed data ke tor par save hoti hain. Behtar result ke liye resize aur quality kam karke save karein.</p></div>
           </div>
 
           <div id="adminTab-categories" class="admin-tab">
@@ -215,7 +299,10 @@ footer button{border:0;background:none;color:#aaa;text-decoration:underline}
           </div>
 
           <div id="adminTab-products" class="admin-tab">
-            <div class="admin-card"><h2>Products</h2><p class="help">Product name, price, old price, category aur product image manage karein.</p><div id="productAdminList"></div><div class="admin-actions"><button class="btn-green" onclick="saveProductsAdmin()">Save Products</button><button class="btn-orange" onclick="addAdminProduct()">+ Add Product</button></div><div id="productStatus" class="admin-status">Products loaded.</div></div>
+            <div class="admin-card"><h2>Products (Detail Page Support)</h2><p class="help">Har product ka Name, Price, Category, Stock aur Description likhein. Detail page par show hoga.</p>
+            <div id="productAdminList"></div>
+            <div class="admin-actions"><button class="btn-green" onclick="saveProductsAdmin()">Save Products</button><button class="btn-orange" onclick="addAdminProduct()">+ Add Product</button></div>
+            <div id="productStatus" class="admin-status">Products loaded.</div></div>
           </div>
 
           <div id="adminTab-firebase" class="admin-tab">
@@ -269,31 +356,120 @@ try{
 }catch(e){console.error(e);firebaseReady=false;window.firebaseInitError=e}
 
 const products=[
-{id:1,name:"Premium Ladies Handbag",price:2499,old:2999,cat:"Women Corner",icon:"👜"},
-{id:2,name:"Wireless Bluetooth Earbuds",price:1599,old:2199,cat:"Tech & Tools",icon:"🎧"},
-{id:3,name:"Kids Summer Dress Set",price:1899,old:2399,cat:"Kids & Mother",icon:"👗"},
-{id:4,name:"Classic Men's Polo Shirt",price:1299,old:1699,cat:"Men's Fashion",icon:"👕"},
-{id:5,name:"Makeup Beauty Kit",price:2199,old:2799,cat:"Beauty & Care",icon:"💄"},
-{id:6,name:"Elegant Jewellery Set",price:999,old:1399,cat:"Women Corner",icon:"💍"},
-{id:7,name:"Soft Comfort Bedding Set",price:3299,old:3999,cat:"Home & Living",icon:"🛏️"},
-{id:8,name:"Islamic Gift & Tasbeeh Set",price:899,old:1199,cat:"Urdu Bazaar",icon:"📿"},
-{id:9,name:"Smart LED Desk Lamp",price:1799,old:2299,cat:"Tech & Tools",icon:"💡"},
-{id:10,name:"Fashion Sunglasses",price:799,old:1099,cat:"Beauty & Care",icon:"🕶️"},
-{id:11,name:"Festive Women's Suit",price:2899,old:3499,cat:"Women Corner",icon:"🥻"},
-{id:12,name:"Remote Control Flying Toy",price:4029,old:4699,cat:"Kids & Mother",icon:"✈️"}
+{id:1,name:"Premium Ladies Handbag",price:2499,old:2999,cat:"Women Corner",icon:"👜",stock:25,desc:"Best quality ladies handbag for daily use and parties."},
+{id:2,name:"Wireless Bluetooth Earbuds",price:1599,old:2199,cat:"Tech & Tools",icon:"🎧",stock:50,desc:"High bass wireless earbuds with active noise cancellation."},
+{id:3,name:"Kids Summer Dress Set",price:1899,old:2399,cat:"Kids & Mother",icon:"👗",stock:12,desc:"Comfortable summer clothes for your little ones."},
+{id:4,name:"Classic Men's Polo Shirt",price:1299,old:1699,cat:"Men's Fashion",icon:"👕",stock:40,desc:"100% cotton polo shirt. Multiple colors available."},
+{id:5,name:"Makeup Beauty Kit",price:2199,old:2799,cat:"Beauty & Care",icon:"💄",stock:8,desc:"Complete makeup beauty kit for professional look."},
+{id:6,name:"Elegant Jewellery Set",price:999,old:1399,cat:"Women Corner",icon:"💍",stock:15,desc:"Beautiful artificial jewellery set for festive season."}
 ];
 let cart=JSON.parse(localStorage.getItem("cd_cart")||"[]"),wishlist=JSON.parse(localStorage.getItem("cd_wishlist")||"[]"),orders=JSON.parse(localStorage.getItem("cd_orders")||"[]");
+
 function money(n){return "PKR "+Number(n).toLocaleString("en-PK")}
 function save(){localStorage.setItem("cd_cart",JSON.stringify(cart));localStorage.setItem("cd_wishlist",JSON.stringify(wishlist));localStorage.setItem("cd_orders",JSON.stringify(orders));updateBadge()}
 function updateBadge(){document.getElementById("cartBadge").textContent=cart.reduce((s,x)=>s+x.qty,0)}
-function renderProducts(list){
- document.getElementById("products").innerHTML=list.length?list.map(p=>`<article class="card"><div class="card-img">${p.image?`<img src="${p.image}" alt="${escapeHtml(p.name)}" style="width:100%;height:100%;object-fit:cover">`:p.icon}</div><div class="card-body"><h3>${p.name}</h3><div><span class="price">${money(p.price)}</span><span class="old">${money(p.old)}</span></div><div class="card-actions"><button class="add" onclick="addToCart(${p.id})">Add to Cart</button><button class="heart ${wishlist.includes(p.id)?"active":""}" onclick="toggleWish(${p.id})">${wishlist.includes(p.id)?"♥":"♡"}</button></div></div></article>`).join(""):'<div class="empty" style="grid-column:1/-1">No products found.</div>';
+
+// Detail Page Logic
+let currentPdId = null;
+let currentPdQty = 1;
+
+function openProductDetail(id) {
+  const p = products.find(x => x.id === id);
+  if(!p) return;
+  
+  currentPdId = p.id;
+  currentPdQty = 1;
+  
+  document.getElementById("pdTitle").textContent = p.name;
+  document.getElementById("pdPrice").textContent = money(p.price);
+  document.getElementById("pdOldPrice").textContent = p.old ? money(p.old) : "";
+  document.getElementById("pdStockText").textContent = (p.stock || 10) + " in stock";
+  document.getElementById("pdDescText").textContent = p.desc || "No description available for this product.";
+  document.getElementById("pdQtyVal").textContent = currentPdQty;
+  
+  const imgBox = document.getElementById("pdImgBox");
+  if(p.image){
+    imgBox.innerHTML = `<img src="${p.image}" alt="${escapeHtml(p.name)}">`;
+  } else {
+    imgBox.innerHTML = p.icon || '📦';
+  }
+  
+  openModal('productDetailModal');
 }
+
+function modPdQty(d) {
+  currentPdQty += d;
+  if(currentPdQty < 1) currentPdQty = 1;
+  const p = products.find(x => x.id === currentPdId);
+  const stock = p ? (p.stock || 10) : 10;
+  if(currentPdQty > stock) currentPdQty = stock; // Cannot order more than stock
+  document.getElementById("pdQtyVal").textContent = currentPdQty;
+}
+
+function addToCartFromDetail() {
+  if(!currentPdId) return;
+  const p = products.find(x => x.id === currentPdId);
+  const i = cart.find(x => x.id === currentPdId);
+  if(i) {
+    i.qty += currentPdQty;
+  } else {
+    cart.push({id: currentPdId, qty: currentPdQty});
+  }
+  save();
+  toast(p.name + " cart mein add ho gaya!");
+  closeModal('productDetailModal');
+}
+
+function buyNowFromDetail() {
+  addToCartFromDetail();
+  openCart();
+}
+
+// Updated Render Products
+function renderProducts(list){
+ document.getElementById("products").innerHTML=list.length?list.map(p=>`<article class="card">
+   <div class="card-img" onclick="openProductDetail(${p.id})">${p.image?`<img src="${p.image}" alt="${escapeHtml(p.name)}" style="width:100%;height:100%;object-fit:cover">`:p.icon}</div>
+   <div class="card-body">
+     <h3 onclick="openProductDetail(${p.id})">${p.name}</h3>
+     <div><span class="price">${money(p.price)}</span><span class="old">${p.old ? money(p.old) : ""}</span></div>
+     <div class="card-actions">
+       <button class="add" onclick="openProductDetail(${p.id})">Buy</button>
+       <button class="heart ${wishlist.includes(p.id)?"active":""}" onclick="toggleWish(${p.id})">${wishlist.includes(p.id)?"♥":"♡"}</button>
+     </div>
+   </div>
+ </article>`).join(""):'<div class="empty" style="grid-column:1/-1">No products found.</div>';
+}
+
 function filterCategory(cat,btn){if(btn){document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("active"));btn.classList.add("active")}const list=cat==="All"?products:products.filter(p=>p.cat===cat);renderProducts(list);document.getElementById("productTitle").textContent=cat==="All"?"Featured Products":cat}
 function searchProducts(e){e.preventDefault();const q=document.getElementById("searchInput").value.trim().toLowerCase();renderProducts(q?products.filter(p=>(p.name+" "+p.cat).toLowerCase().includes(q)):products);document.getElementById("productTitle").textContent=q?"Search results":"Featured Products"}
-function addToCart(id){const p=products.find(x=>x.id===id),i=cart.find(x=>x.id===id);i?i.qty++:cart.push({id,qty:1});save();toast(p.name+" cart mein add ho gaya")}
+
+function addToCart(id){
+  const p=products.find(x=>x.id===id),i=cart.find(x=>x.id===id);
+  i?i.qty++:cart.push({id,qty:1});save();toast(p.name+" cart mein add ho gaya")
+}
 function changeQty(id,d){const i=cart.find(x=>x.id===id);if(!i)return;i.qty+=d;if(i.qty<=0)cart=cart.filter(x=>x.id!==id);save();renderCart()}
-function renderCart(){const b=document.getElementById("cartItems");if(!cart.length){b.innerHTML='<div class="empty">Your cart is empty.</div>';document.getElementById("cartTotal").textContent="PKR 0";return}let t=0;b.innerHTML=cart.map(i=>{const p=products.find(x=>x.id===i.id);t+=p.price*i.qty;return `<div class="cart-row"><div class="cart-icon">${p.icon}</div><div><b>${p.name}</b><div>${money(p.price)}</div></div><div class="qty"><button onclick="changeQty(${p.id},-1)">−</button><span>${i.qty}</span><button onclick="changeQty(${p.id},1)">+</button></div></div>`}).join("");document.getElementById("cartTotal").textContent=money(t)}
+
+// CART BUG FIX HERE
+function renderCart(){
+ const b=document.getElementById("cartItems");
+ 
+ // Purane invalid products ko cart se remove karne ka filter
+ let initialLength = cart.length;
+ cart = cart.filter(i => products.some(x => x.id === i.id));
+ if(cart.length !== initialLength) save();
+
+ if(!cart.length){b.innerHTML='<div class="empty">Your cart is empty.</div>';document.getElementById("cartTotal").textContent="PKR 0";return}
+ 
+ let t=0;
+ b.innerHTML=cart.map(i=>{
+   const p=products.find(x=>x.id===i.id);
+   t+=p.price*i.qty;
+   const imgHtml = p.image ? `<img src="${p.image}" style="width:100%;height:100%;object-fit:cover;border-radius:10px">` : p.icon;
+   return `<div class="cart-row"><div class="cart-icon">${imgHtml}</div><div><b>${p.name}</b><div>${money(p.price)}</div></div><div class="qty"><button onclick="changeQty(${p.id},-1)">−</button><span>${i.qty}</span><button onclick="changeQty(${p.id},1)">+</button></div></div>`
+ }).join("");
+ document.getElementById("cartTotal").textContent=money(t);
+}
+
 function openCart(){renderCart();openModal("cartModal")}
 function toggleWish(id){wishlist.includes(id)?wishlist=wishlist.filter(x=>x!==id):wishlist.push(id);save();renderProducts(products);toast(wishlist.includes(id)?"Wishlist mein add ho gaya":"Wishlist se remove ho gaya")}
 function showWishlist(){const b=document.getElementById("wishlistContent"),list=products.filter(p=>wishlist.includes(p.id));b.innerHTML=list.length?list.map(p=>`<div class="cart-row"><div class="cart-icon">${p.icon}</div><div><b>${p.name}</b><div>${money(p.price)}</div></div><button class="add" style="max-width:130px" onclick="addToCart(${p.id})">Add to Cart</button></div>`).join(""):'<div class="empty">Your wishlist is empty.</div>';openModal("wishlistModal")}
@@ -357,7 +533,9 @@ function logoutUser(){
  if(!auth){openLogin();return}
  auth.signOut().then(()=>{updateAccountUI(null);toast("Logout ho gaya")}).catch(e=>toast(e.message));
 }
-function openModal(id){document.getElementById(id).classList.add("show")}function closeModal(id){document.getElementById(id).classList.remove("show")}function closeOnBackdrop(e,id){if(e.target.id===id)closeModal(id)}
+function openModal(id){document.getElementById(id).classList.add("show")}
+function closeModal(id){document.getElementById(id).classList.remove("show")}
+function closeOnBackdrop(e,id){if(e.target.id===id)closeModal(id)}
 function goHome(){window.scrollTo({top:0,behavior:"smooth"});renderProducts(products)}
 function toast(m){const t=document.getElementById("toast");t.textContent=m;t.classList.add("show");clearTimeout(window.__tt);window.__tt=setTimeout(()=>t.classList.remove("show"),2200)}
 function showHeroPlaceholder(){document.getElementById("heroImage").style.display="none";document.getElementById("heroPlaceholder").style.display="flex"}
@@ -412,29 +590,6 @@ function loadHeroFromFirebaseFull(){
  db.ref("siteSettings/heroImage").once("value").then(s=>{const v=s.val();if(v&&v.data){applyHero(v.data);originalHeroData=v.data;document.getElementById("adminPreviewFull").src=v.data;document.getElementById("adminInfoFull").textContent="Firebase se latest hero image load ho gayi."}else document.getElementById("adminInfoFull").textContent="Firebase mein hero image abhi save nahi hai."}).catch(e=>document.getElementById("adminInfoFull").textContent="Firebase error: "+e.message)
 }
 
-function previewHeroFile(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{originalHeroData=r.result;document.getElementById("adminPreview").src=r.result};r.readAsDataURL(f)}
-function resizeHero(){
- if(!originalHeroData){toast("Pehle image upload karein");return}
- const W=Math.max(320,Math.min(3000,Number(document.getElementById("resizeW").value)||1600)),H=Math.max(120,Math.min(1500,Number(document.getElementById("resizeH").value)||390)),Q=Math.max(.3,Math.min(1,Number(document.getElementById("resizeQ").value)||.85)),mode=document.getElementById("fitMode").value;
- const im=new Image();im.onload=()=>{
-  const c=document.createElement("canvas");c.width=W;c.height=H;const x=c.getContext("2d");
-  x.fillStyle="#064f3e";x.fillRect(0,0,W,H);
-  const scale=mode==="cover"?Math.max(W/im.width,H/im.height):Math.min(W/im.width,H/im.height);
-  const nw=im.width*scale,nh=im.height*scale;x.drawImage(im,(W-nw)/2,(H-nh)/2,nw,nh);
-  originalHeroData=c.toDataURL("image/jpeg",Q);document.getElementById("adminPreview").src=originalHeroData;
-  document.getElementById("adminInfo").textContent=`Resized: ${W} × ${H}px. Ready to save to Firebase.`;
- };im.src=originalHeroData;
-}
-function saveHeroToFirebase(){
- if(!originalHeroData){toast("Image upload/resize karein");return}
- const size=Math.round(originalHeroData.length/1024);
- if(size>5000){toast("Image bohat bari hai. Quality ya size kam karein.");return}
- db.ref("siteSettings/heroImage").set({data:originalHeroData,updatedAt:Date.now(),updatedBy:"admin-password"}).then(()=>{applyHero(originalHeroData);toast("Hero Firebase mein save ho gaya")}).catch(err=>{document.getElementById("adminInfo").textContent=err.message})
-}
-function loadHeroFromFirebase(){
- if(!firebaseReady)return;
- db.ref("siteSettings/heroImage").once("value").then(s=>{const v=s.val();if(v&&v.data){applyHero(v.data);originalHeroData=v.data;document.getElementById("adminPreview").src=v.data;document.getElementById("adminInfo").textContent="Firebase se hero load ho gaya."}else document.getElementById("adminInfo").textContent="Firebase mein hero image abhi save nahi hai."}).catch(e=>document.getElementById("adminInfo").textContent=e.message)
-}
 function applyHero(data){const img=document.getElementById("heroImage");img.src=data;img.style.display="block";document.getElementById("heroPlaceholder").style.display="none"}
 if(firebaseReady){
  db.ref("siteSettings/heroImage").once("value").then(s=>{const v=s.val();if(v&&v.data)applyHero(v.data)}).catch(console.warn);
@@ -624,11 +779,44 @@ function applyCategories(list){
  }
 }
 
-function renderProductAdmin(){const box=document.getElementById('productAdminList');box.innerHTML=products.map((p,i)=>`<div class="admin-product-row"><div class="admin-product-img">${p.image?`<img src="${p.image}" style="width:100%;height:100%;object-fit:cover;border-radius:10px">`:p.icon||'📦'}</div><input data-pi="${i}" data-k="name" value="${escapeHtml(p.name)}"><input data-pi="${i}" data-k="price" type="number" value="${p.price}"><input data-pi="${i}" data-k="old" type="number" value="${p.old||''}"><select data-pi="${i}" data-k="cat">${categoriesAdmin.map(c=>`<option ${c.cat===p.cat?'selected':''}>${escapeHtml(c.cat)}</option>`).join('')}</select><input type="file" accept="image/*" onchange="previewProductImage(event,${i})"><button class="btn-gray" onclick="removeAdminProduct(${i})">Remove</button></div>`).join('')}
+// Updated Admin Product Render for Description and Stock
+function renderProductAdmin(){
+  const box=document.getElementById('productAdminList');
+  box.innerHTML=`<div style="display:grid;grid-template-columns:50px 1.5fr 80px 80px 1fr 70px 1.5fr 110px 80px;gap:8px;font-weight:700;padding:10px 0;color:#445;font-size:12px;">
+    <div>Img</div><div>Name</div><div>Price</div><div>Old</div><div>Category</div><div>Stock</div><div>Desc</div><div>Upload</div><div>Action</div></div>` +
+  products.map((p,i)=>`<div class="admin-product-row">
+    <div class="admin-product-img">${p.image?`<img src="${p.image}" style="width:100%;height:100%;object-fit:cover;border-radius:8px">`:p.icon||'📦'}</div>
+    <input data-pi="${i}" data-k="name" value="${escapeHtml(p.name)}" placeholder="Name">
+    <input data-pi="${i}" data-k="price" type="number" value="${p.price}" placeholder="Price">
+    <input data-pi="${i}" data-k="old" type="number" value="${p.old||''}" placeholder="Old Price">
+    <select data-pi="${i}" data-k="cat">${categoriesAdmin.map(c=>`<option ${c.cat===p.cat?'selected':''}>${escapeHtml(c.cat)}</option>`).join('')}</select>
+    <input data-pi="${i}" data-k="stock" type="number" value="${p.stock||10}" placeholder="Stock">
+    <input data-pi="${i}" data-k="desc" value="${escapeHtml(p.desc||'')}" placeholder="Description">
+    <input type="file" accept="image/*" onchange="previewProductImage(event,${i})" style="font-size:11px;padding:4px">
+    <button class="btn-gray" onclick="removeAdminProduct(${i})">Remove</button>
+  </div>`).join('');
+}
+
 function previewProductImage(e,i){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{resizeDataUrl(r.result,600,600,.82,'contain',out=>{products[i].image=out;products[i].icon='';renderProductAdmin()})};r.readAsDataURL(f)}
-function addAdminProduct(){products.push({id:Date.now(),name:'New Product',price:0,old:0,cat:categoriesAdmin[0]?.cat||'Beauty & Care',icon:'📦'});renderProductAdmin()}
+function addAdminProduct(){products.push({id:Date.now(),name:'New Product',price:0,old:0,cat:categoriesAdmin[0]?.cat||'Beauty & Care',icon:'📦',stock:10,desc:''});renderProductAdmin()}
 function removeAdminProduct(i){products.splice(i,1);renderProductAdmin()}
-function saveProductsAdmin(){if(!firebaseReady){toast('Firebase connected nahi hai');return}document.querySelectorAll('#productAdminList [data-pi]').forEach(el=>{const i=Number(el.dataset.pi),k=el.dataset.k;products[i][k]=k==='price'||k==='old'?Number(el.value):el.value});db.ref('siteSettings/products').set({items:products,updatedAt:Date.now()}).then(()=>{renderProducts(products);document.getElementById('productStatus').textContent='Products Firebase mein save ho gaye.'}).catch(e=>document.getElementById('productStatus').textContent=e.message)}
+function saveProductsAdmin(){
+  if(!firebaseReady){toast('Firebase connected nahi hai');return}
+  document.querySelectorAll('#productAdminList [data-pi]').forEach(el=>{
+    const i=Number(el.dataset.pi),k=el.dataset.k;
+    if(k==='price'||k==='old'||k==='stock'){
+      products[i][k]=Number(el.value);
+    }else{
+      products[i][k]=el.value;
+    }
+  });
+  db.ref('siteSettings/products').set({items:products,updatedAt:Date.now()}).then(()=>{
+    renderProducts(products);
+    document.getElementById('productStatus').textContent='Products Firebase mein save ho gaye.';
+    toast("Products save ho gaye");
+  }).catch(e=>document.getElementById('productStatus').textContent=e.message)
+}
+
 function testFirebaseConnection(){if(!firebaseReady){document.getElementById('firebaseAdminStatus').textContent='Firebase initialize nahi hua.';return}db.ref('siteSettings/connectionTest').set({time:Date.now()}).then(()=>{document.getElementById('firebaseDbStatus').textContent='Connected & writable';document.getElementById('firebaseAdminStatus').textContent='Firebase Realtime Database successfully test ho gaya.'}).catch(e=>{document.getElementById('firebaseDbStatus').textContent='Write permission error';document.getElementById('firebaseAdminStatus').textContent=String(e?.message||e).includes('PERMISSION_DENIED')?'Firebase Rules write ko block kar rahe hain. Is ZIP ki database.rules.json ko Firebase Console → Realtime Database → Rules mein publish karein.':'Firebase error: '+(e?.message||e)})}
 function escapeHtml(v){return String(v??'').replace(/[&<>'"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[m]))}
 
