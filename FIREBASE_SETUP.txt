@@ -1,5 +1,0 @@
-Firebase Realtime Database Setup for Cheezay Dikhao:
-Project: school-c9633
-Database URL: https://school-c9633-default-rtdb.asia-southeast1.firebasedatabase.app
-Admin Password: nabel3457
-(Click logo 5 times to open Admin Panel)
