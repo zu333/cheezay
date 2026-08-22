@@ -62,7 +62,7 @@ main{width:min(1400px,94%);margin:20px auto 60px}
 .cart-icon{width:60px;height:60px;background:#f7f7f7;border-radius:10px;display:grid;place-items:center;font-size:30px}
 .qty{display:flex;border:1px solid #ddd;border-radius:8px;overflow:hidden;margin-left:auto;background:#fff}.qty button{border:0;background:#fafafa;width:32px}.qty span{width:35px;text-align:center;padding:7px;font-weight:700}
 .total{display:flex;justify-content:space-between;font-size:20px;font-weight:800;padding-top:18px}
-.checkout{width:100%;margin-top:18px;border:0;background:var(--green2);color:#fff;padding:14px;border-radius:10px;font-weight:800}
+.checkout{width:100%;margin-top:15px;border:0;background:var(--green2);color:#fff;padding:14px;border-radius:10px;font-weight:800}
 
 /* WhatsApp Floating Button */
 .whatsapp-float{position:fixed;width:55px;height:55px;bottom:25px;left:25px;background-color:#25d366;color:#FFF;border-radius:50px;text-align:center;box-shadow:0px 4px 10px rgba(0,0,0,0.15);z-index:100;display:flex;align-items:center;justify-content:center;transition:.3s}
@@ -267,10 +267,12 @@ footer button{border:0;background:none;color:#aaa;text-decoration:underline}
         </aside>
         <section class="admin-content">
           <div id="adminTab-general" class="admin-tab active">
-            <div class="admin-card"><h2>General Website Settings</h2><p class="help">Website ka naam, WhatsApp, top bar aur footer text yahan se change karein.</p>
+            <div class="admin-card"><h2>General Website Settings</h2><p class="help">Website ka naam, WhatsApp, Easypaisa aur baqi settings yahan se change karein.</p>
               <div class="admin-form-grid">
                 <div class="admin-field"><label>Website Name</label><input id="siteNameAdmin" value="Cheezay Dikhao"></div>
                 <div class="admin-field"><label>WhatsApp Number</label><input id="whatsappAdmin" value="923000000000" placeholder="e.g. 923001234567"></div>
+                <div class="admin-field"><label>Easypaisa Number</label><input id="epNumberAdmin" value="03001234567" placeholder="Easypaisa Number"></div>
+                <div class="admin-field"><label>Easypaisa Account Title</label><input id="epTitleAdmin" value="Cheezay Dikhao" placeholder="Account Title"></div>
                 <div class="admin-field"><label>Top Bar 1</label><input id="top1Admin" value="Lowest delivery price in Pakistan"></div>
                 <div class="admin-field"><label>Top Bar 2</label><input id="top2Admin" value="Cash on Delivery available"></div>
                 <div class="admin-field"><label>Top Bar 3</label><input id="top3Admin" value="7-day easy returns"></div>
@@ -287,7 +289,6 @@ footer button{border:0;background:none;color:#aaa;text-decoration:underline}
             </div>
           </div>
 
-          <!-- Updated Admin Tab for 728x90 Ad Banner -->
           <div id="adminTab-images" class="admin-tab">
             <div class="admin-card"><h2>Main Ad Banner (728x90)</h2><p class="help">Adsterra ya kisi aur network ka 728x90 banner yahan upload karein. GIF bhi support hogi (koi resize nahi hoga).</p>
               <input id="heroFileFull" type="file" accept="image/*" onchange="previewHeroFileFull(event)">
@@ -331,7 +332,34 @@ footer button{border:0;background:none;color:#aaa;text-decoration:underline}
   </div>
 </div>
 
-<div id="cartModal" class="overlay" onclick="closeOnBackdrop(event,'cartModal')"><div class="modal"><button class="close" onclick="closeModal('cartModal')">×</button><h2>Your Cart</h2><div id="cartItems"></div><div class="total"><span>Total</span><span id="cartTotal">PKR 0</span></div><button class="checkout" onclick="checkout()">Place Cash on Delivery Order</button></div></div>
+<div id="cartModal" class="overlay" onclick="closeOnBackdrop(event,'cartModal')">
+  <div class="modal">
+    <button class="close" onclick="closeModal('cartModal')">×</button>
+    <h2>Your Cart</h2>
+    <div id="cartItems"></div>
+    <div class="total"><span>Total</span><span id="cartTotal">PKR 0</span></div>
+    
+    <!-- Payment Section inside Cart -->
+    <div id="paymentSection" style="margin-top:20px; border-top:1px solid #eee; padding-top:20px;">
+      <label style="font-weight:700;display:block;margin-bottom:8px;font-size:14px">Payment Method</label>
+      <select id="paymentMethod" style="width:100%;padding:12px;border-radius:10px;border:1px solid #ddd;font-weight:600;font-size:14px;background:#f9f9f9;outline:0;" onchange="togglePaymentDetails()">
+        <option value="COD">🚚 Cash on Delivery (COD)</option>
+        <option value="Easypaisa">💸 Easypaisa Transfer</option>
+      </select>
+      
+      <div id="easypaisaDetails" style="display:none; background:#f4f9f6; padding:18px; border-radius:12px; margin-top:12px; border:1px solid #c9e8d7;">
+        <p style="margin:0 0 12px; font-size:13.5px;color:#222;line-height:1.5;">Please total amount is number par send karein aur apna Transaction ID (TID) neechay likhein:<br>
+          <br><b>Easypaisa Number:</b> <span id="epNumDisplay" style="color:#087b4b;font-weight:800;font-size:16px;">03001234567</span>
+          <br><b>Account Title:</b> <span id="epTitleDisplay" style="font-weight:700;">Cheezay Dikhao</span>
+        </p>
+        <input id="easypaisaTid" type="text" placeholder="Enter 11-digit Transaction ID (TID)" style="width:100%;padding:12px;border-radius:8px;border:1px solid #ddd;outline:0;">
+      </div>
+      
+      <button class="checkout" onclick="checkout()">Place Order</button>
+    </div>
+
+  </div>
+</div>
 
 <div id="loginModal" class="overlay" onclick="closeOnBackdrop(event,'loginModal')"><div class="modal">
 <button class="close" onclick="closeModal('loginModal')">×</button>
@@ -451,7 +479,13 @@ function renderCart(){
  let initialLength = cart.length;
  cart = cart.filter(i => products.some(x => x.id === i.id));
  if(cart.length !== initialLength) save();
- if(!cart.length){b.innerHTML='<div class="empty">Your cart is empty.</div>';document.getElementById("cartTotal").textContent="PKR 0";return}
+ if(!cart.length){
+    b.innerHTML='<div class="empty">Your cart is empty.</div>';
+    document.getElementById("cartTotal").textContent="PKR 0";
+    document.getElementById("paymentSection").style.display = "none";
+    return;
+ }
+ document.getElementById("paymentSection").style.display = "block";
  let t=0;
  b.innerHTML=cart.map(i=>{
    const p=products.find(x=>x.id===i.id); t+=p.price*i.qty;
@@ -464,8 +498,45 @@ function renderCart(){
 function openCart(){renderCart();openModal("cartModal")}
 function toggleWish(id){wishlist.includes(id)?wishlist=wishlist.filter(x=>x!==id):wishlist.push(id);save();renderProducts(products);toast(wishlist.includes(id)?"Wishlist mein add ho gaya":"Wishlist se remove ho gaya")}
 function showWishlist(){const b=document.getElementById("wishlistContent"),list=products.filter(p=>wishlist.includes(p.id));b.innerHTML=list.length?list.map(p=>`<div class="cart-row"><div class="cart-icon">${p.icon}</div><div><b>${p.name}</b><div>${money(p.price)}</div></div><button class="add" style="max-width:130px" onclick="addToCart(${p.id})">Add to Cart</button></div>`).join(""):'<div class="empty">Your wishlist is empty.</div>';openModal("wishlistModal")}
-function showOrders(){const b=document.getElementById("ordersContent");b.innerHTML=orders.length?orders.map((o,i)=>`<div class="cart-row"><div><b>Order #${i+1}</b><div>${o.items} items • ${money(o.total)}</div><small>${o.date}</small></div><b style="margin-left:auto">COD</b></div>`).join(""):'<div class="empty">No orders yet.</div>';openModal("ordersModal")}
-function checkout(){if(!cart.length){toast("Cart khali hai");return}let total=0,count=0;cart.forEach(i=>{const p=products.find(x=>x.id===i.id);total+=p.price*i.qty;count+=i.qty});orders.unshift({items:count,total,date:new Date().toLocaleString()});cart=[];save();closeModal("cartModal");showOrders();toast("Order successfully place ho gaya")}
+
+function togglePaymentDetails() {
+  const method = document.getElementById("paymentMethod").value;
+  document.getElementById("easypaisaDetails").style.display = method === "Easypaisa" ? "block" : "none";
+}
+
+function checkout(){
+  if(!cart.length){toast("Cart khali hai");return}
+  
+  let method = document.getElementById("paymentMethod").value;
+  let tid = "";
+  
+  if(method === "Easypaisa"){
+    tid = document.getElementById("easypaisaTid").value.trim();
+    if(!tid || tid.length < 8) {
+      toast("Please apna valid Easypaisa Transaction ID (TID) enter karein");
+      document.getElementById("easypaisaTid").focus();
+      return;
+    }
+  }
+
+  let total=0,count=0;
+  cart.forEach(i=>{const p=products.find(x=>x.id===i.id);total+=p.price*i.qty;count+=i.qty});
+  
+  orders.unshift({items:count, total, method: method, tid: tid, date:new Date().toLocaleString()});
+  cart=[]; save();
+  document.getElementById("easypaisaTid").value = "";
+  closeModal("cartModal"); showOrders(); toast("Order successfully place ho gaya");
+}
+
+function showOrders(){
+  const b=document.getElementById("ordersContent");
+  b.innerHTML=orders.length?orders.map((o,i)=>{
+     let methodBadge = o.method === "Easypaisa" ? `<b style="color:#087b4b">Easypaisa</b><br><span style="font-size:10px;color:#777">TID: ${escapeHtml(o.tid)}</span>` : `<b>COD</b>`;
+     return `<div class="cart-row"><div><b>Order #${orders.length - i}</b><div>${o.items} items • ${money(o.total)}</div><small>${o.date}</small></div><div style="margin-left:auto;text-align:right">${methodBadge}</div></div>`;
+  }).join(""):'<div class="empty">No orders yet.</div>';
+  openModal("ordersModal");
+}
+
 function openLogin(){openModal("loginModal")}
 function login(e){
  e.preventDefault();
@@ -524,7 +595,6 @@ function closeAdminFull(){document.getElementById("adminScreen").classList.remov
 
 let originalHeroData = null;
 
-// Fix: Direct Base64 load, no resizing, supports Adsterra Animated GIFs
 function previewHeroFileFull(e){
   const f = e.target.files[0];
   if(!f) return;
@@ -582,11 +652,9 @@ function applyHero(v){
   if(!v || !v.data) return;
   const img = document.getElementById("heroImage");
   const linkTag = document.getElementById("heroLinkTarget");
-  
   img.src = v.data;
   img.style.display = "block";
   document.getElementById("heroPlaceholder").style.display = "none";
-  
   if(v.link) {
      linkTag.href = v.link;
      linkTag.style.pointerEvents = "auto";
@@ -622,6 +690,8 @@ function saveGeneralSettings(){
   const v={
     siteName:document.getElementById('siteNameAdmin').value,
     whatsapp:document.getElementById('whatsappAdmin').value,
+    epNumber:document.getElementById('epNumberAdmin').value,
+    epTitle:document.getElementById('epTitleAdmin').value,
     top1:document.getElementById('top1Admin').value,
     top2:document.getElementById('top2Admin').value,
     top3:document.getElementById('top3Admin').value,
@@ -631,6 +701,7 @@ function saveGeneralSettings(){
   db.ref('siteSettings/general').set(v).then(()=>{
     applyGeneralSettings(v);
     document.getElementById('generalStatus').textContent='General settings save ho gayi.';
+    toast("Settings saved");
   }).catch(e=>document.getElementById('generalStatus').textContent=e.message)
 }
 
@@ -646,6 +717,14 @@ function applyGeneralSettings(v){
     document.getElementById('whatsappBtn').href = 'https://wa.me/' + v.whatsapp.replace(/[^0-9]/g, '');
     document.getElementById('whatsappAdmin').value = v.whatsapp;
   }
+  if(v.epNumber){
+    document.getElementById('epNumDisplay').textContent = v.epNumber;
+    document.getElementById('epNumberAdmin').value = v.epNumber;
+  }
+  if(v.epTitle){
+    document.getElementById('epTitleDisplay').textContent = v.epTitle;
+    document.getElementById('epTitleAdmin').value = v.epTitle;
+  }
 }
 
 function loadAllAdminSettings(){
@@ -654,6 +733,8 @@ function loadAllAdminSettings(){
     const v=s.val();if(!v)return;
     document.getElementById('siteNameAdmin').value=v.siteName||'Cheezay Dikhao';
     document.getElementById('whatsappAdmin').value=v.whatsapp||'923000000000';
+    document.getElementById('epNumberAdmin').value=v.epNumber||'03001234567';
+    document.getElementById('epTitleAdmin').value=v.epTitle||'Cheezay Dikhao';
     document.getElementById('top1Admin').value=v.top1||'';
     document.getElementById('top2Admin').value=v.top2||'';
     document.getElementById('top3Admin').value=v.top3||'';
