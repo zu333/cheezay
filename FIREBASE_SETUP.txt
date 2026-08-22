@@ -2,25 +2,27 @@ CHEEZAY DIKHAO - FIREBASE SETUP
 
 1) Authentication > Sign-in method:
    - Google: ENABLED
-   - Email/Password: optional
-   - Anonymous: NOT REQUIRED for this version. You can disable it.
+   - Email/Password: ENABLED
+   - Anonymous: NOT REQUIRED (can be disabled).
 
 2) Authentication > Settings > Authorized domains:
-   Add:
-   - localhost
-   - your Vercel domain, e.g. your-project.vercel.app
-   Do NOT include https:// in the domain entry.
+   Add your actual Vercel domain, for example: your-project.vercel.app
+   Also keep localhost for local testing. Do NOT include https://.
 
-3) Google login:
-   The website now uses Firebase signInWithRedirect instead of popup. This is more reliable on browsers that block popups.
+3) Email login:
+   Email/Password provider must be enabled. Existing users can log in; the website also includes a Create Account option.
 
-4) Admin:
-   Click the Cheezay Dikhao logo 5 times quickly.
-   Admin password: nabel3457
-   Anonymous Authentication is NOT used by the admin code.
+4) Google login:
+   Website uses signInWithRedirect. If Google login fails, check Authorized domains and that Google provider is Enabled.
 
-5) Realtime Database:
+5) Admin:
+   Click the Cheezay Dikhao logo 5 times quickly. A full-screen Admin panel opens. Password: nabel3457.
+   Anonymous Authentication is NOT used.
+
+6) Realtime Database:
    Apply database.rules.json in Realtime Database > Rules.
 
+IMPORTANT: The Firebase API key in index.html is the exact key supplied for project school-c9633.
+
 SECURITY NOTE:
-The requested admin password is stored in frontend JavaScript, so it is not a secure production admin authentication system. The heroImage path is intentionally writable without Firebase authentication so the requested password-only admin can save without Anonymous Auth. For a real production admin, use Firebase Authentication + security rules/Cloud Functions.
+The requested password-only admin is stored in frontend JavaScript and is not production-grade security. For a real secure admin, use Firebase Authentication/Custom Claims and protected database rules.

@@ -70,6 +70,21 @@ main{width:min(1400px,94%);margin:20px auto 60px}
 .status{padding:10px;border-radius:8px;background:#f3f7f5;color:#276449;font-size:13px}
 footer{background:#171717;color:#ddd;padding:35px 4%;text-align:center}
 footer button{border:0;background:none;color:#aaa;text-decoration:underline}
+
+.admin-screen{display:none;position:fixed;inset:0;background:linear-gradient(135deg,#f7fbf9,#fff7ef);z-index:1000;overflow:auto}
+.admin-screen.show{display:block}
+.admin-top{height:76px;background:#fff;border-bottom:1px solid #e8ecea;display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:5;box-shadow:0 2px 12px #00000008}
+.admin-brand{display:flex;align-items:center;gap:12px;font-weight:800;color:var(--orange);font-size:20px}.admin-brand img{width:48px;height:48px;object-fit:contain}
+.admin-back{border:1px solid #ddd;background:#fff;padding:10px 16px;border-radius:10px;font-weight:700}
+.admin-wrap{width:min(1200px,94%);margin:28px auto 60px}
+.admin-title{margin-bottom:22px}.admin-title h1{margin:0 0 6px;font-size:30px}.admin-title p{margin:0;color:#68736f}
+.admin-layout{display:grid;grid-template-columns:280px 1fr;gap:22px}
+.admin-side,.admin-card{background:#fff;border:1px solid #e4ebe7;border-radius:18px;box-shadow:0 8px 28px #123d2a0a}
+.admin-side{padding:18px;height:max-content}.admin-side-item{padding:12px 14px;border-radius:10px;font-weight:700;color:#43504a;background:#f5f8f6;margin-bottom:8px}.admin-side-item.active{background:#eaf8f0;color:#087b4b}
+.admin-card{padding:24px}.admin-card h2{margin:0 0 6px}.admin-card p.help{color:#68736f;margin-top:0}.admin-preview-large{width:100%;height:320px;object-fit:cover;border-radius:14px;background:#f5f7f6;border:1px solid #e2e8e5;margin:14px 0}
+.admin-form-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.admin-field label{display:block;font-size:13px;font-weight:700;margin-bottom:6px;color:#39433f}.admin-field input,.admin-field select{width:100%;padding:11px 12px;border:1px solid #d9e0dd;border-radius:9px;outline:0}.admin-field input:focus,.admin-field select:focus{border-color:#0da45e;box-shadow:0 0 0 3px #0da45e18}
+.admin-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}.admin-actions button{border:0;padding:12px 16px;border-radius:9px;font-weight:800}.btn-orange{background:var(--orange);color:#fff}.btn-green{background:#087b4b;color:#fff}.btn-gray{background:#eef1ef;color:#33403a}.admin-status{margin-top:16px;padding:12px 14px;border-radius:10px;background:#f1f8f4;color:#276449;font-size:13px;line-height:1.5}
+.admin-login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}.admin-login-card{width:min(430px,94%);background:#fff;border:1px solid #e4ebe7;border-radius:22px;padding:32px;box-shadow:0 18px 60px #00000012;text-align:center}.admin-login-card img{width:90px;height:90px;object-fit:contain}.admin-login-card h2{margin:12px 0 6px}.admin-login-card p{color:#68736f}.admin-login-card input{width:100%;padding:13px;border:1px solid #d9e0dd;border-radius:10px;margin:10px 0;outline:0}.admin-login-card button{width:100%;border:0;background:var(--orange);color:#fff;padding:13px;border-radius:10px;font-weight:800}
 @media(max-width:1050px){.header-main{flex-wrap:wrap;padding:10px 0}.logo{width:auto}.search-wrap{order:3;max-width:none;flex-basis:100%}.actions{gap:8px}.categories{grid-template-columns:repeat(5,1fr)}.products{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:760px){.topinner{font-size:10px}.topitem:nth-child(3),.topitem:nth-child(4){display:none}.hero{height:300px}.section{padding:18px}.categories{grid-template-columns:repeat(3,1fr)}.products{grid-template-columns:repeat(2,1fr)}.actions .action span:last-child{display:none}.actions{margin-left:0}}
 @media(max-width:480px){.logo{font-size:17px}.logo img{width:52px;height:52px}.products{grid-template-columns:1fr}.categories{grid-template-columns:repeat(2,1fr)}.hero{height:250px}.section h2{font-size:21px}}
@@ -87,7 +102,7 @@ footer button{border:0;background:none;color:#aaa;text-decoration:underline}
 </div></div>
 
 <header class="header"><div class="header-main">
-<a class="logo" href="#" onclick="goHome();handleLogoAdminClick(event);return false;" title="Cheezay Dikhao"><img src="cropped-logo.jpg" alt="Cheezay Dikhao"><span>Cheezay Dikhao</span></a>
+<a class="logo" href="#" onclick="handleLogoAdminClick(event);return false;" title="Cheezay Dikhao"><img src="cropped-logo.jpg" alt="Cheezay Dikhao"><span>Cheezay Dikhao</span></a>
 <form class="search-wrap" onsubmit="searchProducts(event)"><input id="searchInput" placeholder="Search products, brands & stores"><button>Search</button></form>
 <div class="actions">
 <button class="action" onclick="openLogin()"><span class="ico">◯</span><span>Log in</span></button>
@@ -135,6 +150,56 @@ footer button{border:0;background:none;color:#aaa;text-decoration:underline}
 
 <footer>© 2026 Cheezay Dikhao — Online Shopping in Pakistan</footer>
 
+<div id="adminScreen" class="admin-screen">
+  <div id="adminLoginScreen" class="admin-login-screen">
+    <div class="admin-login-card">
+      <img src="cropped-logo.jpg" alt="Cheezay Dikhao">
+      <h2>Admin Settings</h2>
+      <p>Website ki hero image aur settings manage karein.</p>
+      <input id="adminPasswordFull" type="password" placeholder="Admin password" autocomplete="current-password">
+      <button onclick="adminLoginFull(event)">Open Admin Panel</button>
+      <div id="adminFullLoginStatus" class="admin-status" style="display:none"></div>
+    </div>
+  </div>
+  <div id="adminDashboard" style="display:none">
+    <div class="admin-top">
+      <div class="admin-brand"><img src="cropped-logo.jpg" alt="Logo"><span>Cheezay Dikhao Admin</span></div>
+      <button class="admin-back" onclick="closeAdminFull()">← Back to Website</button>
+    </div>
+    <div class="admin-wrap">
+      <div class="admin-title"><h1>Website Settings</h1><p>Hero banner ko upload, resize aur Firebase Realtime Database mein save karein.</p></div>
+      <div class="admin-layout">
+        <aside class="admin-side">
+          <div class="admin-side-item active">🖼️ Hero Banner</div>
+          <div class="admin-side-item">☁️ Firebase Storage</div>
+          <div class="admin-side-item">⚙️ Site Settings</div>
+          <div class="admin-status">Firebase: <b id="adminFirebaseState">Checking...</b></div>
+        </aside>
+        <section class="admin-card">
+          <h2>Hero Banner</h2><p class="help">Recommended size: 1600 × 390 px. Upload ke baad resize karke save karein.</p>
+          <div class="admin-field"><label>Image from device</label><input id="heroFileFull" type="file" accept="image/*" onchange="previewHeroFileFull(event)"></div>
+          <img id="adminPreviewFull" class="admin-preview-large" src="default-hero.jpg" alt="Hero preview">
+          <div class="admin-form-grid">
+            <div class="admin-field"><label>Width (px)</label><input id="resizeWFull" type="number" value="1600" min="320" max="3000"></div>
+            <div class="admin-field"><label>Height (px)</label><input id="resizeHFull" type="number" value="390" min="120" max="1500"></div>
+            <div class="admin-field"><label>Quality</label><input id="resizeQFull" type="number" value="0.85" min="0.3" max="1" step="0.05"></div>
+          </div>
+          <div class="admin-form-grid" style="margin-top:14px">
+            <div class="admin-field"><label>Resize mode</label><select id="fitModeFull"><option value="cover">Cover / Crop</option><option value="contain">Fit / No Crop</option></select></div>
+          </div>
+          <div class="admin-actions">
+            <button class="btn-orange" onclick="resizeHeroFull()">Resize Image</button>
+            <button class="btn-green" onclick="saveHeroToFirebaseFull()">Save to Firebase</button>
+            <button class="btn-gray" onclick="loadHeroFromFirebaseFull()">Reload from Firebase</button>
+            <button class="btn-gray" onclick="closeAdminFull()">Exit Admin</button>
+          </div>
+          <div id="adminInfoFull" class="admin-status">Ready. Pehle image upload karein.</div>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div id="cartModal" class="overlay" onclick="closeOnBackdrop(event,'cartModal')"><div class="modal"><button class="close" onclick="closeModal('cartModal')">×</button><h2>Your Cart</h2><div id="cartItems"></div><div class="total"><span>Total</span><span id="cartTotal">PKR 0</span></div><button class="checkout" onclick="checkout()">Place Cash on Delivery Order</button></div></div>
 
 <div id="loginModal" class="overlay" onclick="closeOnBackdrop(event,'loginModal')"><div class="modal">
@@ -147,6 +212,7 @@ footer button{border:0;background:none;color:#aaa;text-decoration:underline}
 <input id="loginEmail" type="email" placeholder="Email address" required>
 <input id="loginPassword" type="password" placeholder="Password" required>
 <button>Login</button>
+<button type="button" class="google-btn" style="margin-top:8px" onclick="createEmailAccount()">Naya Email Account Banayein</button>
 </form>
 <div id="loginStatus" class="status" style="margin-top:12px">Firebase ready.</div>
 </div></div>
@@ -154,41 +220,13 @@ footer button{border:0;background:none;color:#aaa;text-decoration:underline}
 <div id="ordersModal" class="overlay" onclick="closeOnBackdrop(event,'ordersModal')"><div class="modal"><button class="close" onclick="closeModal('ordersModal')">×</button><h2>Orders</h2><div id="ordersContent" class="empty">No orders yet.</div></div></div>
 <div id="wishlistModal" class="overlay" onclick="closeOnBackdrop(event,'wishlistModal')"><div class="modal"><button class="close" onclick="closeModal('wishlistModal')">×</button><h2>Wishlist</h2><div id="wishlistContent" class="empty">Your wishlist is empty.</div></div></div>
 
-<div id="adminModal" class="overlay" onclick="closeOnBackdrop(event,'adminModal')"><div class="modal">
-<button class="close" onclick="closeModal('adminModal')">×</button>
-<h2>Admin Settings</h2>
-<div id="adminLoginBox" class="login-form">
-<p style="color:#666;margin:0">Admin password enter karein.</p>
-<input id="adminPassword" type="password" placeholder="Admin password" autocomplete="current-password">
-<button onclick="adminLogin(event)">Open Admin</button>
-</div>
-<div id="adminPanel" style="display:none">
-<div class="status" id="firebaseStatus">Firebase connected.</div>
-<br>
-<div class="admin-grid">
-<label><b>Upload hero image</b><input id="heroFile" type="file" accept="image/*" onchange="previewHeroFile(event)"></label>
-<div class="admin-toolbar">
-<label>Width (px)<input id="resizeW" type="number" value="1600" min="320" max="3000"></label>
-<label>Height (px)<input id="resizeH" type="number" value="390" min="120" max="1500"></label>
-<label>Quality<input id="resizeQ" type="number" value="0.85" min="0.3" max="1" step="0.05"></label>
-</div>
-<select id="fitMode"><option value="cover">Cover / Crop</option><option value="contain">Fit / No Crop</option></select>
-<img id="adminPreview" class="admin-preview" src="default-hero.jpg" alt="Preview">
-<div class="admin-toolbar">
-<button class="admin-btn" onclick="resizeHero()">Resize Image</button>
-<button class="admin-btn" style="background:#087b4b" onclick="saveHeroToFirebase()">Save Hero to Firebase</button>
-<button class="admin-btn" style="background:#555" onclick="loadHeroFromFirebase()">Reload from Firebase</button>
-<button class="admin-btn" style="background:#777" onclick="adminLogout()">Logout</button>
-</div>
-<div id="adminInfo" class="status">Recommended: 1600 × 390 px. Image is compressed before saving.</div>
-</div></div>
-</div></div>
+div>
 
 <div id="toast" class="toast"></div>
 
 <script>
 const firebaseConfig={
- apiKey:"AIzaSyBsr72VFXwgW3dsJyhjGnisWgtlSA4ynYVY",
+ apiKey:"AIzaSyBsr72VFXwgW3dsJyhjGnisWgtlSA4ynVY",
  authDomain:"school-c9633.firebaseapp.com",
  databaseURL:"https://school-c9633-default-rtdb.asia-southeast1.firebasedatabase.app",
  projectId:"school-c9633",
@@ -202,7 +240,7 @@ try{
  auth=firebase.auth();
  db=firebase.database();
  firebaseReady=true;
-}catch(e){console.error(e)}
+}catch(e){console.error(e);firebaseReady=false;window.firebaseInitError=e}
 
 const products=[
 {id:1,name:"Premium Ladies Handbag",price:2499,old:2999,cat:"Women Corner",icon:"👜"},
@@ -249,6 +287,13 @@ function openLogin(){openModal("loginModal")}function login(e){
    toast("Login failed");
  });
 }
+function createEmailAccount(){
+ if(!firebaseReady){toast("Firebase initialize nahi hua");return}
+ const email=document.getElementById("loginEmail").value.trim(),pass=document.getElementById("loginPassword").value;
+ if(!email||!pass){toast("Email aur password enter karein");return}
+ document.getElementById("loginStatus").textContent="Account ban raha hai...";
+ auth.createUserWithEmailAndPassword(email,pass).then(r=>{document.getElementById("loginStatus").textContent="Account create ho gaya: "+r.user.email;toast("Account created");}).catch(err=>{document.getElementById("loginStatus").textContent=err.message;toast("Account create nahi hua")});
+}
 function loginWithGoogle(){
  if(!firebaseReady){toast("Firebase initialize nahi hua");return}
  const provider=new firebase.auth.GoogleAuthProvider();
@@ -282,45 +327,54 @@ function showHeroPlaceholder(){document.getElementById("heroImage").style.displa
 
 let logoClickCount=0,logoClickTimer=null;
 function handleLogoAdminClick(e){
+ e.preventDefault();
  logoClickCount++;
  clearTimeout(logoClickTimer);
- logoClickTimer=setTimeout(()=>logoClickCount=0,1500);
- if(logoClickCount>=5){
-   logoClickCount=0;
-   clearTimeout(logoClickTimer);
-   openAdmin();
- }
+ logoClickTimer=setTimeout(()=>logoClickCount=0,1600);
+ if(logoClickCount>=5){logoClickCount=0;clearTimeout(logoClickTimer);openAdminFull();}
 }
-function openAdmin(){
- openModal("adminModal");
- document.getElementById("adminPassword").value="";
- document.getElementById("adminLoginBox").style.display="grid";
- document.getElementById("adminPanel").style.display="none";
- document.getElementById("firebaseStatus").textContent=firebaseReady?"Firebase connected.":"Firebase failed to initialize.";
+function openAdminFull(){
+ document.getElementById("adminScreen").classList.add("show");
+ document.getElementById("adminLoginScreen").style.display="flex";
+ document.getElementById("adminDashboard").style.display="none";
+ document.getElementById("adminPasswordFull").value="";
+ document.getElementById("adminFullLoginStatus").style.display="none";
 }
-function adminLogin(e){
+function adminLoginFull(e){
  if(e)e.preventDefault();
- const pass=document.getElementById("adminPassword").value;
- if(pass!=="nabel3457"){toast("Wrong admin password");return}
- if(!firebaseReady){toast("Firebase initialize nahi hua");return}
- const showPanel=()=>{
-   document.getElementById("adminLoginBox").style.display="none";
-   document.getElementById("adminPanel").style.display="block";
-   document.getElementById("firebaseStatus").textContent="Admin password accepted. Firebase connected.";
-   loadHeroFromFirebase();
- };
- // Admin panel ke liye Anonymous Authentication ki zaroorat nahi.
- showPanel();
+ const pass=document.getElementById("adminPasswordFull").value;
+ const st=document.getElementById("adminFullLoginStatus");
+ st.style.display="block";
+ if(pass!=="nabel3457"){st.textContent="Wrong admin password.";st.style.background="#fff1f1";st.style.color="#a52a2a";return}
+ st.textContent=firebaseReady?"Password accepted. Firebase connected.":"Password accepted. Firebase initialize nahi hua.";
+ st.style.background="#f1f8f4";st.style.color="#276449";
+ document.getElementById("adminLoginScreen").style.display="none";
+ document.getElementById("adminDashboard").style.display="block";
+ document.getElementById("adminFirebaseState").textContent=firebaseReady?"Connected":"Not connected";
+ loadHeroFromFirebaseFull();
 }
-function adminLogout(){
- if(auth.currentUser && auth.currentUser.isAnonymous) auth.signOut();
- document.getElementById("adminPanel").style.display="none";
- document.getElementById("adminLoginBox").style.display="grid";
- document.getElementById("adminPassword").value="";
- toast("Admin logout");
-}
+function closeAdminFull(){document.getElementById("adminScreen").classList.remove("show");document.getElementById("adminLoginScreen").style.display="flex";document.getElementById("adminDashboard").style.display="none"}
 
 let originalHeroData=null;
+function previewHeroFileFull(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{originalHeroData=r.result;document.getElementById("adminPreviewFull").src=r.result;document.getElementById("adminInfoFull").textContent="Image loaded. Ab Resize Image par click karein."};r.readAsDataURL(f)}
+function resizeHeroFull(){
+ if(!originalHeroData){document.getElementById("adminInfoFull").textContent="Pehle image upload karein.";return}
+ const W=Math.max(320,Math.min(3000,Number(document.getElementById("resizeWFull").value)||1600));
+ const H=Math.max(120,Math.min(1500,Number(document.getElementById("resizeHFull").value)||390));
+ const Q=Math.max(.3,Math.min(1,Number(document.getElementById("resizeQFull").value)||.85));
+ const mode=document.getElementById("fitModeFull").value;
+ const im=new Image();im.onload=()=>{const c=document.createElement("canvas");c.width=W;c.height=H;const x=c.getContext("2d");x.fillStyle="#064f3e";x.fillRect(0,0,W,H);const scale=mode==="cover"?Math.max(W/im.width,H/im.height):Math.min(W/im.width,H/im.height);const nw=im.width*scale,nh=im.height*scale;x.drawImage(im,(W-nw)/2,(H-nh)/2,nw,nh);originalHeroData=c.toDataURL("image/jpeg",Q);document.getElementById("adminPreviewFull").src=originalHeroData;document.getElementById("adminInfoFull").textContent=`Resized: ${W} × ${H}px. Ready to save.`};im.src=originalHeroData}
+function saveHeroToFirebaseFull(){
+ if(!firebaseReady){document.getElementById("adminInfoFull").textContent="Firebase initialize nahi hua. API key check karein.";return}
+ if(!originalHeroData){document.getElementById("adminInfoFull").textContent="Pehle image upload/resize karein.";return}
+ const size=Math.round(originalHeroData.length/1024);if(size>5000){document.getElementById("adminInfoFull").textContent="Image bohat bari hai. Quality ya dimensions kam karein.";return}
+ db.ref("siteSettings/heroImage").set({data:originalHeroData,updatedAt:Date.now(),updatedBy:"admin-password"}).then(()=>{applyHero(originalHeroData);document.getElementById("adminInfoFull").textContent="Hero image Firebase mein successfully save ho gayi."}).catch(err=>{document.getElementById("adminInfoFull").textContent="Firebase error: "+err.message})
+}
+function loadHeroFromFirebaseFull(){
+ if(!firebaseReady){document.getElementById("adminInfoFull").textContent="Firebase initialize nahi hua.";return}
+ db.ref("siteSettings/heroImage").once("value").then(s=>{const v=s.val();if(v&&v.data){applyHero(v.data);originalHeroData=v.data;document.getElementById("adminPreviewFull").src=v.data;document.getElementById("adminInfoFull").textContent="Firebase se latest hero image load ho gayi."}else document.getElementById("adminInfoFull").textContent="Firebase mein hero image abhi save nahi hai."}).catch(e=>document.getElementById("adminInfoFull").textContent="Firebase error: "+e.message)
+}
+
 function previewHeroFile(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{originalHeroData=r.result;document.getElementById("adminPreview").src=r.result};r.readAsDataURL(f)}
 function resizeHero(){
  if(!originalHeroData){toast("Pehle image upload karein");return}
