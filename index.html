@@ -16,7 +16,7 @@ button,input{font:inherit}button{cursor:pointer}
 /* Markaz Style Header Update */
 .header{background:linear-gradient(90deg, #365451 0%, #0da45e 100%);position:sticky;top:0;z-index:30;box-shadow:0 4px 12px #00000015}
 .header-main{width:min(1400px,94%);margin:auto;min-height:85px;display:flex;align-items:center;gap:28px}
-.logo{width:205px;display:flex;align-items:center;gap:10px;text-decoration:none;color:#fff;font-weight:800;font-size:22px}
+.logo{width:205px;display:flex;align-items:center;gap:10px;text-decoration:none;color:#fff;font-weight:800;font-size:22px;user-select:none}
 .logo img{width:68px;height:68px;object-fit:contain}
 .search-wrap{flex:1;display:flex;max-width:720px;height:46px;border:none;border-radius:28px;overflow:hidden;background:#fff;box-shadow:inset 0 0 0 2px #fff}
 .search-wrap input{flex:1;border:0;outline:0;padding:0 20px;font-size:15px;color:#333}
@@ -152,7 +152,7 @@ footer button{border:0;background:none;color:#e8f4f0;text-decoration:underline}
 </div></div>
 
 <header class="header"><div class="header-main">
-<a class="logo" href="#" onclick="handleLogoAdminClick(event);return false;" title="Cheezay Dikhao"><img src="cropped-logo.jpg" alt="Cheezay Dikhao"><span>Cheezay Dikhao</span></a>
+<a class="logo" href="#" onclick="handleLogoAdminClick(event);return false;" title="Click 5 times quickly to open Admin Panel"><img src="cropped-logo.jpg" alt="Cheezay Dikhao"><span>Cheezay Dikhao</span></a>
 <form class="search-wrap" onsubmit="searchProducts(event)"><input id="searchInput" placeholder="Search products, brands & stores"><button>Search</button></form>
 <div class="actions">
 <button id="accountAction" class="action" onclick="handleAccountAction()"><span class="ico" id="accountIcon">◯</span><span id="accountLabel">Log in</span></button>
@@ -234,7 +234,7 @@ footer button{border:0;background:none;color:#e8f4f0;text-decoration:underline}
         <div class="pd-side-box">
           <h4 style="display:flex;align-items:center;gap:6px">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#064f3e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
-            Delivery in 3-5 days | Charges PKR 165
+            <span id="deliveryTextDisplay">Delivery in 3-5 days | Charges PKR 165</span>
           </h4>
           <p style="color:#555;margin:10px 0 0">Aik he Catalog ke multiple items agar aap "Add to Cart" kar ke aik he address per order karein ge tou un multiple items per aik he delivery charges lage ge.</p>
         </div>
@@ -290,6 +290,102 @@ footer button{border:0;background:none;color:#e8f4f0;text-decoration:underline}
 <div id="wishlistModal" class="overlay" onclick="closeOnBackdrop(event,'wishlistModal')"><div class="modal"><button class="close" onclick="closeModal('wishlistModal')">×</button><h2 style="color:#111">Wishlist</h2><div id="wishlistContent" class="empty">Your wishlist is empty.</div></div></div>
 
 <div id="toast" class="toast"></div>
+
+<div id="adminScreen" class="admin-screen">
+  <div id="adminLoginScreen" class="admin-login-screen">
+    <div class="admin-login-card">
+      <img src="cropped-logo.jpg" alt="Cheezay Dikhao">
+      <h2>Admin Settings</h2>
+      <p>Website ki hero image aur settings manage karein.</p>
+      <input id="adminPasswordFull" type="password" placeholder="Admin password" autocomplete="current-password">
+      <button onclick="adminLoginFull(event)">Open Admin Panel</button>
+      <div id="adminFullLoginStatus" class="admin-status" style="display:none"></div>
+    </div>
+  </div>
+  <div id="adminDashboard" style="display:none">
+    <div class="admin-top">
+      <div class="admin-brand"><img id="adminBrandLogo" src="cropped-logo.jpg" alt="Logo"><span>Cheezay Dikhao Admin</span></div>
+      <button class="admin-back" onclick="closeAdminFull()">← Back to Website</button>
+    </div>
+    <div class="admin-wrap">
+      <div class="admin-title"><h1>Website Admin Panel</h1><p>Yahan se website ki tamam basic settings, images, categories aur products manage karein.</p></div>
+      <div class="admin-layout">
+        <aside class="admin-side">
+          <button class="admin-side-item active" onclick="showAdminTab('general',this)">⚙️ General Settings</button>
+          <button class="admin-side-item" onclick="showAdminTab('images',this)">🖼️ Ad Banners</button>
+          <button class="admin-side-item" onclick="showAdminTab('categories',this)">🗂️ Categories</button>
+          <button class="admin-side-item" onclick="showAdminTab('products',this)">🛍️ Products</button>
+          <button class="admin-side-item" onclick="showAdminTab('firebase',this)">🔥 Firebase</button>
+          <div class="admin-status">Firebase: <b id="adminFirebaseState">Checking...</b></div>
+        </aside>
+        <section class="admin-content">
+          <div id="adminTab-general" class="admin-tab active">
+            <div class="admin-card"><h2>General Website Settings</h2><p class="help">Website ka naam, WhatsApp, Easypaisa aur baqi settings yahan se change karein.</p>
+              <div class="admin-form-grid">
+                <div class="admin-field"><label>Website Name</label><input id="siteNameAdmin" value="Cheezay Dikhao"></div>
+                <div class="admin-field"><label>WhatsApp Number</label><input id="whatsappAdmin" value="923000000000" placeholder="e.g. 923001234567"></div>
+                <div class="admin-field"><label>Easypaisa Number</label><input id="epNumberAdmin" value="03001234567" placeholder="Easypaisa Number"></div>
+                <div class="admin-field"><label>Easypaisa Account Title</label><input id="epTitleAdmin" value="Cheezay Dikhao" placeholder="Account Title"></div>
+                <div class="admin-field"><label>Delivery Charges Text</label><input id="deliveryAdmin" value="Delivery in 3-5 days | Charges PKR 165" placeholder="e.g. Delivery in 3-5 days | Charges PKR 165"></div>
+                <div class="admin-field"><label>Footer Text</label><input id="footerAdmin" value="© 2026 Cheezay Dikhao — Online Shopping in Pakistan"></div>
+                <div class="admin-field"><label>Top Bar 1</label><input id="top1Admin" value="Lowest delivery price in Pakistan"></div>
+                <div class="admin-field"><label>Top Bar 2</label><input id="top2Admin" value="Cash on Delivery available"></div>
+                <div class="admin-field"><label>Top Bar 3</label><input id="top3Admin" value="7-day easy returns"></div>
+                <div class="admin-field"><label>Top Bar 4</label><input id="top4Admin" value="Verified Suppliers"></div>
+              </div>
+              <div class="admin-actions"><button class="btn-green" onclick="saveGeneralSettings()">Save General Settings</button><button class="btn-gray" onclick="loadAllAdminSettings()">Reload</button></div>
+              <div id="generalStatus" class="admin-status">Ready.</div>
+            </div>
+            <div class="admin-card" style="margin-top:18px"><h2>Logo</h2><p class="help">Device se logo upload karein. Resize karke Firebase mein save ho jayega.</p>
+              <div class="admin-image-editor"><div><input id="logoFileAdmin" type="file" accept="image/*" onchange="previewAdminImage(event,'logo')"><img id="logoPreviewAdmin" class="admin-preview-square" src="cropped-logo.jpg"></div><div>
+                <div class="admin-form-grid"><div class="admin-field"><label>Width</label><input id="logoWAdmin" type="number" value="500" min="80" max="2000"></div><div class="admin-field"><label>Height</label><input id="logoHAdmin" type="number" value="500" min="80" max="2000"></div><div class="admin-field"><label>Quality</label><input id="logoQAdmin" type="number" value="0.9" min="0.3" max="1" step="0.05"></div></div>
+                <div class="admin-actions"><button class="btn-orange" onclick="resizeAdminImage('logo')">Resize Image</button><button class="btn-green" onclick="saveAdminImage('logo')">Save Logo</button></div></div></div><div id="logoStatus" class="admin-status">Logo ready.</div>
+            </div>
+          </div>
+
+          <!-- Updated Admin Tab for 728x90 Ad Banner -->
+          <div id="adminTab-images" class="admin-tab">
+            <div class="admin-card"><h2>Main Ad Banner (728x90)</h2><p class="help">Adsterra ya kisi aur network ka 728x90 banner yahan upload karein. GIF bhi support hogi (koi resize nahi hoga).</p>
+              <input id="heroFileFull" type="file" accept="image/*" onchange="previewHeroFileFull(event)">
+              <input id="heroLinkFull" type="url" placeholder="Direct Adsterra Link Paste Karein (e.g. https://...)" style="width:100%;padding:11px 12px;border:1px solid #d9e0dd;border-radius:9px;outline:0;margin-top:14px;">
+              
+              <div style="background:#f5f7f6;border:1px dashed #e2e8e5;border-radius:8px;padding:10px;margin:14px 0;display:flex;justify-content:center;">
+                <img id="adminPreviewFull" src="default-hero.jpg" alt="Ad preview" style="width:728px;height:90px;max-width:100%;object-fit:cover;background:#eee;">
+              </div>
+
+              <div class="admin-actions">
+                <button class="btn-green" onclick="saveHeroToFirebaseFull()">Save Banner & Link</button>
+                <button class="btn-gray" onclick="loadHeroFromFirebaseFull()">Reload Banner</button>
+              </div>
+              <div id="adminInfoFull" class="admin-status">Ready.</div>
+            </div>
+          </div>
+
+          <div id="adminTab-categories" class="admin-tab">
+            <div class="admin-card"><h2>Categories</h2><p class="help">Category ka naam aur uski image device se upload karein.</p><div class="admin-form-grid" style="margin:15px 0">
+<div class="admin-field"><label>New Category Name</label><input id="newCategoryName" placeholder="e.g. Electronics"></div>
+<div class="admin-field"><label>Category Key</label><input id="newCategoryKey" placeholder="e.g. Electronics"></div>
+<div class="admin-field"><label>Upload Image</label><input id="newCategoryImage" type="file" accept="image/*" onchange="previewNewCatImg(event)"><img id="newCatImgPreview" src="" style="width:45px;height:45px;object-fit:cover;border-radius:50%;display:none;margin-top:8px;"></div>
+</div>
+<div class="admin-actions"><button class="btn-orange" onclick="addCategoryAdmin()">+ Add Category</button><button class="btn-green" onclick="saveCategoriesAdmin()">Save Categories</button><button class="btn-gray" onclick="loadCategoriesAdmin(true)">Reload from Firebase</button></div>
+<div id="categoryAdminList"></div><div id="categoryStatus" class="admin-status">Categories loaded.</div></div>
+          </div>
+
+          <div id="adminTab-products" class="admin-tab">
+            <div class="admin-card"><h2>Products (Detail Page Support)</h2><p class="help">Har product ka Name, Price, Category, Stock aur Description likhein. Detail page par show hoga.</p>
+            <div id="productAdminList"></div>
+            <div class="admin-actions"><button class="btn-green" onclick="saveProductsAdmin()">Save Products</button><button class="btn-orange" onclick="addAdminProduct()">+ Add Product</button></div>
+            <div id="productStatus" class="admin-status">Products loaded.</div></div>
+          </div>
+
+          <div id="adminTab-firebase" class="admin-tab">
+            <div class="admin-card"><h2>Firebase Status</h2><div class="firebase-check-grid"><div><b>Project</b><span>school-c9633</span></div><div><b>Realtime Database</b><span id="firebaseDbStatus">Connected check...</span></div><div><b>Authentication</b><span>Email/Password + Google</span></div></div><div class="admin-actions"><button class="btn-green" onclick="testFirebaseConnection()">Test Firebase</button><button class="btn-gray" onclick="logoutUser()">Logout User</button></div><div id="firebaseAdminStatus" class="admin-status">Firebase configuration active.</div></div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script>
 const firebaseConfig={
@@ -485,10 +581,18 @@ function goHome(){window.scrollTo({top:0,behavior:"smooth"});renderProducts(prod
 function toast(m){const t=document.getElementById("toast");t.textContent=m;t.classList.add("show");clearTimeout(window.__tt);window.__tt=setTimeout(()=>t.classList.remove("show"),2200)}
 function showHeroPlaceholder(){document.getElementById("heroImage").style.display="none";document.getElementById("heroPlaceholder").style.display="flex"}
 
+// LOGO CLICK EVENT (5 Clicks required to open admin)
 let logoClickCount=0,logoClickTimer=null;
 function handleLogoAdminClick(e){
- e.preventDefault(); logoClickCount++; clearTimeout(logoClickTimer); logoClickTimer=setTimeout(()=>logoClickCount=0,1600);
- if(logoClickCount>=5){logoClickCount=0;clearTimeout(logoClickTimer);openAdminFull();}
+ e.preventDefault(); 
+ logoClickCount++; 
+ clearTimeout(logoClickTimer); 
+ logoClickTimer=setTimeout(()=>logoClickCount=0,1600);
+ if(logoClickCount>=5){
+   logoClickCount=0;
+   clearTimeout(logoClickTimer);
+   openAdminFull();
+ }
 }
 function openAdminFull(){
  document.getElementById("adminScreen").classList.add("show"); document.getElementById("adminLoginScreen").style.display="flex"; document.getElementById("adminDashboard").style.display="none"; document.getElementById("adminPasswordFull").value=""; document.getElementById("adminFullLoginStatus").style.display="none";
@@ -602,6 +706,7 @@ function saveGeneralSettings(){
     whatsapp:document.getElementById('whatsappAdmin').value,
     epNumber:document.getElementById('epNumberAdmin').value,
     epTitle:document.getElementById('epTitleAdmin').value,
+    deliveryText:document.getElementById('deliveryAdmin').value,
     top1:document.getElementById('top1Admin').value,
     top2:document.getElementById('top2Admin').value,
     top3:document.getElementById('top3Admin').value,
@@ -635,6 +740,12 @@ function applyGeneralSettings(v){
     document.getElementById('epTitleDisplay').textContent = v.epTitle;
     document.getElementById('epTitleAdmin').value = v.epTitle;
   }
+  if(v.deliveryText){
+    const delEl = document.getElementById('deliveryTextDisplay');
+    if(delEl) delEl.textContent = v.deliveryText;
+    const admDel = document.getElementById('deliveryAdmin');
+    if(admDel) admDel.value = v.deliveryText;
+  }
 }
 
 function loadAllAdminSettings(){
@@ -645,6 +756,7 @@ function loadAllAdminSettings(){
     document.getElementById('whatsappAdmin').value=v.whatsapp||'923000000000';
     document.getElementById('epNumberAdmin').value=v.epNumber||'03001234567';
     document.getElementById('epTitleAdmin').value=v.epTitle||'Cheezay Dikhao';
+    document.getElementById('deliveryAdmin').value=v.deliveryText||'Delivery in 3-5 days | Charges PKR 165';
     document.getElementById('top1Admin').value=v.top1||'';
     document.getElementById('top2Admin').value=v.top2||'';
     document.getElementById('top3Admin').value=v.top3||'';
