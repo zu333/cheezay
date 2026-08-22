@@ -86,7 +86,7 @@ footer button{border:0;background:none;color:#aaa;text-decoration:underline}
 .admin-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}.admin-actions button{border:0;padding:12px 16px;border-radius:9px;font-weight:800}.btn-orange{background:var(--orange);color:#fff}.btn-green{background:#087b4b;color:#fff}.btn-gray{background:#eef1ef;color:#33403a}.admin-status{margin-top:16px;padding:12px 14px;border-radius:10px;background:#f1f8f4;color:#276449;font-size:13px;line-height:1.5}
 .admin-login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}.admin-login-card{width:min(430px,94%);background:#fff;border:1px solid #e4ebe7;border-radius:22px;padding:32px;box-shadow:0 18px 60px #00000012;text-align:center}.admin-login-card img{width:90px;height:90px;object-fit:contain}.admin-login-card h2{margin:12px 0 6px}.admin-login-card p{color:#68736f}.admin-login-card input{width:100%;padding:13px;border:1px solid #d9e0dd;border-radius:10px;margin:10px 0;outline:0}.admin-login-card button{width:100%;border:0;background:var(--orange);color:#fff;padding:13px;border-radius:10px;font-weight:800}
 
-.admin-content{min-width:0}.admin-tab{display:none}.admin-tab.active{display:block}.admin-side-item{width:100%;border:0;text-align:left;cursor:pointer}.admin-image-editor{display:grid;grid-template-columns:220px 1fr;gap:22px;align-items:center}.admin-preview-square{width:200px;height:200px;object-fit:contain;border:1px solid #e2e8e5;border-radius:14px;background:#f7f8f7}.firebase-check-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.firebase-check-grid>div{padding:16px;background:#f5f8f6;border-radius:12px;display:flex;flex-direction:column;gap:6px}.firebase-check-grid span{color:#68736f}.admin-product-row{display:grid;grid-template-columns:70px 1.5fr .7fr .7fr 1fr 120px;gap:8px;align-items:center;padding:12px 0;border-bottom:1px solid #edf0ee}.admin-product-row input,.admin-product-row select{padding:9px;border:1px solid #d9e0dd;border-radius:8px;width:100%}.admin-product-img{width:60px;height:60px;border-radius:10px;object-fit:cover;background:#f3f5f4}.admin-category-row{display:grid;grid-template-columns:55px 1fr 1fr 180px 90px;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid #edf0ee}.admin-category-row input{padding:10px;border:1px solid #d9e0dd;border-radius:8px;width:100%}
+.admin-content{min-width:0}.admin-tab{display:none}.admin-tab.active{display:block}.admin-side-item{width:100%;border:0;text-align:left;cursor:pointer}.admin-image-editor{display:grid;grid-template-columns:220px 1fr;gap:22px;align-items:center}.admin-preview-square{width:200px;height:200px;object-fit:contain;border:1px solid #e2e8e5;border-radius:14px;background:#f7f8f7}.firebase-check-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.firebase-check-grid>div{padding:16px;background:#f5f8f6;border-radius:12px;display:flex;flex-direction:column;gap:6px}.firebase-check-grid span{color:#68736f}.admin-product-row{display:grid;grid-template-columns:70px 1.5fr .7fr .7fr 1fr 120px;gap:8px;align-items:center;padding:12px 0;border-bottom:1px solid #edf0ee}.admin-product-row input,.admin-product-row select{padding:9px;border:1px solid #d9e0dd;border-radius:8px;width:100%}.admin-product-img{width:60px;height:60px;border-radius:10px;object-fit:cover;background:#f3f5f4}.admin-category-row{display:grid;grid-template-columns:55px minmax(160px,1fr) minmax(160px,1fr) 180px 90px;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid #edf0ee}.admin-category-row input{padding:10px;border:1px solid #d9e0dd;border-radius:8px;width:100%}
 @media(max-width:760px){.admin-layout{grid-template-columns:1fr}.admin-side{display:flex;gap:7px;overflow:auto}.admin-side-item{min-width:170px}.admin-form-grid{grid-template-columns:1fr}.admin-image-editor{grid-template-columns:1fr}.firebase-check-grid{grid-template-columns:1fr}.admin-product-row{grid-template-columns:55px 1fr 1fr}.admin-product-row>*:nth-child(n+4){grid-column:span 1}.admin-category-row{grid-template-columns:45px 1fr 1fr}.admin-preview-square{width:160px;height:160px}}
 
 @media(max-width:1050px){.header-main{flex-wrap:wrap;padding:10px 0}.logo{width:auto}.search-wrap{order:3;max-width:none;flex-basis:100%}.actions{gap:8px}.categories{grid-template-columns:repeat(5,1fr)}.products{grid-template-columns:repeat(3,1fr)}}
@@ -214,7 +214,13 @@ footer button{border:0;background:none;color:#aaa;text-decoration:underline}
           </div>
 
           <div id="adminTab-categories" class="admin-tab">
-            <div class="admin-card"><h2>Categories</h2><p class="help">Category ka naam, icon/emoji aur optional image set karein.</p><div id="categoryAdminList"></div><div class="admin-actions"><button class="btn-green" onclick="saveCategoriesAdmin()">Save Categories</button></div><div id="categoryStatus" class="admin-status">Categories loaded.</div></div>
+            <div class="admin-card"><h2>Categories</h2><p class="help">Category ka naam, icon/emoji aur optional image set karein.</p><div class="admin-form-grid" style="margin:15px 0">
+<div class="admin-field"><label>New Category Name</label><input id="newCategoryName" placeholder="e.g. Electronics"></div>
+<div class="admin-field"><label>Category Key</label><input id="newCategoryKey" placeholder="e.g. Electronics"></div>
+<div class="admin-field"><label>Icon / Emoji</label><input id="newCategoryIcon" value="📦" maxlength="4"></div>
+</div>
+<div class="admin-actions"><button class="btn-orange" onclick="addCategoryAdmin()">+ Add Category</button><button class="btn-green" onclick="saveCategoriesAdmin()">Save Categories</button><button class="btn-gray" onclick="loadCategoriesAdmin(true)">Reload from Firebase</button></div>
+<div id="categoryAdminList"></div><div id="categoryStatus" class="admin-status">Categories loaded.</div></div>
           </div>
 
           <div id="adminTab-products" class="admin-tab">
@@ -250,8 +256,6 @@ footer button{border:0;background:none;color:#aaa;text-decoration:underline}
 <div id="ordersModal" class="overlay" onclick="closeOnBackdrop(event,'ordersModal')"><div class="modal"><button class="close" onclick="closeModal('ordersModal')">×</button><h2>Orders</h2><div id="ordersContent" class="empty">No orders yet.</div></div></div>
 <div id="wishlistModal" class="overlay" onclick="closeOnBackdrop(event,'wishlistModal')"><div class="modal"><button class="close" onclick="closeModal('wishlistModal')">×</button><h2>Wishlist</h2><div id="wishlistContent" class="empty">Your wishlist is empty.</div></div></div>
 
-div>
-
 <div id="toast" class="toast"></div>
 
 <script>
@@ -268,6 +272,7 @@ let firebaseReady=false, db=null, auth=null;
 try{
  firebase.initializeApp(firebaseConfig);
  auth=firebase.auth();
+ auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(console.warn);
  db=firebase.database();
  firebaseReady=true;
 }catch(e){console.error(e);firebaseReady=false;window.firebaseInitError=e}
@@ -328,14 +333,27 @@ function loginWithGoogle(){
  if(!firebaseReady){toast("Firebase initialize nahi hua");return}
  const provider=new firebase.auth.GoogleAuthProvider();
  provider.setCustomParameters({prompt:"select_account"});
- const st=document.getElementById("loginStatus"); if(st)st.textContent="Google login ho raha hai...";
- auth.signInWithRedirect(provider).catch(err=>{if(st)st.textContent=err.message;toast("Google login failed")});
+ const st=document.getElementById("loginStatus");
+ if(st)st.textContent="Google login ho raha hai...";
+ auth.signInWithPopup(provider).then(result=>{
+   closeModal("loginModal");
+   updateAccountUI(result.user);
+   toast("Google login successful");
+ }).catch(err=>{
+   console.error("Google login error:",err);
+   if(st)st.textContent="Google login error: "+err.code+" — "+err.message;
+   toast("Google login failed");
+   // If popup is blocked or unsupported, use redirect as fallback.
+   if(err.code==="auth/popup-blocked" || err.code==="auth/popup-cancelled-by-user" || err.code==="auth/operation-not-supported-in-this-environment"){
+      auth.signInWithRedirect(provider).catch(e=>{if(st)st.textContent="Google login error: "+e.code+" — "+e.message;});
+   }
+ });
 }
 if(firebaseReady){
  auth.getRedirectResult().then(result=>{
-   if(result && result.user){ closeModal("loginModal"); toast("Google login successful"); updateAccountUI(result.user); }
+   if(result && result.user){ closeModal("loginModal"); updateAccountUI(result.user); toast("Google login successful"); }
  }).catch(err=>{
-   const st=document.getElementById("loginStatus"); if(st)st.textContent=err.message;
+   const st=document.getElementById("loginStatus"); if(st)st.textContent="Google login error: "+err.code+" — "+err.message;
    console.error("Google redirect error:",err);
  });
 }
@@ -380,7 +398,7 @@ function adminLoginFull(e){
  document.getElementById("adminLoginScreen").style.display="none";
  document.getElementById("adminDashboard").style.display="block";
  document.getElementById("adminFirebaseState").textContent=firebaseReady?"Connected":"Not connected";
- loadHeroFromFirebaseFull(); loadAllAdminSettings(); if(firebaseReady){db.ref('siteSettings/logo').once('value').then(s=>{const v=s.val();if(v&&v.data){adminImages.logo=v.data;document.getElementById('logoPreviewAdmin').src=v.data}});}
+ loadHeroFromFirebaseFull(); loadAllAdminSettings(); loadCategoriesAdmin(); if(firebaseReady){db.ref('siteSettings/logo').once('value').then(s=>{const v=s.val();if(v&&v.data){adminImages.logo=v.data;document.getElementById('logoPreviewAdmin').src=v.data}});}
 }
 function closeAdminFull(){document.getElementById("adminScreen").classList.remove("show");document.getElementById("adminLoginScreen").style.display="flex";document.getElementById("adminDashboard").style.display="none"}
 
@@ -442,7 +460,7 @@ const defaultCategories=[
  {name:"Cosmetics",cat:"Beauty & Care",icon:"💄"},{name:"Womens Stitched",cat:"Women Corner",icon:"👗"},{name:"Kids Clothing",cat:"Kids & Mother",icon:"👕"},{name:"Mens Stitched",cat:"Men's Fashion",icon:"👔"},{name:"Jewellery",cat:"Women Corner",icon:"💍"},{name:"Fashion Accessories",cat:"Beauty & Care",icon:"🕶️"},{name:"Bedding",cat:"Home & Living",icon:"🛏️"},{name:"Festive Collection",cat:"Women Corner",icon:"🧣"},{name:"Islamic Accessories",cat:"Urdu Bazaar",icon:"📖"}
 ];
 let categoriesAdmin=JSON.parse(localStorage.getItem("cd_categories")||"null")||defaultCategories;
-function showAdminTab(name,btn){document.querySelectorAll('.admin-tab').forEach(x=>x.classList.remove('active'));document.getElementById('adminTab-'+name).classList.add('active');document.querySelectorAll('.admin-side-item').forEach(x=>x.classList.remove('active'));if(btn)btn.classList.add('active');if(name==='categories')renderCategoryAdmin();if(name==='products')renderProductAdmin();if(name==='firebase')testFirebaseConnection();}
+function showAdminTab(name,btn){document.querySelectorAll('.admin-tab').forEach(x=>x.classList.remove('active'));document.getElementById('adminTab-'+name).classList.add('active');document.querySelectorAll('.admin-side-item').forEach(x=>x.classList.remove('active'));if(btn)btn.classList.add('active');if(name==='categories')loadCategoriesAdmin();if(name==='products')renderProductAdmin();if(name==='firebase')testFirebaseConnection();}
 function previewAdminImage(e,type){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{adminImages[type]=r.result;document.getElementById(type==='logo'?'logoPreviewAdmin':'adminPreviewFull').src=r.result};r.readAsDataURL(f)}
 function resizeDataUrl(data,W,H,Q,mode,cb){const im=new Image();im.onload=()=>{const c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,W,H);const scale=mode==='cover'?Math.max(W/im.width,H/im.height):Math.min(W/im.width,H/im.height);const nw=im.width*scale,nh=im.height*scale;x.drawImage(im,(W-nw)/2,(H-nh)/2,nw,nh);cb(c.toDataURL('image/jpeg',Q))};im.src=data}
 function resizeAdminImage(type){const data=adminImages[type];if(!data){toast('Pehle image upload karein');return}const W=Number(document.getElementById('logoWAdmin').value)||500,H=Number(document.getElementById('logoHAdmin').value)||500,Q=Number(document.getElementById('logoQAdmin').value)||.9;resizeDataUrl(data,W,H,Q,'contain',out=>{adminImages[type]=out;document.getElementById('logoPreviewAdmin').src=out;document.getElementById('logoStatus').textContent=`Logo resized: ${W} × ${H}px`})}
@@ -451,11 +469,56 @@ function applyLogo(data){document.querySelectorAll('.logo img').forEach(x=>x.src
 function saveGeneralSettings(){if(!firebaseReady){toast('Firebase connected nahi hai');return}const v={siteName:document.getElementById('siteNameAdmin').value,top1:document.getElementById('top1Admin').value,top2:document.getElementById('top2Admin').value,top3:document.getElementById('top3Admin').value,top4:document.getElementById('top4Admin').value,footer:document.getElementById('footerAdmin').value};db.ref('siteSettings/general').set(v).then(()=>{applyGeneralSettings(v);document.getElementById('generalStatus').textContent='General settings save ho gayi.'}).catch(e=>document.getElementById('generalStatus').textContent=e.message)}
 function applyGeneralSettings(v){const tops=document.querySelectorAll('.topitem span');[v.top1,v.top2,v.top3,v.top4].forEach((x,i)=>{if(tops[i]&&x)tops[i].textContent=x});if(v.footer)document.getElementById('footerText').textContent=v.footer;if(v.siteName){document.title=v.siteName+' - Shop';document.querySelectorAll('.logo span').forEach(x=>x.textContent=v.siteName)}}
 function loadAllAdminSettings(){if(!firebaseReady)return;db.ref('siteSettings/general').once('value').then(s=>{const v=s.val();if(!v)return;document.getElementById('siteNameAdmin').value=v.siteName||'Cheezay Dikhao';document.getElementById('top1Admin').value=v.top1||'';document.getElementById('top2Admin').value=v.top2||'';document.getElementById('top3Admin').value=v.top3||'';document.getElementById('top4Admin').value=v.top4||'';document.getElementById('footerAdmin').value=v.footer||'';applyGeneralSettings(v)})}
-function renderCategoryAdmin(){const box=document.getElementById('categoryAdminList');box.innerHTML=categoriesAdmin.map((c,i)=>`<div class="admin-category-row"><div class="admin-category-preview">${c.image?`<img src="${c.image}" alt="" style="width:45px;height:45px;object-fit:cover;border-radius:50%">`:`<span>${escapeHtml(c.icon||'📦')}</span>`}</div><input value="${escapeHtml(c.name||'')}" data-ci="${i}" data-k="name"><input value="${escapeHtml(c.cat||'')}" data-ci="${i}" data-k="cat"><input type="file" accept="image/*" onchange="previewCategoryImage(event,${i})"><button class="btn-gray" onclick="removeCategoryAdmin(${i})">Remove</button></div>`).join('')}
-function previewCategoryImage(e,i){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{resizeDataUrl(r.result,300,300,.82,'cover',out=>{categoriesAdmin[i].image=out;categoriesAdmin[i].icon='';renderCategoryAdmin()})};r.readAsDataURL(f)}
-function saveCategoriesAdmin(){if(!firebaseReady){toast('Firebase connected nahi hai');return}document.querySelectorAll('#categoryAdminList [data-ci]').forEach(el=>{categoriesAdmin[Number(el.dataset.ci)][el.dataset.k]=el.value});db.ref('siteSettings/categories').set({items:categoriesAdmin,updatedAt:Date.now()}).then(()=>{localStorage.setItem('cd_categories',JSON.stringify(categoriesAdmin));applyCategories(categoriesAdmin);document.getElementById('categoryStatus').textContent='Categories save ho gayi.'}).catch(e=>document.getElementById('categoryStatus').textContent=e.message)}
-function removeCategoryAdmin(i){categoriesAdmin.splice(i,1);renderCategoryAdmin()}
-function applyCategories(list){categoriesAdmin=list;localStorage.setItem('cd_categories',JSON.stringify(list));const box=document.querySelector('.categories');if(!box)return;box.innerHTML=list.map(c=>`<button class="cat" onclick="filterCategory('${String(c.cat||'').replace(/'/g,"\\'")}')"><div class="cat-img">${c.image?`<img src="${c.image}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:escapeHtml(c.icon||'📦')}</div><b>${escapeHtml(c.name||'Category')}</b></button>`).join('')}
+function loadCategoriesAdmin(showMessage=false){
+ if(!firebaseReady){renderCategoryAdmin();return Promise.resolve();}
+ return db.ref('siteSettings/categories').once('value').then(s=>{
+   const v=s.val();
+   if(v && Array.isArray(v.items)) categoriesAdmin=v.items;
+   else if(!Array.isArray(categoriesAdmin)||!categoriesAdmin.length) categoriesAdmin=defaultCategories.map(x=>({...x}));
+   localStorage.setItem('cd_categories',JSON.stringify(categoriesAdmin));
+   renderCategoryAdmin();
+   applyCategories(categoriesAdmin);
+   if(showMessage) document.getElementById('categoryStatus').textContent='Categories Firebase se reload ho gayi.';
+ }).catch(e=>{renderCategoryAdmin();document.getElementById('categoryStatus').textContent='Firebase read error: '+e.message;});
+}
+function renderCategoryAdmin(){
+ const box=document.getElementById('categoryAdminList');
+ if(!box)return;
+ if(!categoriesAdmin.length){box.innerHTML='<div class="empty">Abhi koi category nahi hai. Upar se Add Category karein.</div>';return;}
+ box.innerHTML='<div style="display:grid;grid-template-columns:55px minmax(160px,1fr) minmax(160px,1fr) 180px 90px;gap:10px;font-weight:700;padding:10px 0;color:#445"><div>Image</div><div>Name</div><div>Category Key</div><div>Upload Image</div><div>Action</div></div>'+categoriesAdmin.map((c,i)=>`<div class="admin-category-row"><div class="admin-category-preview">${c.image?`<img src="${c.image}" alt="" style="width:45px;height:45px;object-fit:cover;border-radius:50%">`:`<span style="font-size:28px">${escapeHtml(c.icon||'📦')}</span>`}</div><input value="${escapeHtml(c.name||'')}" data-ci="${i}" data-k="name" onchange="updateCategoryField(${i},'name',this.value)"><input value="${escapeHtml(c.cat||'')}" data-ci="${i}" data-k="cat" onchange="updateCategoryField(${i},'cat',this.value)"><input type="file" accept="image/*" onchange="previewCategoryImage(event,${i})"><button class="btn-gray" type="button" onclick="removeCategoryAdmin(${i})">Remove</button></div>`).join('');
+}
+function updateCategoryField(i,k,v){if(categoriesAdmin[i])categoriesAdmin[i][k]=v}
+function addCategoryAdmin(){
+ const name=(document.getElementById('newCategoryName').value||'').trim();
+ const cat=(document.getElementById('newCategoryKey').value||name).trim();
+ const icon=(document.getElementById('newCategoryIcon').value||'📦').trim();
+ if(!name){toast('Category name likhein');return;}
+ if(categoriesAdmin.some(c=>(c.cat||'').toLowerCase()===cat.toLowerCase())){toast('Ye category pehle se mojood hai');return;}
+ categoriesAdmin.push({name,cat,icon});
+ document.getElementById('newCategoryName').value='';document.getElementById('newCategoryKey').value='';document.getElementById('newCategoryIcon').value='📦';
+ renderCategoryAdmin();
+ saveCategoriesAdmin(true);
+}
+function previewCategoryImage(e,i){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{resizeDataUrl(r.result,300,300,.82,'cover',out=>{categoriesAdmin[i].image=out;categoriesAdmin[i].icon='';renderCategoryAdmin();saveCategoriesAdmin(true)})};r.readAsDataURL(f)}
+function saveCategoriesAdmin(silent=false){
+ document.querySelectorAll('#categoryAdminList [data-ci]').forEach(el=>{const i=Number(el.dataset.ci);if(categoriesAdmin[i])categoriesAdmin[i][el.dataset.k]=el.value});
+ localStorage.setItem('cd_categories',JSON.stringify(categoriesAdmin));
+ if(!firebaseReady){if(!silent)toast('Firebase connected nahi hai');return Promise.resolve();}
+ return db.ref('siteSettings/categories').set({items:categoriesAdmin,updatedAt:Date.now()}).then(()=>{applyCategories(categoriesAdmin);if(!silent)document.getElementById('categoryStatus').textContent='Categories Firebase mein save ho gayi.';}).catch(e=>{document.getElementById('categoryStatus').textContent='Save error: '+e.message;toast('Categories save nahi hui');});
+}
+function removeCategoryAdmin(i){
+ if(i<0||i>=categoriesAdmin.length)return;
+ const name=categoriesAdmin[i].name;
+ categoriesAdmin.splice(i,1);
+ renderCategoryAdmin();
+ saveCategoriesAdmin(true).then(()=>{document.getElementById('categoryStatus').textContent='"'+name+'" remove ho gayi.';toast('Category remove ho gayi');});
+}
+function applyCategories(list){
+ categoriesAdmin=list||[];
+ localStorage.setItem('cd_categories',JSON.stringify(categoriesAdmin));
+ const box=document.querySelector('.categories');if(!box)return;
+ box.innerHTML=categoriesAdmin.map(c=>`<button class="cat" onclick="filterCategory(${JSON.stringify(c.cat||'')})"><div class="cat-img">${c.image?`<img src="${c.image}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:escapeHtml(c.icon||'📦')}</div><b>${escapeHtml(c.name||'Category')}</b></button>`).join('');
+}
 function renderProductAdmin(){const box=document.getElementById('productAdminList');box.innerHTML=products.map((p,i)=>`<div class="admin-product-row"><div class="admin-product-img">${p.image?`<img src="${p.image}" style="width:100%;height:100%;object-fit:cover;border-radius:10px">`:p.icon||'📦'}</div><input data-pi="${i}" data-k="name" value="${escapeHtml(p.name)}"><input data-pi="${i}" data-k="price" type="number" value="${p.price}"><input data-pi="${i}" data-k="old" type="number" value="${p.old||''}"><select data-pi="${i}" data-k="cat">${categoriesAdmin.map(c=>`<option ${c.cat===p.cat?'selected':''}>${escapeHtml(c.cat)}</option>`).join('')}</select><input type="file" accept="image/*" onchange="previewProductImage(event,${i})"><button class="btn-gray" onclick="removeAdminProduct(${i})">Remove</button></div>`).join('')}
 function previewProductImage(e,i){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{resizeDataUrl(r.result,600,600,.82,'contain',out=>{products[i].image=out;products[i].icon='';renderProductAdmin()})};r.readAsDataURL(f)}
 function addAdminProduct(){products.push({id:Date.now(),name:'New Product',price:0,old:0,cat:categoriesAdmin[0]?.cat||'Beauty & Care',icon:'📦'});renderProductAdmin()}

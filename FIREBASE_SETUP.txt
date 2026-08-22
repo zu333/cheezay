@@ -1,28 +1,34 @@
 CHEEZAY DIKHAO - FIREBASE SETUP
 
-1) Authentication > Sign-in method:
-   - Google: ENABLED
+1) Firebase Console > Authentication > Sign-in method
    - Email/Password: ENABLED
-   - Anonymous: NOT REQUIRED (can be disabled).
+   - Google: ENABLED
+   - Anonymous: NOT REQUIRED
 
-2) Authentication > Settings > Authorized domains:
-   Add your actual Vercel domain, for example: your-project.vercel.app
-   Also keep localhost for local testing. Do NOT include https://.
+2) Firebase Console > Authentication > Settings > Authorized domains
+   Add:
+   - localhost
+   - your Vercel domain, e.g. cheezay-dikhao.vercel.app
+   Do NOT add https:// to the domain.
 
-3) Email login:
-   Email/Password provider must be enabled. Existing users can log in; the website also includes a Create Account option.
+3) Firebase Console > Realtime Database > Rules
+   Import/copy database.rules.json from this ZIP.
+   This project uses a password-only admin panel, so the admin's Firebase writes are allowed by these rules.
 
-4) Google login:
-   Website uses signInWithRedirect. If Google login fails, check Authorized domains and that Google provider is Enabled.
+4) Google Login
+   The website now uses signInWithPopup first and redirect as fallback.
+   If Google still shows auth/unauthorized-domain, add the exact Vercel hostname to Authorized domains.
+   If it shows auth/popup-blocked, allow popups for the site.
 
-5) Admin:
-   Click the Cheezay Dikhao logo 5 times quickly. A full-screen Admin panel opens. Password: nabel3457.
-   Anonymous Authentication is NOT used.
+5) Admin
+   Click the logo 5 times quickly. Password: nabel3457
 
-6) Realtime Database:
-   Apply database.rules.json in Realtime Database > Rules.
+6) Categories
+   Admin > Categories:
+   - Category names are loaded from Firebase/local data.
+   - Add Category saves immediately.
+   - Remove saves immediately.
+   - Edit name/key and click Save Categories.
+   - Upload category image, it is resized to 300x300 and saved.
 
-IMPORTANT: The Firebase API key in index.html is the exact key supplied for project school-c9633.
-
-SECURITY NOTE:
-The requested password-only admin is stored in frontend JavaScript and is not production-grade security. For a real secure admin, use Firebase Authentication/Custom Claims and protected database rules.
+7) Products and images are saved under siteSettings/products and siteSettings/categories.
